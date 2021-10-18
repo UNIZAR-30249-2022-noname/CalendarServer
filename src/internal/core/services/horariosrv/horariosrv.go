@@ -14,5 +14,10 @@ func New(horarioRepositorio ports.HorarioRepositorio) *service {
 }
 
 func (srv *service) GetAvaiableHours(terna domain.Terna) ([]domain.AvaiableHours, error) {
-	return nil, nil
+	res, err := srv.horarioRepositorio.GetAvaiableHours(terna)
+	if err != nil {
+		//TODO casos de error
+	}
+
+	return res, nil
 }

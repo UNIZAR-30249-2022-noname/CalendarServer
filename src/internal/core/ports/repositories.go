@@ -4,5 +4,5 @@ import "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 
 type HorarioRepositorio interface {
 	//TODO funciones de este repo
-	GetAvaiableHours(domain.Terna) ([]domain.AvaibleHours, error)
+	GetAvaiableHours(domain.Terna) ([]domain.AvaiableHours, error)
 }

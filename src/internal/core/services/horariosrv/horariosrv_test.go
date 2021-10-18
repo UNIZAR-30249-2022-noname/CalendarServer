@@ -45,6 +45,7 @@ func TestGetAvaiableHours(t *testing.T) {
 		mocks: func(m mocks) {
 			m.horarioRepository.EXPECT().GetAvaiableHours(ternaAsked).Return(avaiableHours, nil)
 		},
+		//TODO casos de error
 	},
 	}
 	// · Runner · //

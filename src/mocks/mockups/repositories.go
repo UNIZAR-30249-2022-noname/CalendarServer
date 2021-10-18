@@ -35,10 +35,10 @@ func (m *MockHorarioRepositorio) EXPECT() *MockHorarioRepositorioMockRecorder {
 }
 
 // GetAvaiableHours mocks base method.
-func (m *MockHorarioRepositorio) GetAvaiableHours(arg0 domain.Terna) ([]domain.AvaibleHours, error) {
+func (m *MockHorarioRepositorio) GetAvaiableHours(arg0 domain.Terna) ([]domain.AvaiableHours, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetAvaiableHours", arg0)
-	ret0, _ := ret[0].([]domain.AvaibleHours)
+	ret0, _ := ret[0].([]domain.AvaiableHours)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
