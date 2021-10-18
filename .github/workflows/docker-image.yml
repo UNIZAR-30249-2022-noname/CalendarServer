@@ -26,6 +26,6 @@ jobs:
  
       
       - name: Build and push Docker image
-        run: docker build -t arejula27/calendarunizar:${{ env.TAG }} -f docker/Dockerfile . && docker push arejula27/calendarunizar
+        run: docker build -t arejula27/calendarunizar -f docker/Dockerfile . && docker push arejula27/calendarunizar
     
 
