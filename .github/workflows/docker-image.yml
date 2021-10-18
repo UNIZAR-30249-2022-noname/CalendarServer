@@ -15,6 +15,9 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
       
+      - name: Get the tag name
+        run: echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+      
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
@@ -23,6 +26,6 @@ jobs:
  
       
       - name: Build and push Docker image
-        run: docker build -t arejula27/calendarunizar -f docker/Dockerfile . && docker push arejula27/calendarunizar
+        run: docker build -t arejula27/calendarunizar:${{ env.TAG }} -f docker/Dockerfile . && docker push arejula27/calendarunizar
     
 
