@@ -28,5 +28,5 @@ jobs:
           images: arejula27/calendarunizar
       
       - name: Build and push Docker image
-        run: docker build -t arejula27/calendarunizar:${{ steps.meta.outputs.tags }} -f docker/Dockerfile .
+        run: docker build -t arejula27/calendarunizar:${{ steps.meta.outputs.label }} -f docker/Dockerfile .
 
