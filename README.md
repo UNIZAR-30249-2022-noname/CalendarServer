@@ -11,4 +11,4 @@ Si ya esta  construirla o si se quiere descargar de internet usa
 ```bash
 docker run -d -p 8080:8080 arejula27/calendarunizar:0.0.1 
 ```
-Para probar su funcionamiento hacer `localhost:8080/ping`.
+Para probar su funcionamiento hacer `localhost:8080/ping`
