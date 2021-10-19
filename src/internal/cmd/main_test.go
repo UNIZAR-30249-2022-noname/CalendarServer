@@ -5,6 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/suite"
 )
@@ -18,9 +19,7 @@ func (s *TestSuite) setupRouterTest() *gin.Engine {
 
 	r := gin.Default()
 
-	r.GET("/ping", func(c *gin.Context) {
-		c.String(200, "pong")
-	})
+	r.GET("/ping", handlers.Ping)
 
 	return r
 }
