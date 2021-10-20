@@ -40,7 +40,7 @@ func TestGetAvailableHours(t *testing.T) {
 	}
 
 	type want struct {
-		result domain.AvaiableHours
+		result []domain.AvaiableHours
 		err    error
 	}
 	tests := []struct {
@@ -56,13 +56,12 @@ func TestGetAvailableHours(t *testing.T) {
 				Curso:      2,
 				Grupo:      1,
 			}},
-			want: want{result: availableHours},
+			want: want{result: []domain.AvaiableHours{availableHours}},
 			mocks: func(m mocks) {
-				m.horarioService.EXPECT().GetAvailableHours(handlers.TernaDto{
+				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
 					Titulacion: "Ing.Informática",
 					Curso:      2,
-					Grupo:      1,
-				}).Return(availableHours, nil)
+					Grupo:      1}).Return([]domain.AvaiableHours{availableHours}, nil)
 			},
 		},
 	}

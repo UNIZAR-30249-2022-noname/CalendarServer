@@ -8,8 +8,9 @@ import (
 func SetupRouter() *gin.Engine {
 
 	r := gin.Default()
-
+	//horarioHandler := handlers.NewHTTPHandler(nil)
 	r.GET("/ping", handlers.Ping)
+	//r.GET("/availableHours", horarioHandler.GetAvailableHours)
 
 	return r
 }
