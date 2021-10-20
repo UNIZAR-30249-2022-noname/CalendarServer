@@ -60,7 +60,7 @@ func TestGetAvailableHours(t *testing.T) {
 			}},
 			want: want{result: []domain.AvaiableHours{availableHours}, code: 200},
 			mocks: func(m mocks) {
-				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
+				m.horarioService.EXPECT().GetAvaiableHours(domain.Terna{
 					Titulacion: "Ing.Informática",
 					Curso:      2,
 					Grupo:      1}).Return([]domain.AvaiableHours{availableHours}, nil)
