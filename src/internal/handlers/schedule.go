@@ -27,6 +27,10 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 		Titulacion: titulacion,
 		Grupo:      grupo,
 	}
-	hdl.horarioService.GetAvailableHours(terna)
-	c.String(http.StatusOK, "titulacion %s curso %s grupo %s ", titulacion, curso, grupo)
+	availableHours, err := hdl.horarioService.GetAvailableHours(terna)
+	if err != nil {
+		//TODO hacer bien este error
+		c.AbortWithStatusJSON(500, gin.H{"message": err.Error()})
+	}
+	c.JSON(http.StatusOK, availableHours)
 }

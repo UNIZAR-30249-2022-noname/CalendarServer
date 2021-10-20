@@ -1,6 +1,8 @@
 package main_test
 
 import (
+	"bytes"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
@@ -41,7 +43,7 @@ func TestGetAvailableHours(t *testing.T) {
 
 	type want struct {
 		result []domain.AvaiableHours
-		err    error
+		code   int
 	}
 	tests := []struct {
 		name  string
@@ -56,7 +58,7 @@ func TestGetAvailableHours(t *testing.T) {
 				Curso:      2,
 				Grupo:      1,
 			}},
-			want: want{result: []domain.AvaiableHours{availableHours}},
+			want: want{result: []domain.AvaiableHours{availableHours}, code: 200},
 			mocks: func(m mocks) {
 				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
 					Titulacion: "Ing.Informática",
@@ -84,8 +86,10 @@ func TestGetAvailableHours(t *testing.T) {
 		uri := "/availableHours?titulacion=" + tt.args.terna.Titulacion + "&year=" + strconv.Itoa(tt.args.terna.Curso) + "&group=" + strconv.Itoa(tt.args.terna.Grupo)
 		req, _ := http.NewRequest("GET", uri, nil)
 		r.ServeHTTP(w, req)
-		assert.Equal(t, 200, w.Code)
-		//TODO comprobar horas disponibles devueltas
+		assert.Equal(t, tt.want.code, w.Code)
+
+		wantedJson, _ := json.Marshal(tt.want.result)
+		assert.Equal(t, bytes.NewBuffer(wantedJson), w.Body)
 	}
 
 }
