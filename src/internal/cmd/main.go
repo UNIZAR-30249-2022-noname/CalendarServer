@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func setupRouter() *gin.Engine {
+func SetupRouter() *gin.Engine {
 
 	r := gin.Default()
 
@@ -16,7 +16,7 @@ func setupRouter() *gin.Engine {
 
 func main() {
 
-	r := setupRouter()
+	r := SetupRouter()
 
 	r.Run(":8080")
 }
