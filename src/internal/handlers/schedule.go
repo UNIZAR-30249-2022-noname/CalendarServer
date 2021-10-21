@@ -25,8 +25,10 @@ func NewHTTPHandler(horarioService ports.HorarioService) *HTTPHandler {
 //@Descriptionby type of hour (lessons, lab or problems)
 //@Tag Scheduler
 //@Produce json
-// @Param string query string false "string valid" minlength(5) maxlength(10)
-//@Succes 200 {array} []domain.AvailableHours
+//@Param titulacion query string true "titulacion de las horas a obtener"
+//@Param curso query int true "curso de las horas a obtener"
+//@Param grupo query int true "grupo de las horas a obtener"
+//@Success 200 {array} []domain.AvailableHours
 //@Router /availableHours/ [get]
 func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 	titulacion := c.Query("titulacion")

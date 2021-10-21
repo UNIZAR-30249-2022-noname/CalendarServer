@@ -12,14 +12,60 @@
                 ],
                 "parameters": [
                     {
-                        "maxLength": 10,
-                        "minLength": 5,
                         "type": "string",
-                        "description": "string valid",
-                        "name": "string",
-                        "in": "query"
+                        "description": "titulacion de las horas a obtener",
+                        "name": "titulacion",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "curso de las horas a obtener",
+                        "name": "curso",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "grupo de las horas a obtener",
+                        "name": "grupo",
+                        "in": "query",
+                        "required": true
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/domain.AvailableHours"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "domain.AvailableHours": {
+            "type": "object",
+            "properties": {
+                "kind": {
+                    "type": "integer"
+                },
+                "max": {
+                    "type": "integer"
+                },
+                "remaining": {
+                    "type": "integer"
+                },
+                "subject": {
+                    "type": "string"
+                }
             }
         }
     }

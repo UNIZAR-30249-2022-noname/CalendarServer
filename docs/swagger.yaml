@@ -1,3 +1,15 @@
+definitions:
+  domain.AvailableHours:
+    properties:
+      kind:
+        type: integer
+      max:
+        type: integer
+      remaining:
+        type: integer
+      subject:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -5,12 +17,30 @@ paths:
     get:
       description: List all the hours remaining for creaiting an entrie on the schedule
       parameters:
-      - description: string valid
+      - description: titulacion de las horas a obtener
         in: query
-        maxLength: 10
-        minLength: 5
-        name: string
+        name: titulacion
+        required: true
         type: string
+      - description: curso de las horas a obtener
+        in: query
+        name: curso
+        required: true
+        type: integer
+      - description: grupo de las horas a obtener
+        in: query
+        name: grupo
+        required: true
+        type: integer
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/domain.AvailableHours'
+              type: array
+            type: array
 swagger: "2.0"

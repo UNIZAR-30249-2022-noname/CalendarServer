@@ -24,11 +24,11 @@ func SetupRouter() *gin.Engine {
 
 func main() {
 
-	docs.SwaggerInfo.Title = "Swagger Example API"
-	docs.SwaggerInfo.Description = "This is a sample server Petstore server."
+	docs.SwaggerInfo.Title = "API UNIZAR calendar and schedule"
+	docs.SwaggerInfo.Description = "This is API for managing and visulizating the calendar and schedule of Unizar."
 	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.Host = "petstore.swagger.io"
-	docs.SwaggerInfo.BasePath = "/v2"
+	docs.SwaggerInfo.Host = "http://localhost:8080/swagger/index.html"
+	docs.SwaggerInfo.BasePath = "/v1"
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	r := SetupRouter()
