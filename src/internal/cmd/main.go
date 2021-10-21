@@ -13,7 +13,7 @@ import (
 func SetupRouter() *gin.Engine {
 
 	r := gin.Default()
-
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	horariosrv := horariosrv.New(nil)
 	horarioHandler := handlers.NewHTTPHandler(horariosrv)
 	r.GET("/ping", handlers.Ping)
@@ -23,7 +23,7 @@ func SetupRouter() *gin.Engine {
 }
 
 func main() {
-
+	// · Swagger ·
 	docs.SwaggerInfo.Title = "API UNIZAR calendar and schedule"
 	docs.SwaggerInfo.Description = "This is API for managing and visulizating the calendar and schedule of Unizar."
 	docs.SwaggerInfo.Version = "1.0"
@@ -32,7 +32,6 @@ func main() {
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	r := SetupRouter()
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.Run(":8080")
 }
