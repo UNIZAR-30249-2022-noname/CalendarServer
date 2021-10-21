@@ -6,6 +6,7 @@ import (
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/ports"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -28,9 +29,11 @@ func NewHTTPHandler(horarioService ports.HorarioService) *HTTPHandler {
 //@Param titulacion query string true "titulacion de las horas a obtener"
 //@Param curso query int true "curso de las horas a obtener"
 //@Param grupo query int true "grupo de las horas a obtener"
-//@Success 200 {array} []domain.AvailableHours
+//@Success 200 {array} domain.AvailableHours
+// @Failure 400,404 {object} ErrorHttp
 //@Router /availableHours/ [get]
 func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
+
 	titulacion := c.Query("titulacion")
 	curso, _ := strconv.Atoi(c.Query("year"))
 	grupo, _ := strconv.Atoi(c.Query("group"))
@@ -40,9 +43,18 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 		Grupo:      grupo,
 	}
 	availableHours, err := hdl.horarioService.GetAvailableHours(terna)
-	if err != nil {
-		//TODO hacer bien este error
-		c.AbortWithStatusJSON(500, gin.H{"message": err.Error()})
+	if err == apperrors.ErrInvalidInput {
+
+		c.AbortWithStatusJSON(http.StatusBadRequest, ErrorHttp{Message: "Parámetros incorrectos"})
+
+	} else if err == apperrors.ErrNotFound {
+		c.AbortWithStatusJSON(http.StatusNotFound, ErrorHttp{Message: "La terna no existe"})
+
+	} else if err != nil {
+
+		c.AbortWithStatusJSON(500, ErrorHttp{Message: "unkown"})
+	} else {
+		c.JSON(http.StatusOK, availableHours)
 	}
-	c.JSON(http.StatusOK, availableHours)
+
 }

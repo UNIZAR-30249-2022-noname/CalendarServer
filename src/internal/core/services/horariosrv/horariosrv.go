@@ -16,7 +16,7 @@ func New(horarioRepositorio ports.HorarioRepositorio) *service {
 func (srv *service) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours, error) {
 	res, err := srv.horarioRepositorio.GetAvailableHours(terna)
 	if err != nil {
-		//TODO casos de error
+		return []domain.AvailableHours{}, err
 	}
 
 	return res, nil
