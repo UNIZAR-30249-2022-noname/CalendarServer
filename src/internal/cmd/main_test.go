@@ -82,6 +82,49 @@ func TestGetAvailableHours(t *testing.T) {
 					Grupo: 1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
+		{
+			name: "Error when [curso] is empty",
+			args: args{terna: handlers.TernaDto{
+
+				Titulacion: "Ing.Informática",
+				Grupo:      1,
+			}},
+			want: want{result: errorParam, code: http.StatusBadRequest},
+			mocks: func(m mocks) {
+				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
+					Titulacion: "Ing.Informática",
+					Grupo:      1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+			},
+		},
+		{
+			name: "Error when [Grupo] is empty",
+			args: args{terna: handlers.TernaDto{
+
+				Titulacion: "Ing.Informática",
+				Curso:      1,
+			}},
+			want: want{result: errorParam, code: http.StatusBadRequest},
+			mocks: func(m mocks) {
+				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
+					Titulacion: "Ing.Informática",
+					Curso:      1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+			},
+		},
+		{
+			name: "Error [terna] has not resources attached",
+			args: args{terna: handlers.TernaDto{
+				Titulacion: "Ing.Informática",
+				Curso:      2,
+				Grupo:      1,
+			}},
+			want: want{result: handlers.ErrorHttp{Message: "La terna no existe"}, code: http.StatusNotFound},
+			mocks: func(m mocks) {
+				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
+					Titulacion: "Ing.Informática",
+					Curso:      2,
+					Grupo:      1}).Return([]domain.AvailableHours{}, apperrors.ErrNotFound)
+			},
+		},
 		//TODO more tests
 	}
 	// · Runner · //

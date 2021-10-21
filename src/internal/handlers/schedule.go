@@ -32,6 +32,7 @@ func NewHTTPHandler(horarioService ports.HorarioService) *HTTPHandler {
 //@Success 200 {array} domain.AvailableHours
 //@Router /availableHours/ [get]
 func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
+
 	titulacion := c.Query("titulacion")
 	curso, _ := strconv.Atoi(c.Query("year"))
 	grupo, _ := strconv.Atoi(c.Query("group"))
@@ -43,11 +44,16 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 	availableHours, err := hdl.horarioService.GetAvailableHours(terna)
 	if err == apperrors.ErrInvalidInput {
 
-		c.AbortWithStatusJSON(http.StatusOK, ErrorHttp{Message: "Parámetros incorrectos"})
+		c.AbortWithStatusJSON(http.StatusBadRequest, ErrorHttp{Message: "Parámetros incorrectos"})
+
+	} else if err == apperrors.ErrNotFound {
+		c.AbortWithStatusJSON(http.StatusNotFound, ErrorHttp{Message: "La terna no existe"})
 
 	} else if err != nil {
 
 		c.AbortWithStatusJSON(500, ErrorHttp{Message: "unkown"})
+	} else {
+		c.JSON(http.StatusOK, availableHours)
 	}
-	c.JSON(http.StatusOK, availableHours)
+
 }
