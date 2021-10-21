@@ -58,11 +58,20 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/domain.AvailableHours"
-                                }
+                                "$ref": "#/definitions/domain.AvailableHours"
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
                         }
                     }
                 }
@@ -83,6 +92,14 @@ var doc = `{
                     "type": "integer"
                 },
                 "subject": {
+                    "type": "string"
+                }
+            }
+        },
+        "handlers.ErrorHttp": {
+            "type": "object",
+            "properties": {
+                "message": {
                     "type": "string"
                 }
             }

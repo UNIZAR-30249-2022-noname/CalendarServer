@@ -30,6 +30,7 @@ func NewHTTPHandler(horarioService ports.HorarioService) *HTTPHandler {
 //@Param curso query int true "curso de las horas a obtener"
 //@Param grupo query int true "grupo de las horas a obtener"
 //@Success 200 {array} domain.AvailableHours
+// @Failure 400,404 {object} ErrorHttp
 //@Router /availableHours/ [get]
 func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 
