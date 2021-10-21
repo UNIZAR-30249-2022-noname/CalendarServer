@@ -6,6 +6,7 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/horariosrv"
 	mock_ports "github.com/D-D-EINA-Calendar/CalendarServer/src/mocks/mockups"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/golang/mock/gomock"
@@ -45,8 +46,40 @@ func TestGetAvailableHours(t *testing.T) {
 		mocks: func(m mocks) {
 			m.horarioRepository.EXPECT().GetAvailableHours(ternaAsked).Return(AvailableHours, nil)
 		},
-		//TODO casos de error
 	},
+		{
+			name: "Should return error when not found",
+			args: args{terna: ternaAsked},
+			want: want{result: []domain.AvailableHours{}, err: apperrors.ErrNotFound},
+			mocks: func(m mocks) {
+				m.horarioRepository.EXPECT().GetAvailableHours(ternaAsked).Return([]domain.AvailableHours{}, apperrors.ErrNotFound)
+			},
+		},
+		{
+			name: "Should return error when [titulación] is empty",
+			args: args{terna: domain.Terna{Curso: 1, Grupo: 1}},
+			want: want{result: []domain.AvailableHours{}, err: apperrors.ErrInvalidInput},
+			mocks: func(m mocks) {
+				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Curso: 1, Grupo: 1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+			},
+		},
+		{
+			name: "Should return error when [curso] is empty",
+			args: args{terna: domain.Terna{Titulacion: "A", Grupo: 1}},
+			want: want{result: []domain.AvailableHours{}, err: apperrors.ErrInvalidInput},
+			mocks: func(m mocks) {
+				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Titulacion: "A", Grupo: 1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+			},
+		},
+		{
+			name: "Should return error when [curso] is empty",
+			args: args{terna: domain.Terna{Titulacion: "A", Curso: 1}},
+			want: want{result: []domain.AvailableHours{}, err: apperrors.ErrInvalidInput},
+			mocks: func(m mocks) {
+				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Titulacion: "A", Curso: 1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+			},
+		},
+		//TODO casos de error
 	}
 	// · Runner · //
 	for _, tt := range tests {

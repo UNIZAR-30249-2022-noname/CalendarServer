@@ -28,7 +28,7 @@ func NewHTTPHandler(horarioService ports.HorarioService) *HTTPHandler {
 //@Param titulacion query string true "titulacion de las horas a obtener"
 //@Param curso query int true "curso de las horas a obtener"
 //@Param grupo query int true "grupo de las horas a obtener"
-//@Success 200 {array} []domain.AvailableHours
+//@Success 200 {array} domain.AvailableHours
 //@Router /availableHours/ [get]
 func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 	titulacion := c.Query("titulacion")
