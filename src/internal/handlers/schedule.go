@@ -41,15 +41,13 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 		Grupo:      grupo,
 	}
 	availableHours, err := hdl.horarioService.GetAvailableHours(terna)
-	if err == apperrors.ErrNotFound {
+	if err == apperrors.ErrInvalidInput {
 
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": err.Error()})
-	} else if err == apperrors.ErrInvalidInput {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		c.AbortWithStatusJSON(http.StatusOK, ErrorHttp{Message: "Parámetros incorrectos"})
 
 	} else if err != nil {
 
-		c.AbortWithStatusJSON(500, gin.H{"message": err.Error()})
+		c.AbortWithStatusJSON(500, ErrorHttp{Message: "unkown"})
 	}
 	c.JSON(http.StatusOK, availableHours)
 }
