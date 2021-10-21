@@ -6,6 +6,7 @@ import (
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/ports"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -40,8 +41,14 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 		Grupo:      grupo,
 	}
 	availableHours, err := hdl.horarioService.GetAvailableHours(terna)
-	if err != nil {
-		//TODO hacer bien este error
+	if err == apperrors.ErrNotFound {
+
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": err.Error()})
+	} else if err == apperrors.ErrInvalidInput {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+
+	} else if err != nil {
+
 		c.AbortWithStatusJSON(500, gin.H{"message": err.Error()})
 	}
 	c.JSON(http.StatusOK, availableHours)
