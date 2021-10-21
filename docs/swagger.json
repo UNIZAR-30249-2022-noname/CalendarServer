@@ -1,0 +1,26 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/availableHours/": {
+            "get": {
+                "description": "List all the hours remaining for creaiting an entrie on the schedule",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "maxLength": 10,
+                        "minLength": 5,
+                        "type": "string",
+                        "description": "string valid",
+                        "name": "string",
+                        "in": "query"
+                    }
+                ]
+            }
+        }
+    }
+}

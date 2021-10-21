@@ -16,9 +16,9 @@ type mocks struct {
 }
 
 //Comprueba si dada una [Terna] devuelve las horas disponibles correctamente
-func TestGetAvaiableHours(t *testing.T) {
+func TestGetAvailableHours(t *testing.T) {
 	// · Mocks · //
-	avaiableHours := simpleAvaiableHours()
+	AvailableHours := simpleAvailableHours()
 	ternaAsked := domain.Terna{
 		Titulacion: "Ing.Informática",
 		Curso:      2,
@@ -30,7 +30,7 @@ func TestGetAvaiableHours(t *testing.T) {
 		terna domain.Terna
 	}
 	type want struct {
-		result []domain.AvaiableHours
+		result []domain.AvailableHours
 		err    error
 	}
 	tests := []struct {
@@ -41,9 +41,9 @@ func TestGetAvaiableHours(t *testing.T) {
 	}{{
 		name: "Should return avaiable hours correctly",
 		args: args{terna: ternaAsked},
-		want: want{result: avaiableHours},
+		want: want{result: AvailableHours},
 		mocks: func(m mocks) {
-			m.horarioRepository.EXPECT().GetAvaiableHours(ternaAsked).Return(avaiableHours, nil)
+			m.horarioRepository.EXPECT().GetAvailableHours(ternaAsked).Return(AvailableHours, nil)
 		},
 		//TODO casos de error
 	},
@@ -60,7 +60,7 @@ func TestGetAvaiableHours(t *testing.T) {
 		service := horariosrv.New(m.horarioRepository)
 
 		//Execute
-		result, err := service.GetAvaiableHours(tt.args.terna)
+		result, err := service.GetAvailableHours(tt.args.terna)
 
 		//Verify
 		if tt.want.err != nil && err != nil {
@@ -72,9 +72,9 @@ func TestGetAvaiableHours(t *testing.T) {
 	}
 }
 
-func simpleAvaiableHours() []domain.AvaiableHours {
+func simpleAvailableHours() []domain.AvailableHours {
 
-	return []domain.AvaiableHours{
+	return []domain.AvailableHours{
 		{
 			Kind:      domain.TEORIA,
 			Subject:   "IC",

@@ -18,6 +18,16 @@ func NewHTTPHandler(horarioService ports.HorarioService) *HTTPHandler {
 		horarioService: horarioService,
 	}
 }
+
+//GetAvailableHours is the handler of get available hours endpoint
+//@Sumary Get available hours
+//@Description List all the hours remaining for creaiting an entrie on the schedule
+//@Descriptionby type of hour (lessons, lab or problems)
+//@Tag Scheduler
+//@Produce json
+// @Param string query string false "string valid" minlength(5) maxlength(10)
+//@Succes 200 {array} []domain.AvailableHours
+//@Router /availableHours/ [get]
 func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 	titulacion := c.Query("titulacion")
 	curso, _ := strconv.Atoi(c.Query("year"))

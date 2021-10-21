@@ -1,0 +1,16 @@
+info:
+  contact: {}
+paths:
+  /availableHours/:
+    get:
+      description: List all the hours remaining for creaiting an entrie on the schedule
+      parameters:
+      - description: string valid
+        in: query
+        maxLength: 10
+        minLength: 5
+        name: string
+        type: string
+      produces:
+      - application/json
+swagger: "2.0"

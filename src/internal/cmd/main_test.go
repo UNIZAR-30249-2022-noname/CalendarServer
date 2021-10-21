@@ -42,7 +42,7 @@ func TestGetAvailableHours(t *testing.T) {
 	}
 
 	type want struct {
-		result []domain.AvaiableHours
+		result []domain.AvailableHours
 		code   int
 	}
 	tests := []struct {
@@ -58,12 +58,12 @@ func TestGetAvailableHours(t *testing.T) {
 				Curso:      2,
 				Grupo:      1,
 			}},
-			want: want{result: []domain.AvaiableHours{availableHours}, code: 200},
+			want: want{result: []domain.AvailableHours{availableHours}, code: 200},
 			mocks: func(m mocks) {
-				m.horarioService.EXPECT().GetAvaiableHours(domain.Terna{
+				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
 					Titulacion: "Ing.Informática",
 					Curso:      2,
-					Grupo:      1}).Return([]domain.AvaiableHours{availableHours}, nil)
+					Grupo:      1}).Return([]domain.AvailableHours{availableHours}, nil)
 			},
 		},
 	}
@@ -94,6 +94,6 @@ func TestGetAvailableHours(t *testing.T) {
 
 }
 
-func simpleAvailableHours() domain.AvaiableHours {
-	return domain.AvaiableHours{}
+func simpleAvailableHours() domain.AvailableHours {
+	return domain.AvailableHours{}
 }

@@ -34,17 +34,17 @@ func (m *MockHorarioService) EXPECT() *MockHorarioServiceMockRecorder {
 	return m.recorder
 }
 
-// GetAvaiableHours mocks base method.
-func (m *MockHorarioService) GetAvaiableHours(terna domain.Terna) ([]domain.AvaiableHours, error) {
+// GetAvailableHours mocks base method.
+func (m *MockHorarioService) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAvaiableHours", terna)
-	ret0, _ := ret[0].([]domain.AvaiableHours)
+	ret := m.ctrl.Call(m, "GetAvailableHours", terna)
+	ret0, _ := ret[0].([]domain.AvailableHours)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetAvaiableHours indicates an expected call of GetAvaiableHours.
-func (mr *MockHorarioServiceMockRecorder) GetAvaiableHours(terna interface{}) *gomock.Call {
+// GetAvailableHours indicates an expected call of GetAvailableHours.
+func (mr *MockHorarioServiceMockRecorder) GetAvailableHours(terna interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAvaiableHours", reflect.TypeOf((*MockHorarioService)(nil).GetAvaiableHours), terna)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAvailableHours", reflect.TypeOf((*MockHorarioService)(nil).GetAvailableHours), terna)
 }

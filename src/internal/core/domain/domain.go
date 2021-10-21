@@ -7,7 +7,7 @@ const (
 )
 
 //modelo de horas disponibles
-type AvaiableHours struct {
+type AvailableHours struct {
 	Kind      int
 	Subject   string
 	Remaining int
