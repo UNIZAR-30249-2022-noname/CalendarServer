@@ -138,7 +138,7 @@ var doc = `{
                 "initMin": {
                     "type": "integer"
                 },
-                "kindkind": {
+                "kind": {
                     "type": "integer"
                 },
                 "room": {

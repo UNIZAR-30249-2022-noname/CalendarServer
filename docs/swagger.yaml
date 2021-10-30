@@ -22,7 +22,7 @@ definitions:
         type: integer
       initMin:
         type: integer
-      kindkind:
+      kind:
         type: integer
       room:
         type: string

@@ -14,7 +14,7 @@ type EntryDTO struct {
 	EndHour  int    `json:"endHour"`
 	EndMin   int    `json:"endMin"`
 	Subject  string `json:"subject"`
-	Kind     int    `json:"kindkind"`
+	Kind     int    `json:"kind"`
 	Room     string `json:"room"`
 	Semana   string `json:"semana"`
 	Grupo    string `json:"grupo"`
