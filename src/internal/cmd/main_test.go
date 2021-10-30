@@ -186,13 +186,33 @@ func TestPostSchedulerEntry(t *testing.T) {
 		mocks func(m mocks)
 	}{
 		{
-			name: "Should create a new entry succesfully",
+			name: "Should create a new entry succesfully for theorical classes",
 			args: args{
-				newEntry: simpleEntryKindOne()},
+				newEntry: simpleTheoricalEntry()},
 			want: want{result: "01/01/2021", code: http.StatusOK},
 			mocks: func(m mocks) {
 
-				m.horarioService.EXPECT().CreateNewEntry(simpleEntryKindOne().ToEntry()).Return("01/01/2021", nil)
+				m.horarioService.EXPECT().CreateNewEntry(simpleTheoricalEntry().ToEntry()).Return("01/01/2021", nil)
+			},
+		},
+		{
+			name: "Should create a new entry succesfully for practices classes",
+			args: args{
+				newEntry: simplePracticeEntry()},
+			want: want{result: "01/01/2021", code: http.StatusOK},
+			mocks: func(m mocks) {
+
+				m.horarioService.EXPECT().CreateNewEntry(simplePracticeEntry().ToEntry()).Return("01/01/2021", nil)
+			},
+		},
+		{
+			name: "Should create a new entry succesfully for exercises classes",
+			args: args{
+				newEntry: simpleExercisesEntry()},
+			want: want{result: "01/01/2021", code: http.StatusOK},
+			mocks: func(m mocks) {
+
+				m.horarioService.EXPECT().CreateNewEntry(simpleExercisesEntry().ToEntry()).Return("01/01/2021", nil)
 			},
 		},
 
@@ -218,7 +238,7 @@ func TestPostSchedulerEntry(t *testing.T) {
 			r := setUpRouter()
 			w := httptest.NewRecorder()
 			uri := path
-			body, _ := json.Marshal(simpleEntryKindOne())
+			body, _ := json.Marshal(tt.args.newEntry)
 			bytes.NewBuffer(body)
 			req, _ := http.NewRequest("POST", uri, bytes.NewBuffer(body))
 			r.ServeHTTP(w, req)
@@ -231,14 +251,41 @@ func TestPostSchedulerEntry(t *testing.T) {
 	}
 
 }
-func simpleEntryKindOne() handlers.EntryDTO {
+func simpleTheoricalEntry() handlers.EntryDTO {
 	return handlers.EntryDTO{
 		InitHour: 1,
 		InitMin:  1,
 		EndHour:  1,
 		EndMin:   1,
 		Subject:  "a",
-		Kind:     1,
+		Kind:     domain.THEORICAL,
 		Room:     "a",
+	}
+}
+
+func simplePracticeEntry() handlers.EntryDTO {
+	return handlers.EntryDTO{
+		InitHour: 1,
+		InitMin:  1,
+		EndHour:  1,
+		EndMin:   1,
+		Subject:  "a",
+		Kind:     domain.PRACTICES,
+		Room:     "a",
+		Semana:   "A",
+		Grupo:    "1",
+	}
+}
+
+func simpleExercisesEntry() handlers.EntryDTO {
+	return handlers.EntryDTO{
+		InitHour: 1,
+		InitMin:  1,
+		EndHour:  1,
+		EndMin:   1,
+		Subject:  "a",
+		Kind:     domain.EXERCISES,
+		Room:     "a",
+		Grupo:    "1",
 	}
 }

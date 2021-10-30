@@ -1,9 +1,9 @@
 package domain
 
 const (
-	TEORIA    = 0
-	PRACTICAS = 1
-	PROBLEMAS = 2
+	THEORICAL = 0
+	PRACTICES = 1
+	EXERCISES = 2
 )
 
 //modelo de horas disponibles

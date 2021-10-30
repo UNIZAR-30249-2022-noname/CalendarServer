@@ -109,13 +109,13 @@ func simpleAvailableHours() []domain.AvailableHours {
 
 	return []domain.AvailableHours{
 		{
-			Kind:      domain.TEORIA,
+			Kind:      domain.THEORICAL,
 			Subject:   "IC",
 			Remaining: 5,
 			Max:       5,
 		},
 		{
-			Kind:      domain.PRACTICAS,
+			Kind:      domain.PRACTICES,
 			Subject:   "Prog 1",
 			Remaining: 2,
 			Max:       3,
