@@ -164,3 +164,71 @@ func TestGetAvailableHours(t *testing.T) {
 func simpleAvailableHours() domain.AvailableHours {
 	return domain.AvailableHours{}
 }
+
+/////////////////////////////
+// TEST SCHEDULER ENTRIES ///
+/////////////////////////////
+
+func TestPostSchedulerEntry(t *testing.T) {
+
+	// · Mocks · //
+
+	//errorParam := handlers.ErrorHttp{Message: "Parámetros incorrectos"}
+
+	// · Test · //
+	type args struct {
+		newEntry handlers.EntryDTO
+	}
+
+	type want struct {
+		result interface{}
+		code   int
+	}
+	tests := []struct {
+		name  string
+		args  args
+		want  want
+		mocks func(m mocks)
+	}{
+		{
+			name: "Should create a new entry succesfully",
+			args: args{
+				newEntry: handlers.EntryDTO{}},
+			want: want{result: nil, code: http.StatusOK},
+			mocks: func(m mocks) {
+				m.horarioService.EXPECT().CreateNewEntry(domain.Entry{}).Return(nil)
+			},
+		},
+
+		//TODO more tests
+	}
+	// · Runner · //
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			//Prepare
+			m := mocks{
+				horarioService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
+			}
+			tt.mocks(m)
+			setUpRouter := func() *gin.Engine {
+				horarioHandler := handlers.NewHTTPHandler(m.horarioService)
+				r := gin.Default()
+				r.GET("/availableHours", horarioHandler.GetAvailableHours)
+				return r
+
+			}
+			r := setUpRouter()
+			w := httptest.NewRecorder()
+			uri := "" //TODO
+			req, _ := http.NewRequest("GET", uri, nil)
+			r.ServeHTTP(w, req)
+			assert.Equal(t, tt.want.code, w.Code)
+
+			wantedJson, _ := json.Marshal(tt.want.result)
+			assert.Equal(t, bytes.NewBuffer(wantedJson), w.Body)
+
+		})
+
+	}
+
+}

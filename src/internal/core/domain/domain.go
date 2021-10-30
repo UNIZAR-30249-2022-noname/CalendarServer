@@ -19,3 +19,5 @@ type Terna struct {
 	Curso      int
 	Grupo      int
 }
+
+type Entry struct{}

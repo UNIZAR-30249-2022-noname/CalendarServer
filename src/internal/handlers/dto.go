@@ -6,6 +6,8 @@ type TernaDto struct {
 	Grupo      int    `json:"grupo"`
 }
 
+type EntryDTO struct{}
+
 type ErrorHttp struct {
 	Message string `json:"message"`
 }
