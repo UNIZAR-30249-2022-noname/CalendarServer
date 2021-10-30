@@ -10,6 +10,27 @@ definitions:
       subject:
         type: string
     type: object
+  handlers.EntryDTO:
+    properties:
+      endHour:
+        type: integer
+      endMin:
+        type: integer
+      grupo:
+        type: string
+      initHour:
+        type: integer
+      initMin:
+        type: integer
+      kindkind:
+        type: integer
+      room:
+        type: string
+      semana:
+        type: string
+      subject:
+        type: string
+    type: object
   handlers.ErrorHttp:
     properties:
       message:
@@ -54,4 +75,25 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/handlers.ErrorHttp'
+  /newEntry/:
+    post:
+      description: |-
+        Requesting a new entry for the scheduler. The entry will be definied by the initial hour
+        and the ending hour, adintional info must be indicated depending of the kind of hours
+        the kinds of subject hours are:
+        - Theorical = 1
+        - Practices = 2
+        - Exercises = 3
+      parameters:
+      - description: Entry to create
+        in: body
+        name: entry
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.EntryDTO'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Receive the date of the latests entry modification
 swagger: "2.0"

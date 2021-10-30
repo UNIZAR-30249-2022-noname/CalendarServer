@@ -229,7 +229,7 @@ func TestPostSchedulerEntry(t *testing.T) {
 			setUpRouter := func() *gin.Engine {
 				horarioHandler := handlers.NewHTTPHandler(m.horarioService)
 				r := gin.Default()
-				r.POST(path, horarioHandler.NewEntry)
+				r.POST(path, horarioHandler.PostNewEntry)
 				return r
 
 			}

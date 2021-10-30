@@ -20,7 +20,7 @@ func NewHTTPHandler(horarioService ports.HorarioService) *HTTPHandler {
 	}
 }
 
-//GetAvailableHours is the handler of get available hours endpoint
+//GetAvailableHours is the handler for getting available hours endpoint
 //@Sumary Get available hours
 //@Description List all the hours remaining for creaiting an entrie on the schedule
 //@Descriptionby type of hour (lessons, lab or problems)
@@ -59,7 +59,20 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 
 }
 
-func (hdl *HTTPHandler) NewEntry(c *gin.Context) {
+//PostNewEntry is the handler for creating a new schedluer entry
+//@Sumary Post new scheduler entry
+//@Description Requesting a new entry for the scheduler. The entry will be definied by the initial hour
+//@Description and the ending hour, adintional info must be indicated depending of the kind of hours
+//@Description the kinds of subject hours are:
+//@Description  - Theorical = 1
+//@Description  - Practices = 2
+//@Description  - Exercises = 3
+//@Tag Scheduler
+//@Param entry body  EntryDTO true "Entry to create"
+//@Produce text/plain
+//@Success 200 "Receive the date of the latests entry modification"
+//@Router /newEntry/ [post]
+func (hdl *HTTPHandler) PostNewEntry(c *gin.Context) {
 	//Read the body request
 	body := EntryDTO{}
 	c.BindJSON(&body)
