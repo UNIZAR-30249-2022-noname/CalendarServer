@@ -70,7 +70,7 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 //@Tag Scheduler
 //@Param entry body  EntryDTO true "Entry to create"
 //@Produce text/plain
-//@Success 200 "Receive the date of the latests entry modification"
+//@Success 200 "Receive the date of the latests entry modification with format dd/mm/aaaa"
 //@Router /newEntry/ [post]
 func (hdl *HTTPHandler) PostNewEntry(c *gin.Context) {
 	//Read the body request

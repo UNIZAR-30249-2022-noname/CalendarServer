@@ -96,7 +96,7 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Receive the date of the latests entry modification"
+                        "description": "Receive the date of the latests entry modification with format dd/mm/aaaa"
                     }
                 }
             }
