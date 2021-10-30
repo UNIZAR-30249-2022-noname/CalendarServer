@@ -35,11 +35,12 @@ func (m *MockHorarioService) EXPECT() *MockHorarioServiceMockRecorder {
 }
 
 // CreateNewEntry mocks base method.
-func (m *MockHorarioService) CreateNewEntry(entry domain.Entry) error {
+func (m *MockHorarioService) CreateNewEntry(entry domain.Entry) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateNewEntry", entry)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // CreateNewEntry indicates an expected call of CreateNewEntry.

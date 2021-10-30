@@ -20,4 +20,25 @@ type Terna struct {
 	Grupo      int
 }
 
-type Entry struct{}
+type hour struct {
+	hour int
+	min  int
+}
+
+func NewHour(h, m int) hour {
+	return hour{
+		hour: h,
+		min:  m,
+	}
+}
+
+type Room struct {
+	Name string
+}
+
+type Entry struct {
+	Init    hour
+	End     hour
+	Subject AvailableHours
+	Room    Room
+}

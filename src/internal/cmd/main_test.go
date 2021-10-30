@@ -42,6 +42,7 @@ func TestGetAvailableHours(t *testing.T) {
 	availableHours := simpleAvailableHours()
 	errorParam := handlers.ErrorHttp{Message: "Parámetros incorrectos"}
 	// · Test · //
+	path := "/availableHours"
 	type args struct {
 		terna handlers.TernaDto
 	}
@@ -147,7 +148,7 @@ func TestGetAvailableHours(t *testing.T) {
 			}
 			r := setUpRouter()
 			w := httptest.NewRecorder()
-			uri := "/availableHours?titulacion=" + tt.args.terna.Titulacion + "&year=" + strconv.Itoa(tt.args.terna.Curso) + "&group=" + strconv.Itoa(tt.args.terna.Grupo)
+			uri := path + "?titulacion=" + tt.args.terna.Titulacion + "&year=" + strconv.Itoa(tt.args.terna.Curso) + "&group=" + strconv.Itoa(tt.args.terna.Grupo)
 			req, _ := http.NewRequest("GET", uri, nil)
 			r.ServeHTTP(w, req)
 			assert.Equal(t, tt.want.code, w.Code)
@@ -176,6 +177,8 @@ func TestPostSchedulerEntry(t *testing.T) {
 	//errorParam := handlers.ErrorHttp{Message: "Parámetros incorrectos"}
 
 	// · Test · //
+	path := "/newEntry"
+
 	type args struct {
 		newEntry handlers.EntryDTO
 	}
@@ -193,10 +196,11 @@ func TestPostSchedulerEntry(t *testing.T) {
 		{
 			name: "Should create a new entry succesfully",
 			args: args{
-				newEntry: handlers.EntryDTO{}},
-			want: want{result: nil, code: http.StatusOK},
+				newEntry: simpleEntryKindOne()},
+			want: want{result: "01/01/2021", code: http.StatusOK},
 			mocks: func(m mocks) {
-				m.horarioService.EXPECT().CreateNewEntry(domain.Entry{}).Return(nil)
+
+				m.horarioService.EXPECT().CreateNewEntry(simpleEntryKindOne().ToEntry()).Return("01/01/2021", nil)
 			},
 		},
 
@@ -206,29 +210,43 @@ func TestPostSchedulerEntry(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			//Prepare
+
 			m := mocks{
 				horarioService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
 			}
-			tt.mocks(m)
 			setUpRouter := func() *gin.Engine {
 				horarioHandler := handlers.NewHTTPHandler(m.horarioService)
 				r := gin.Default()
-				r.GET("/availableHours", horarioHandler.GetAvailableHours)
+				r.POST(path, horarioHandler.NewEntry)
 				return r
 
 			}
+			tt.mocks(m)
+
 			r := setUpRouter()
 			w := httptest.NewRecorder()
-			uri := "" //TODO
-			req, _ := http.NewRequest("GET", uri, nil)
+			uri := path
+			body, _ := json.Marshal(simpleEntryKindOne())
+			bytes.NewBuffer(body)
+			req, _ := http.NewRequest("POST", uri, bytes.NewBuffer(body))
 			r.ServeHTTP(w, req)
 			assert.Equal(t, tt.want.code, w.Code)
 
-			wantedJson, _ := json.Marshal(tt.want.result)
-			assert.Equal(t, bytes.NewBuffer(wantedJson), w.Body)
+			assert.Equal(t, tt.want.result, w.Body.String())
 
 		})
 
 	}
 
+}
+func simpleEntryKindOne() handlers.EntryDTO {
+	return handlers.EntryDTO{
+		InitHour: 1,
+		InitMin:  1,
+		EndHour:  1,
+		EndMin:   1,
+		Subject:  "a",
+		Kind:     1,
+		Room:     "a",
+	}
 }

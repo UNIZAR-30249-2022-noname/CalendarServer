@@ -58,3 +58,16 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 	}
 
 }
+
+func (hdl *HTTPHandler) NewEntry(c *gin.Context) {
+	//Read the body request
+	body := EntryDTO{}
+	c.BindJSON(&body)
+	//Execute service
+	lastMod, err := hdl.horarioService.CreateNewEntry(body.ToEntry())
+	if err == nil {
+		c.String(http.StatusOK, lastMod)
+
+	}
+
+}
