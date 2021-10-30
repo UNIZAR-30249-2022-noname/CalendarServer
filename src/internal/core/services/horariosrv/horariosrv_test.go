@@ -83,24 +83,28 @@ func TestGetAvailableHours(t *testing.T) {
 	}
 	// · Runner · //
 	for _, tt := range tests {
-		//Prepare
 
-		m := mocks{
-			horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
-		}
+		t.Run(tt.name, func(t *testing.T) {
+			//Prepare
 
-		tt.mocks(m)
-		service := horariosrv.New(m.horarioRepository)
+			m := mocks{
+				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+			}
 
-		//Execute
-		result, err := service.GetAvailableHours(tt.args.terna)
+			tt.mocks(m)
+			service := horariosrv.New(m.horarioRepository)
 
-		//Verify
-		if tt.want.err != nil && err != nil {
-			assert.Equal(t, tt.want.err.Error(), err.Error())
-		}
+			//Execute
+			result, err := service.GetAvailableHours(tt.args.terna)
 
-		assert.Equal(t, tt.want.result, result)
+			//Verify
+			if tt.want.err != nil && err != nil {
+				assert.Equal(t, tt.want.err.Error(), err.Error())
+			}
+
+			assert.Equal(t, tt.want.result, result)
+
+		})
 
 	}
 }
