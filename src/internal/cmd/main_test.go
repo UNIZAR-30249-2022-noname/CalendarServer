@@ -33,16 +33,12 @@ func TestPingRoute(t *testing.T) {
 	assert.Equal(t, "pong", w.Body.String())
 }
 
-////////////////////////////
-// TEST AVAIALABLE HOURS ///
-////////////////////////////
 func TestGetAvailableHours(t *testing.T) {
 
 	// · Mocks · //
 	availableHours := simpleAvailableHours()
 	errorParam := handlers.ErrorHttp{Message: "Parámetros incorrectos"}
 	// · Test · //
-	path := "/availableHours"
 	type args struct {
 		terna handlers.TernaDto
 	}
@@ -133,31 +129,27 @@ func TestGetAvailableHours(t *testing.T) {
 	}
 	// · Runner · //
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			//Prepare
-			m := mocks{
-				horarioService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
-			}
-			tt.mocks(m)
-			setUpRouter := func() *gin.Engine {
-				horarioHandler := handlers.NewHTTPHandler(m.horarioService)
-				r := gin.Default()
-				r.GET("/availableHours", horarioHandler.GetAvailableHours)
-				return r
+		//Prepare
+		m := mocks{
+			horarioService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
+		}
+		tt.mocks(m)
+		setUpRouter := func() *gin.Engine {
+			horarioHandler := handlers.NewHTTPHandler(m.horarioService)
+			r := gin.Default()
+			r.GET("/availableHours", horarioHandler.GetAvailableHours)
+			return r
 
-			}
-			r := setUpRouter()
-			w := httptest.NewRecorder()
-			uri := path + "?titulacion=" + tt.args.terna.Titulacion + "&year=" + strconv.Itoa(tt.args.terna.Curso) + "&group=" + strconv.Itoa(tt.args.terna.Grupo)
-			req, _ := http.NewRequest("GET", uri, nil)
-			r.ServeHTTP(w, req)
-			assert.Equal(t, tt.want.code, w.Code)
+		}
+		r := setUpRouter()
+		w := httptest.NewRecorder()
+		uri := "/availableHours?titulacion=" + tt.args.terna.Titulacion + "&year=" + strconv.Itoa(tt.args.terna.Curso) + "&group=" + strconv.Itoa(tt.args.terna.Grupo)
+		req, _ := http.NewRequest("GET", uri, nil)
+		r.ServeHTTP(w, req)
+		assert.Equal(t, tt.want.code, w.Code)
 
-			wantedJson, _ := json.Marshal(tt.want.result)
-			assert.Equal(t, bytes.NewBuffer(wantedJson), w.Body)
-
-		})
-
+		wantedJson, _ := json.Marshal(tt.want.result)
+		assert.Equal(t, bytes.NewBuffer(wantedJson), w.Body)
 	}
 
 }
