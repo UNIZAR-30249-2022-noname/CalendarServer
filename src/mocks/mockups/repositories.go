@@ -48,3 +48,17 @@ func (mr *MockHorarioRepositorioMockRecorder) GetAvailableHours(arg0 interface{}
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAvailableHours", reflect.TypeOf((*MockHorarioRepositorio)(nil).GetAvailableHours), arg0)
 }
+
+// SaveEntry mocks base method.
+func (m *MockHorarioRepositorio) SaveEntry(arg0 domain.Entry) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SaveEntry", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SaveEntry indicates an expected call of SaveEntry.
+func (mr *MockHorarioRepositorioMockRecorder) SaveEntry(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveEntry", reflect.TypeOf((*MockHorarioRepositorio)(nil).SaveEntry), arg0)
+}

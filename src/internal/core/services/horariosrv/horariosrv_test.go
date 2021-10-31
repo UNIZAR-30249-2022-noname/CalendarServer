@@ -2,6 +2,7 @@ package horariosrv_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/horariosrv"
@@ -121,5 +122,81 @@ func simpleAvailableHours() []domain.AvailableHours {
 			Max:       3,
 		},
 	}
+
+}
+
+/////////////////////////////
+// TEST SCHEDULER ENTRIES ///
+/////////////////////////////
+
+func TestNewEntries(t *testing.T) {
+	// · Mocks · //
+
+	// · Test · //
+	type args struct {
+		entry domain.Entry
+	}
+	type want struct {
+		result string
+		err    error
+	}
+	tests := []struct {
+		name  string
+		args  args
+		want  want
+		mocks func(m mocks)
+	}{{
+		name: "Should return the current date",
+		args: args{entry: simpleEntry()},
+		want: want{result: currentDate()},
+		mocks: func(m mocks) {
+			m.horarioRepository.EXPECT().SaveEntry(simpleEntry()).Return(nil)
+		},
+	},
+	//TODO casos de error
+	}
+	// · Runner · //
+	for _, tt := range tests {
+		//Prepare
+		m := mocks{
+			horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+		}
+
+		tt.mocks(m)
+		service := horariosrv.New(m.horarioRepository)
+
+		//Execute
+		result, err := service.CreateNewEntry(tt.args.entry)
+
+		//Verify operation succeded
+		if tt.want.err != nil && err != nil {
+			assert.Equal(t, tt.want.err.Error(), err.Error())
+		}
+
+		assert.Equal(t, tt.want.result, result)
+
+		//Verify state changed
+		//TODO use the getEntry function for verifying the entrie was created
+
+	}
+}
+
+func simpleEntry() domain.Entry {
+	return domain.Entry{
+		Init: domain.NewHour(1, 1),
+		End:  domain.NewHour(2, 2),
+		Subject: domain.AvailableHours{
+			Kind:      domain.PRACTICES,
+			Subject:   "Prog 1",
+			Remaining: 2,
+			Max:       3,
+		},
+		Room: domain.Room{Name: "1"},
+	}
+}
+
+func currentDate() string {
+
+	return time.Now().Format("02/01/2006")
 
 }
