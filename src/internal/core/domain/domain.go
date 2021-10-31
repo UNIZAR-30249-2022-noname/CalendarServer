@@ -6,7 +6,8 @@ const (
 	PROBLEMAS = 2
 )
 
-//modelo de horas disponibles
+//AvaialableHours is a struct which represents the available hours
+//per [Terna]
 type AvailableHours struct {
 	Kind      int
 	Subject   string
@@ -14,6 +15,8 @@ type AvailableHours struct {
 	Max       int
 }
 
+//Terna is a struct which represent the relation among
+// bachelors, year and group
 type Terna struct {
 	Titulacion string
 	Curso      int

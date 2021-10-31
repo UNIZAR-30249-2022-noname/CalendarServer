@@ -23,12 +23,15 @@ type mocks struct {
 }
 
 func TestPingRoute(t *testing.T) {
+	//setup the real router
 	router := main.SetupRouter()
 
 	w := httptest.NewRecorder()
+	//doing the request
 	req, _ := http.NewRequest("GET", "/ping", nil)
 	router.ServeHTTP(w, req)
 
+	//Checking results
 	assert.Equal(t, 200, w.Code)
 	assert.Equal(t, "pong", w.Body.String())
 }

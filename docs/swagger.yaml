@@ -54,4 +54,12 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/handlers.ErrorHttp'
+  /ping/:
+    get:
+      description: Response "pong" if the server is currrently available
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Returns \"pong\
 swagger: "2.0"
