@@ -146,7 +146,7 @@ func TestNewEntries(t *testing.T) {
 		want  want
 		mocks func(m mocks)
 	}{{
-		name: "Should return the current date",
+		name: "Create entry succed",
 		args: args{entry: simpleEntry()},
 		want: want{result: currentDate(), err: nil},
 		mocks: func(m mocks) {
@@ -165,6 +165,25 @@ func TestNewEntries(t *testing.T) {
 		{
 			name:  "Should return error if hours are invalid",
 			args:  args{entry: incorrectHoursEntry()},
+			want:  want{result: "", err: apperrors.ErrInvalidInput},
+			mocks: func(m mocks) {},
+		},
+
+		{
+			name:  "Should return error if init hours lacks",
+			args:  args{entry: theoricalEntryFieldLacks()[0]},
+			want:  want{result: "", err: apperrors.ErrInvalidInput},
+			mocks: func(m mocks) {},
+		},
+		{
+			name:  "Should return error if end hours lacks",
+			args:  args{entry: theoricalEntryFieldLacks()[1]},
+			want:  want{result: "", err: apperrors.ErrInvalidInput},
+			mocks: func(m mocks) {},
+		},
+		{
+			name:  "Should return error if subject lacks",
+			args:  args{entry: theoricalEntryFieldLacks()[0]},
 			want:  want{result: "", err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {},
 		},
@@ -224,6 +243,42 @@ func incorrectHoursEntry() domain.Entry {
 		Room: domain.Room{Name: "1"},
 	}
 
+}
+
+func theoricalEntryFieldLacks() []domain.Entry {
+
+	return []domain.Entry{
+		//Init lacks
+		{
+			End: domain.NewHour(2, 0),
+			Subject: domain.AvailableHours{
+				Kind:      domain.THEORICAL,
+				Subject:   "Prog 1",
+				Remaining: 2,
+				Max:       3,
+			},
+			Room: domain.Room{Name: "1"},
+		},
+		//End lacks
+		{
+			Init: domain.NewHour(2, 0),
+			Subject: domain.AvailableHours{
+				Kind:      domain.THEORICAL,
+				Subject:   "Prog 1",
+				Remaining: 2,
+				Max:       3,
+			},
+			Room: domain.Room{Name: "1"},
+		},
+		//Subject Lacks
+		{
+			Init: domain.NewHour(1, 0),
+			End:  domain.NewHour(2, 0),
+			Room: domain.Room{Name: "1"},
+		},
+		//It is allowed to let room  field empty
+
+	}
 }
 
 func currentDate() string {
