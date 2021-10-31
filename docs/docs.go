@@ -77,7 +77,30 @@ var doc = `{
                 }
             }
         },
-
+        "/newEntry/": {
+            "post": {
+                "description": "Requesting a new entry for the scheduler. The entry will be definied by the initial hour\nand the ending hour, adintional info must be indicated depending of the kind of hours\nthe kinds of subject hours are:\n- Theorical = 1\n- Practices = 2\n- Exercises = 3",
+                "produces": [
+                    "text/plain"
+                ],
+                "parameters": [
+                    {
+                        "description": "Entry to create",
+                        "name": "entry",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.EntryDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Receive the date of the latests entry modification with format dd/mm/aaaa"
+                    }
+                }
+            }
+        },
         "/ping/": {
             "get": {
                 "description": "Response \"pong\" if the server is currrently available",
@@ -86,8 +109,7 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns \\\"pong\\"
-
+                        "description": "Returns \"pong\" "
                     }
                 }
             }

@@ -75,16 +75,34 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/handlers.ErrorHttp'
-
-  /ping/:
-    get:
-      description: Response "pong" if the server is currrently available
-
+  /newEntry/:
+    post:
+      description: |-
+        Requesting a new entry for the scheduler. The entry will be definied by the initial hour
+        and the ending hour, adintional info must be indicated depending of the kind of hours
+        the kinds of subject hours are:
+        - Theorical = 1
+        - Practices = 2
+        - Exercises = 3
+      parameters:
+      - description: Entry to create
+        in: body
+        name: entry
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.EntryDTO'
       produces:
       - text/plain
       responses:
         "200":
-
-          description: Returns \"pong\
-
+          description: Receive the date of the latests entry modification with format
+            dd/mm/aaaa
+  /ping/:
+    get:
+      description: Response "pong" if the server is currrently available
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: 'Returns "pong" '
 swagger: "2.0"

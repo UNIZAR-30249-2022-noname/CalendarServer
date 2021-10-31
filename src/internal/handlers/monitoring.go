@@ -7,7 +7,7 @@ import "github.com/gin-gonic/gin"
 //@Description Response "pong" if the server is currrently available
 //@Tag Monitoring
 //@Produce plain
-//@Success 200 "Returns \"pong\""
+//@Success 200 "Returns "pong" "
 //@Router /ping/ [get]
 func Ping(c *gin.Context) {
 	c.String(200, "pong")
