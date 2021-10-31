@@ -160,3 +160,135 @@ func TestGetAvailableHours(t *testing.T) {
 func simpleAvailableHours() domain.AvailableHours {
 	return domain.AvailableHours{}
 }
+
+/////////////////////////////
+// TEST SCHEDULER ENTRIES ///
+/////////////////////////////
+
+func TestPostSchedulerEntry(t *testing.T) {
+
+	// · Mocks · //
+
+	//errorParam := handlers.ErrorHttp{Message: "Parámetros incorrectos"}
+
+	// · Test · //
+	path := "/newEntry"
+
+	type args struct {
+		newEntry handlers.EntryDTO
+	}
+
+	type want struct {
+		result interface{}
+		code   int
+	}
+	tests := []struct {
+		name  string
+		args  args
+		want  want
+		mocks func(m mocks)
+	}{
+		{
+			name: "Should create a new entry succesfully for theorical classes",
+			args: args{
+				newEntry: simpleTheoricalEntry()},
+			want: want{result: "01/01/2021", code: http.StatusOK},
+			mocks: func(m mocks) {
+
+				m.horarioService.EXPECT().CreateNewEntry(simpleTheoricalEntry().ToEntry()).Return("01/01/2021", nil)
+			},
+		},
+		{
+			name: "Should create a new entry succesfully for practices classes",
+			args: args{
+				newEntry: simplePracticeEntry()},
+			want: want{result: "01/01/2021", code: http.StatusOK},
+			mocks: func(m mocks) {
+
+				m.horarioService.EXPECT().CreateNewEntry(simplePracticeEntry().ToEntry()).Return("01/01/2021", nil)
+			},
+		},
+		{
+			name: "Should create a new entry succesfully for exercises classes",
+			args: args{
+				newEntry: simpleExercisesEntry()},
+			want: want{result: "01/01/2021", code: http.StatusOK},
+			mocks: func(m mocks) {
+
+				m.horarioService.EXPECT().CreateNewEntry(simpleExercisesEntry().ToEntry()).Return("01/01/2021", nil)
+			},
+		},
+
+		//TODO more tests
+	}
+	// · Runner · //
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			//Prepare
+
+			m := mocks{
+				horarioService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
+			}
+			setUpRouter := func() *gin.Engine {
+				horarioHandler := handlers.NewHTTPHandler(m.horarioService)
+				r := gin.Default()
+				r.POST(path, horarioHandler.PostNewEntry)
+				return r
+
+			}
+			tt.mocks(m)
+
+			r := setUpRouter()
+			w := httptest.NewRecorder()
+			uri := path
+			body, _ := json.Marshal(tt.args.newEntry)
+			bytes.NewBuffer(body)
+			req, _ := http.NewRequest("POST", uri, bytes.NewBuffer(body))
+			r.ServeHTTP(w, req)
+			assert.Equal(t, tt.want.code, w.Code)
+
+			assert.Equal(t, tt.want.result, w.Body.String())
+
+		})
+
+	}
+
+}
+func simpleTheoricalEntry() handlers.EntryDTO {
+	return handlers.EntryDTO{
+		InitHour: 1,
+		InitMin:  1,
+		EndHour:  1,
+		EndMin:   1,
+		Subject:  "a",
+		Kind:     domain.THEORICAL,
+		Room:     "a",
+	}
+}
+
+func simplePracticeEntry() handlers.EntryDTO {
+	return handlers.EntryDTO{
+		InitHour: 1,
+		InitMin:  1,
+		EndHour:  1,
+		EndMin:   1,
+		Subject:  "a",
+		Kind:     domain.PRACTICES,
+		Room:     "a",
+		Semana:   "A",
+		Grupo:    "1",
+	}
+}
+
+func simpleExercisesEntry() handlers.EntryDTO {
+	return handlers.EntryDTO{
+		InitHour: 1,
+		InitMin:  1,
+		EndHour:  1,
+		EndMin:   1,
+		Subject:  "a",
+		Kind:     domain.EXERCISES,
+		Room:     "a",
+		Grupo:    "1",
+	}
+}

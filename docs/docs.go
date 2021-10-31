@@ -77,6 +77,7 @@ var doc = `{
                 }
             }
         },
+
         "/ping/": {
             "get": {
                 "description": "Response \"pong\" if the server is currrently available",
@@ -86,6 +87,7 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "Returns \\\"pong\\"
+
                     }
                 }
             }
@@ -103,6 +105,38 @@ var doc = `{
                 },
                 "remaining": {
                     "type": "integer"
+                },
+                "subject": {
+                    "type": "string"
+                }
+            }
+        },
+        "handlers.EntryDTO": {
+            "type": "object",
+            "properties": {
+                "endHour": {
+                    "type": "integer"
+                },
+                "endMin": {
+                    "type": "integer"
+                },
+                "grupo": {
+                    "type": "string"
+                },
+                "initHour": {
+                    "type": "integer"
+                },
+                "initMin": {
+                    "type": "integer"
+                },
+                "kind": {
+                    "type": "integer"
+                },
+                "room": {
+                    "type": "string"
+                },
+                "semana": {
+                    "type": "string"
                 },
                 "subject": {
                     "type": "string"

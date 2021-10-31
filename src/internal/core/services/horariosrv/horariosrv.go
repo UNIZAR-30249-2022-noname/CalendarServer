@@ -25,3 +25,7 @@ func (srv *service) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHou
 
 	return res, nil
 }
+
+func (srv *service) CreateNewEntry(entry domain.Entry) (string, error) {
+	return "", nil
+}

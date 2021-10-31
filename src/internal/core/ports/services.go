@@ -8,5 +8,6 @@ type HorarioService interface {
 	//GetAvaiabledHours is a function which returns a set of [AvailableHours]
 	//given a completed [Terna] (not null fields)
 	GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours, error)
+	CreateNewEntry(entry domain.Entry) (string, error)
 	//TODO funciones de este service
 }
