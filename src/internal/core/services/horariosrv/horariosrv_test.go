@@ -80,7 +80,6 @@ func TestGetAvailableHours(t *testing.T) {
 				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Titulacion: "A", Curso: 1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
-		//TODO casos de error
 	}
 	// · Runner · //
 	for _, tt := range tests {
@@ -186,8 +185,6 @@ func TestNewEntries(t *testing.T) {
 			want:  want{result: "", err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {},
 		},
-
-		//TODO casos de error
 	}
 	// · Runner · //
 	for _, tt := range tests {
@@ -210,6 +207,7 @@ func TestNewEntries(t *testing.T) {
 		assert.Equal(t, tt.want.result, result)
 
 		//Verify state changed
+
 		//TODO use the getEntry function for verifying the entrie was created
 
 	}

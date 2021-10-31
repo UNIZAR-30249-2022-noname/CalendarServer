@@ -125,7 +125,6 @@ func TestGetAvailableHours(t *testing.T) {
 					Grupo:      1}).Return([]domain.AvailableHours{}, apperrors.ErrNotFound)
 			},
 		},
-		//TODO more tests
 	}
 	// · Runner · //
 	for _, tt := range tests {
@@ -215,8 +214,6 @@ func TestPostSchedulerEntry(t *testing.T) {
 				m.horarioService.EXPECT().CreateNewEntry(simpleExercisesEntry().ToEntry()).Return("01/01/2021", nil)
 			},
 		},
-
-		//TODO more tests
 	}
 	// · Runner · //
 	for _, tt := range tests {
