@@ -148,12 +148,28 @@ func TestNewEntries(t *testing.T) {
 	}{{
 		name: "Should return the current date",
 		args: args{entry: simpleEntry()},
-		want: want{result: currentDate()},
+		want: want{result: currentDate(), err: nil},
 		mocks: func(m mocks) {
 			m.horarioRepository.EXPECT().SaveEntry(simpleEntry()).Return(nil)
 		},
 	},
-	//TODO casos de error
+		{
+			name: "Should return error if repository fails",
+			args: args{entry: simpleEntry()},
+			want: want{result: "", err: apperrors.ErrInternal},
+			mocks: func(m mocks) {
+				m.horarioRepository.EXPECT().SaveEntry(simpleEntry()).Return(apperrors.ErrInternal)
+			},
+		},
+
+		{
+			name:  "Should return error if hours are invalid",
+			args:  args{entry: incorrectHoursEntry()},
+			want:  want{result: "", err: apperrors.ErrInvalidInput},
+			mocks: func(m mocks) {},
+		},
+
+		//TODO casos de error
 	}
 	// · Runner · //
 	for _, tt := range tests {
@@ -193,6 +209,21 @@ func simpleEntry() domain.Entry {
 		},
 		Room: domain.Room{Name: "1"},
 	}
+}
+
+func incorrectHoursEntry() domain.Entry {
+	return domain.Entry{
+		Init: domain.NewHour(3, 0),
+		End:  domain.NewHour(2, 0),
+		Subject: domain.AvailableHours{
+			Kind:      domain.PRACTICES,
+			Subject:   "Prog 1",
+			Remaining: 2,
+			Max:       3,
+		},
+		Room: domain.Room{Name: "1"},
+	}
+
 }
 
 func currentDate() string {

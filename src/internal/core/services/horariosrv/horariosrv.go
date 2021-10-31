@@ -26,6 +26,11 @@ func (srv *HorarioServiceImp) GetAvailableHours(terna domain.Terna) ([]domain.Av
 }
 
 func (srv *HorarioServiceImp) CreateNewEntry(entry domain.Entry) (string, error) {
+	//Check if the entry has valid time interval
+	if entry.Init.IsLaterThan(entry.End) {
+		return "", apperrors.ErrInvalidInput
+	}
+
 	err := srv.horarioRepositorio.SaveEntry(entry)
 	if err != nil {
 		return "", apperrors.ErrInternal

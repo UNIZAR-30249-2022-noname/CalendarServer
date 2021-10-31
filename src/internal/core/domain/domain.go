@@ -20,16 +20,27 @@ type Terna struct {
 	Grupo      int
 }
 
-type hour struct {
+type Hour struct {
 	hour int
 	min  int
 }
 
-func NewHour(h, m int) hour {
-	return hour{
+func NewHour(h, m int) Hour {
+	return Hour{
 		hour: h,
 		min:  m,
 	}
+}
+
+func (h Hour) IsLaterThan(h2 Hour) bool {
+	//if the hour is previus return false
+	if h.hour < h2.hour {
+		return false
+		//if the hour is equal check the minutes
+	} else if h.hour == h2.hour && h.min <= h2.min {
+		return false
+	}
+	return true
 }
 
 type Room struct {
@@ -37,8 +48,8 @@ type Room struct {
 }
 
 type Entry struct {
-	Init    hour
-	End     hour
+	Init    Hour
+	End     Hour
 	Subject AvailableHours
 	Room    Room
 }
