@@ -27,7 +27,7 @@ func (srv *HorarioServiceImp) GetAvailableHours(terna domain.Terna) ([]domain.Av
 
 func (srv *HorarioServiceImp) CreateNewEntry(entry domain.Entry) (string, error) {
 	//check if there is not empty compulsory fields
-	if (entry.Init == domain.Hour{}) || (entry.End == domain.Hour{}) || (entry.Subject == domain.AvailableHours{}) {
+	if (entry.Init == domain.Hour{}) || (entry.End == domain.Hour{}) || (entry.Subject == domain.Subject{}) {
 		return "", apperrors.ErrInvalidInput
 	}
 

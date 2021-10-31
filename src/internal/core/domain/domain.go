@@ -8,10 +8,13 @@ const (
 
 //modelo de horas disponibles
 type AvailableHours struct {
-	Kind      int
-	Subject   string
+	Subject   Subject
 	Remaining int
 	Max       int
+}
+type Subject struct {
+	Kind int
+	Name string
 }
 
 type Terna struct {
@@ -50,6 +53,8 @@ type Room struct {
 type Entry struct {
 	Init    Hour
 	End     Hour
-	Subject AvailableHours
+	Subject Subject
 	Room    Room
+	Week    string
+	Group   string
 }

@@ -62,3 +62,5 @@ func TestIsLaterThan(t *testing.T) {
 	}
 
 }
+
+//TODO test for verifying Available hours depending its kind and empty fields

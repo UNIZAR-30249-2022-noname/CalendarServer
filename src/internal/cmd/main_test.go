@@ -272,8 +272,8 @@ func simplePracticeEntry() handlers.EntryDTO {
 		Subject:  "a",
 		Kind:     domain.PRACTICES,
 		Room:     "a",
-		Semana:   "A",
-		Grupo:    "1",
+		Week:     "A",
+		Group:    "1",
 	}
 }
 
@@ -286,6 +286,6 @@ func simpleExercisesEntry() handlers.EntryDTO {
 		Subject:  "a",
 		Kind:     domain.EXERCISES,
 		Room:     "a",
-		Grupo:    "1",
+		Group:    "1",
 	}
 }

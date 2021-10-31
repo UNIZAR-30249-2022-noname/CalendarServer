@@ -110,14 +110,13 @@ func simpleAvailableHours() []domain.AvailableHours {
 
 	return []domain.AvailableHours{
 		{
-			Kind:      domain.THEORICAL,
-			Subject:   "IC",
+
+			Subject:   domain.Subject{Kind: domain.THEORICAL, Name: "IC"},
 			Remaining: 5,
 			Max:       5,
 		},
 		{
-			Kind:      domain.PRACTICES,
-			Subject:   "Prog 1",
+			Subject:   domain.Subject{Name: "Prog 1", Kind: domain.PRACTICES},
 			Remaining: 2,
 			Max:       3,
 		},
@@ -220,11 +219,9 @@ func simpleEntry() domain.Entry {
 	return domain.Entry{
 		Init: domain.NewHour(1, 1),
 		End:  domain.NewHour(2, 2),
-		Subject: domain.AvailableHours{
-			Kind:      domain.PRACTICES,
-			Subject:   "Prog 1",
-			Remaining: 2,
-			Max:       3,
+		Subject: domain.Subject{
+			Kind: domain.PRACTICES,
+			Name: "Prog 1",
 		},
 		Room: domain.Room{Name: "1"},
 	}
@@ -234,11 +231,9 @@ func incorrectHoursEntry() domain.Entry {
 	return domain.Entry{
 		Init: domain.NewHour(3, 0),
 		End:  domain.NewHour(2, 0),
-		Subject: domain.AvailableHours{
-			Kind:      domain.PRACTICES,
-			Subject:   "Prog 1",
-			Remaining: 2,
-			Max:       3,
+		Subject: domain.Subject{
+			Kind: domain.PRACTICES,
+			Name: "Prog 1",
 		},
 		Room: domain.Room{Name: "1"},
 	}
@@ -251,22 +246,18 @@ func theoricalEntryFieldLacks() []domain.Entry {
 		//Init lacks
 		{
 			End: domain.NewHour(2, 0),
-			Subject: domain.AvailableHours{
-				Kind:      domain.THEORICAL,
-				Subject:   "Prog 1",
-				Remaining: 2,
-				Max:       3,
+			Subject: domain.Subject{
+				Kind: domain.THEORICAL,
+				Name: "Prog 1",
 			},
 			Room: domain.Room{Name: "1"},
 		},
 		//End lacks
 		{
 			Init: domain.NewHour(2, 0),
-			Subject: domain.AvailableHours{
-				Kind:      domain.THEORICAL,
-				Subject:   "Prog 1",
-				Remaining: 2,
-				Max:       3,
+			Subject: domain.Subject{
+				Kind: domain.THEORICAL,
+				Name: "Prog 1",
 			},
 			Room: domain.Room{Name: "1"},
 		},
