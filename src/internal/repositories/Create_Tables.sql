@@ -23,6 +23,7 @@ CREATE TABLE app_db.curso (
 
 CREATE TABLE app_db.grupodocente (
     id int PRIMARY KEY AUTO_INCREMENT,
+    numero int not null
     idcurso int not null,
     FOREIGN KEY (idcurso) REFERENCES app_db.curso (id)
 );
@@ -36,6 +37,7 @@ CREATE TABLE app_db.hora (
     id int PRIMARY KEY AUTO_INCREMENT,
     disponibles int not null,
     totales int not null,
+    tipo int not null,
     idasignatura int not null,
     idgrupo int not null,
     FOREIGN KEY (idasignatura) REFERENCES app_db.asignatura (id),
