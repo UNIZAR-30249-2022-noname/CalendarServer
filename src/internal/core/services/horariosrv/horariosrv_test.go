@@ -199,7 +199,7 @@ func simpleEntry() domain.Entry {
 		Init: domain.NewHour(1, 1),
 		End:  domain.NewHour(2, 2),
 		Subject: domain.Subject{
-			Kind: domain.PRACTICES,
+			Kind: domain.THEORICAL,
 			Name: "Prog 1",
 		},
 		Room: domain.Room{Name: "1"},
