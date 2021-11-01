@@ -100,6 +100,19 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/ping/": {
+            "get": {
+                "description": "Response \"pong\" if the server is currrently available",
+                "produces": [
+                    "text/plain"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns \"pong\" "
+                    }
+                }
+            }
         }
     },
     "definitions": {
