@@ -162,27 +162,31 @@ func TestNewEntries(t *testing.T) {
 	}
 	// · Runner · //
 	for _, tt := range tests {
-		//Prepare
-		m := mocks{
-			horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
-		}
 
-		tt.mocks(m)
-		service := horariosrv.New(m.horarioRepository)
+		t.Run(tt.name, func(t *testing.T) {
+			//Prepare
+			m := mocks{
+				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+			}
 
-		//Execute
-		result, err := service.CreateNewEntry(tt.args.entry)
+			tt.mocks(m)
+			service := horariosrv.New(m.horarioRepository)
 
-		//Verify operation succeded
-		if tt.want.err != nil && err != nil {
-			assert.Equal(t, tt.want.err.Error(), err.Error())
-		}
+			//Execute
+			result, err := service.CreateNewEntry(tt.args.entry)
 
-		assert.Equal(t, tt.want.result, result)
+			//Verify operation succeded
+			if tt.want.err != nil && err != nil {
+				assert.Equal(t, tt.want.err.Error(), err.Error())
+			}
 
-		//Verify state changed
+			assert.Equal(t, tt.want.result, result)
 
-		//TODO use the getEntry function for verifying the entrie was created
+			//Verify state changed
+
+			//TODO use the getEntry function for verifying the entrie was created
+
+		})
 
 	}
 }
