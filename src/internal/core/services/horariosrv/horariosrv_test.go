@@ -159,32 +159,6 @@ func TestNewEntries(t *testing.T) {
 				m.horarioRepository.EXPECT().SaveEntry(simpleEntry()).Return(apperrors.ErrInternal)
 			},
 		},
-
-		{
-			name:  "Should return error if hours are invalid",
-			args:  args{entry: incorrectHoursEntry()},
-			want:  want{result: "", err: apperrors.ErrInvalidInput},
-			mocks: func(m mocks) {},
-		},
-
-		{
-			name:  "Should return error if init hours lacks",
-			args:  args{entry: theoricalEntryFieldLacks()[0]},
-			want:  want{result: "", err: apperrors.ErrInvalidInput},
-			mocks: func(m mocks) {},
-		},
-		{
-			name:  "Should return error if end hours lacks",
-			args:  args{entry: theoricalEntryFieldLacks()[1]},
-			want:  want{result: "", err: apperrors.ErrInvalidInput},
-			mocks: func(m mocks) {},
-		},
-		{
-			name:  "Should return error if subject lacks",
-			args:  args{entry: theoricalEntryFieldLacks()[0]},
-			want:  want{result: "", err: apperrors.ErrInvalidInput},
-			mocks: func(m mocks) {},
-		},
 	}
 	// · Runner · //
 	for _, tt := range tests {
@@ -222,51 +196,6 @@ func simpleEntry() domain.Entry {
 			Name: "Prog 1",
 		},
 		Room: domain.Room{Name: "1"},
-	}
-}
-
-func incorrectHoursEntry() domain.Entry {
-	return domain.Entry{
-		Init: domain.NewHour(3, 0),
-		End:  domain.NewHour(2, 0),
-		Subject: domain.Subject{
-			Kind: domain.PRACTICES,
-			Name: "Prog 1",
-		},
-		Room: domain.Room{Name: "1"},
-	}
-
-}
-
-func theoricalEntryFieldLacks() []domain.Entry {
-
-	return []domain.Entry{
-		//Init lacks
-		{
-			End: domain.NewHour(2, 0),
-			Subject: domain.Subject{
-				Kind: domain.THEORICAL,
-				Name: "Prog 1",
-			},
-			Room: domain.Room{Name: "1"},
-		},
-		//End lacks
-		{
-			Init: domain.NewHour(2, 0),
-			Subject: domain.Subject{
-				Kind: domain.THEORICAL,
-				Name: "Prog 1",
-			},
-			Room: domain.Room{Name: "1"},
-		},
-		//Subject Lacks
-		{
-			Init: domain.NewHour(1, 0),
-			End:  domain.NewHour(2, 0),
-			Room: domain.Room{Name: "1"},
-		},
-		//It is allowed to let room  field empty
-
 	}
 }
 

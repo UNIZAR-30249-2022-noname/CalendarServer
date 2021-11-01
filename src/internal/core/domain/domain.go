@@ -1,9 +1,11 @@
 package domain
 
+import "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
+
 const (
-	THEORICAL = 0
-	PRACTICES = 1
-	EXERCISES = 2
+	THEORICAL = 1
+	PRACTICES = 2
+	EXERCISES = 3
 )
 
 //modelo de horas disponibles
@@ -15,6 +17,13 @@ type AvailableHours struct {
 type Subject struct {
 	Kind int
 	Name string
+}
+
+func (s Subject) IsValid() error {
+	if s.Kind == 0 || s.Name == "" {
+		return apperrors.ErrInvalidInput
+	}
+	return nil
 }
 
 type Terna struct {
@@ -57,4 +66,37 @@ type Entry struct {
 	Room    Room
 	Week    string
 	Group   string
+}
+
+func (e Entry) IsValid() error {
+
+	//check if there is not empty compulsory fields
+	if (e.Init == Hour{}) || (e.End == Hour{}) || (e.Subject == Subject{}) {
+		return apperrors.ErrInvalidInput
+	}
+	//Check if the entry has valid time interval
+	if e.Init.IsLaterThan(e.End) {
+		return apperrors.ErrInvalidInput
+	}
+	err := e.Subject.IsValid()
+	if err != nil {
+		return apperrors.ErrInvalidInput
+	}
+
+	switch e.Subject.Kind {
+	case THEORICAL:
+		//currently doesn'have a specific field
+		break
+	case PRACTICES:
+		if e.Week == "" || e.Group == "" {
+			return apperrors.ErrInvalidInput
+		}
+
+	case EXERCISES:
+		if e.Group == "" {
+			return apperrors.ErrInvalidInput
+		}
+
+	}
+	return nil
 }
