@@ -30,10 +30,8 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/samonzeweb/godb v1.0.15
 	github.com/swaggo/files v0.0.0-20210815190702-a29dd2bc99b2
 	github.com/swaggo/gin-swagger v1.3.2
-	github.com/swaggo/swag v1.7.3 // indirect
 	github.com/ugorji/go/codec v1.2.6 // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
 	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d // indirect
@@ -47,5 +45,5 @@ require (
 
 require (
 	github.com/go-sql-driver/mysql v1.6.0
-	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
+	github.com/swaggo/swag v1.7.3
 )
