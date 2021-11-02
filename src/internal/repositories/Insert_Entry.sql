@@ -8,7 +8,7 @@ SELECT id, idgrupo
             IN (SELECT id FROM app_db.asignatura WHERE asignatura.nombre='si')
 
 --Sacar id aula
-SELECT id FROM app_db.aula WHERE ...
+SELECT id FROM app_db.aula WHERE aula.nombre='1'
 
 --El insert
 INSERT INTO app_db.entradahorario (inicio, fin, idhoras, idaula, idgrupo, ultModificacion)
