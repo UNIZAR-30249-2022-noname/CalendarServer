@@ -35,6 +35,10 @@ func NewHour(h, m int) hour {
 	}
 }
 
+func HourToInt(h hour) int {
+	return h.hour*100 + h.min
+}
+
 type Room struct {
 	Name string
 }
