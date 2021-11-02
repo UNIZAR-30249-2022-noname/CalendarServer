@@ -1,4 +1,4 @@
-SELECT a.* FROM
+SELECT a.disponibles, a.totales, a.tipo, a.nombre FROM
 (SELECT hora.*, a.nombre FROM hora INNER JOIN 
 	(SELECT * FROM asignatura 
      WHERE id IN 
