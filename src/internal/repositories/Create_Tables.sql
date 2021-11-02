@@ -29,7 +29,7 @@ CREATE TABLE app_db.grupodocente (
 
 CREATE TABLE app_db.aula (
     id int PRIMARY KEY AUTO_INCREMENT,
-    numero int not null
+    nombre varchar(30) not null
 );
 
 CREATE TABLE app_db.hora (
