@@ -16,15 +16,15 @@ type EntryDTO struct {
 	Subject  string `json:"subject"`
 	Kind     int    `json:"kind"`
 	Room     string `json:"room"`
-	Semana   string `json:"semana"`
-	Grupo    string `json:"grupo"`
+	Week     string `json:"semana"`
+	Group    string `json:"grupo"`
 }
 
 func (e EntryDTO) ToEntry() domain.Entry {
 	return domain.Entry{
 		Init:    domain.NewHour(e.InitHour, e.InitMin),
 		End:     domain.NewHour(e.EndHour, e.EndMin),
-		Subject: domain.AvailableHours{Kind: e.Kind, Subject: e.Subject},
+		Subject: domain.Subject{Kind: e.Kind, Name: e.Subject},
 		Room:    domain.Room{Name: e.Room},
 	}
 
