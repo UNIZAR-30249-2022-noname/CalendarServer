@@ -2,6 +2,8 @@ package horarioRepositorio
 
 import (
 	"database/sql"
+	"fmt"
+	"time"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/models"
@@ -42,4 +44,19 @@ func (repo *repo) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours
 	}
 
 	return res, nil
+}
+
+func (repo *repo) CreateNewEntry(entry domain.Entry) (error) {
+	var idhoras, idgrupo, idaula int
+	err := repo.db.QueryRow(consultas.SelectIdHoraGrupo,
+			entry.Subject.Kind, entry.Subject.Name).Scan(&idhoras, &idgrupo)
+	if err != nil { return apperrors.ErrSql }
+	err = repo.db.QueryRow(consultas.SelectIdAula, entry.Room.Name).Scan(&idaula)
+	if err != nil { return apperrors.ErrSql }
+	now := time.Now()
+  	ultModificacion := now.Format("2006-02-01")
+	results, err := repo.db.Exec(consultas.InsertEntradaHorario, entry.Init, entry.End, idhoras, idaula, idgrupo, ultModificacion)
+	fmt.Printf("%v", results)
+	if err != nil { return apperrors.ErrSql }
+	return nil
 }
