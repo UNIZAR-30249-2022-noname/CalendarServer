@@ -5,6 +5,7 @@ import (
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBasico(t *testing.T) {
@@ -28,12 +29,15 @@ func TestBasico(t *testing.T) {
 		Grupo:      0,
 	}
 	repos := horarioRepositorio.New()
+	allTrue := true
 	//TODO no sudes del error pero lo pongo asi para k no de errores
 	hoursgot, _ := repos.GetAvailableHours(ternaAsked)
 	for i, h := range hoursgot {
 		if h != hoursexpected[i] {
 			t.Errorf("Expected: %v, got: %v", hoursexpected, hoursgot)
+			allTrue = false
 		}
 	}
-
+	assert.Equal(t, true, allTrue)
+	repos.CloseConn()
 }

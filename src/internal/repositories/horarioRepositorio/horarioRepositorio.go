@@ -13,8 +13,7 @@ type repo struct {
 }
 
 func New() *repo {
-	db, _ := sql.Open("mysql", "user:user@tcp(127.0.0.1:6033)/horarios_db")
-	defer db.Close()
+	db, _ := sql.Open("mysql", "user:user@tcp(127.0.0.1:6033)/app_db")
 	return &repo{db}
 }
 
@@ -23,6 +22,10 @@ type AuxAvaiableHours struct {
 	Subject   string `json:"name"`
 	Remaining int    `json:"disponibles"`
 	Max       int    `json:"totales"`
+}
+
+func (repo *repo) CloseConn() (error) {
+	return repo.db.Close();
 }
 
 func (repo *repo) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours, error) {
@@ -42,15 +45,15 @@ func (repo *repo) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours
 	if err != nil {
 		return []domain.AvailableHours{}, err
 	}
-	i := 0
+	
 	for results.Next() {
 		var auxv AuxAvaiableHours
 		// for each row, scan the result into our tag composite object
 		err = results.Scan(&auxv.Remaining, &auxv.Max, &auxv.Kind, &auxv.Subject)
 		if err != nil {
-			panic(err.Error()) // proper error handling instead of panic in your app
+			return []domain.AvailableHours{}, err
 		}
-		res[i] = domain.AvailableHours{Kind: auxv.Kind, Subject: auxv.Subject, Remaining: auxv.Remaining, Max: auxv.Max}
+		res = append(res, domain.AvailableHours{Kind: auxv.Kind, Subject: auxv.Subject, Remaining: auxv.Remaining, Max: auxv.Max})
 		log.Printf("%v", auxv)
 	}
 
