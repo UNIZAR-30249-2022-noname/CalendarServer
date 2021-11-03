@@ -1,17 +1,29 @@
 package domain
 
+import "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
+
 const (
-	THEORICAL = 0
-	PRACTICES = 1
-	EXERCISES = 2
+	THEORICAL = 1
+	PRACTICES = 2
+	EXERCISES = 3
 )
 
 //modelo de horas disponibles
 type AvailableHours struct {
-	Kind      int
-	Subject   string
+	Subject   Subject
 	Remaining int
 	Max       int
+}
+type Subject struct {
+	Kind int
+	Name string
+}
+
+func (s Subject) IsValid() error {
+	if s.Kind == 0 || s.Name == "" {
+		return apperrors.ErrInvalidInput
+	}
+	return nil
 }
 
 type Terna struct {
@@ -20,16 +32,27 @@ type Terna struct {
 	Grupo      int
 }
 
-type hour struct {
+type Hour struct {
 	hour int
 	min  int
 }
 
-func NewHour(h, m int) hour {
-	return hour{
+func NewHour(h, m int) Hour {
+	return Hour{
 		hour: h,
 		min:  m,
 	}
+}
+
+func (h Hour) IsLaterThan(h2 Hour) bool {
+	//if the hour is previus return false
+	if h.hour < h2.hour {
+		return false
+		//if the hour is equal check the minutes
+	} else if h.hour == h2.hour && h.min <= h2.min {
+		return false
+	}
+	return true
 }
 
 type Room struct {
@@ -37,8 +60,43 @@ type Room struct {
 }
 
 type Entry struct {
-	Init    hour
-	End     hour
-	Subject AvailableHours
+	Init    Hour
+	End     Hour
+	Subject Subject
 	Room    Room
+	Week    string
+	Group   string
+}
+
+func (e Entry) IsValid() error {
+
+	//check if there is not empty compulsory fields
+	if (e.Init == Hour{}) || (e.End == Hour{}) || (e.Subject == Subject{}) {
+		return apperrors.ErrInvalidInput
+	}
+	//Check if the entry has valid time interval
+	if e.Init.IsLaterThan(e.End) {
+		return apperrors.ErrInvalidInput
+	}
+	err := e.Subject.IsValid()
+	if err != nil {
+		return apperrors.ErrInvalidInput
+	}
+
+	switch e.Subject.Kind {
+	case THEORICAL:
+		//currently doesn'have a specific field
+		break
+	case PRACTICES:
+		if e.Week == "" || e.Group == "" {
+			return apperrors.ErrInvalidInput
+		}
+
+	case EXERCISES:
+		if e.Group == "" {
+			return apperrors.ErrInvalidInput
+		}
+
+	}
+	return nil
 }
