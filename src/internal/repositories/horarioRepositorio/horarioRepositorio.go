@@ -2,9 +2,9 @@ package horarioRepositorio
 
 import (
 	"database/sql"
-	"log"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -43,7 +43,7 @@ func (repo *repo) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours
 		"INNER JOIN curso ON grupodocente.idcurso=curso.id WHERE curso.numero=? AND grupodocente.numero=?)) b "+
 		"ON a.id=b.id", terna.Titulacion, terna.Curso, terna.Grupo)
 	if err != nil {
-		return []domain.AvailableHours{}, err
+		return []domain.AvailableHours{}, apperrors.ErrSql
 	}
 	
 	for results.Next() {
@@ -54,29 +54,7 @@ func (repo *repo) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours
 			return []domain.AvailableHours{}, err
 		}
 		res = append(res, domain.AvailableHours{Kind: auxv.Kind, Subject: auxv.Subject, Remaining: auxv.Remaining, Max: auxv.Max})
-		log.Printf("%v", auxv)
 	}
 
 	return res, nil
 }
-
-/*
-func TestIsSuperAnimal(t *testing.T) {
-
-	AvailableHours := []domain.AvailableHours{
-		{
-			Kind:      domain.TEORIA,
-			Subject:   "IC",
-			Remaining: 5,
-			Max:       5,
-		},
-	}
-
-	repositorio := horarioRepositorio.New()
-	expected := true
-	got := true
-	if got != expected {
-		t.Errorf("Expected: %v, got: %v", expected, got)
-	}
-}
-*/

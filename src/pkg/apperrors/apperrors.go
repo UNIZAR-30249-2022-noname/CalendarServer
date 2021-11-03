@@ -7,4 +7,5 @@ var (
 	ErrIllegalOperation = errors.New("illegal_operation")
 	ErrInvalidInput     = errors.New("invalid_input")
 	ErrInternal         = errors.New("internal")
+	ErrSql         		= errors.New("sql")
 )
