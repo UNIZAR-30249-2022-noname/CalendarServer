@@ -33,7 +33,7 @@ func TestBasico(t *testing.T) {
 	repos := horarioRepositorio.New()
 	hoursgot, error := repos.GetAvailableHours(ternaAsked)
 	if error != nil {
-		assert.Equal(t, err.Error(), error)
+		assert.Equal(t, err, error)
 	}
 	for i, h := range hoursgot {
 		assert.Equal(t, h, hoursexpected[i])
