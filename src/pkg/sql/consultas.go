@@ -19,5 +19,5 @@ const SelectIdHoraGrupo = "SELECT id, idgrupo " +
 
 const SelectIdAula = "SELECT id FROM app_db.aula WHERE aula.nombre=?"
 
-const InsertEntradaHorario = "INSERT INTO app_db.entradahorario (inicio, fin, idhoras, idaula, idgrupo, ultModificacion) " +
-	"VALUES (?, ?, ?, ?, ?, ?)"
+const InsertEntradaHorario = "INSERT INTO app_db.entradahorario (inicio, fin, idhoras, idaula, idgrupo, ultModificacion, grupo, semana) " +
+	"VALUES (?, ?, ?, ?, ?, ?, ?, ?)"

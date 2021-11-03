@@ -54,8 +54,9 @@ func (repo *repo) CreateNewEntry(entry domain.Entry) (error) {
 	if err != nil { return apperrors.ErrSql }
 	now := time.Now()
   	ultModificacion := now.Format("2006-02-01")
-	_ , err = repo.db.Exec(consultas.InsertEntradaHorario, domain.HourToInt(entry.Init), 
-								 domain.HourToInt(entry.End), idhoras, idaula, idgrupo, ultModificacion)
+	_ , err = repo.db.Exec(consultas.InsertEntradaHorario, domain.HourToInt(entry.Init), 						 
+							domain.HourToInt(entry.End), idhoras, idaula, idgrupo, ultModificacion, 
+							  entry.Group, entry.Week)
 	if err != nil { return apperrors.ErrSql }
 	return nil
 }

@@ -4,7 +4,7 @@
 --Sacar que hours es -> idhoras idgrupo
 SELECT id, idgrupo 
     FROM app_db.hora 
-        WHERE hora.tipo=0 AND hora.disponibles=20 AND hora.totales=21 AND hora.idasignatura 
+        WHERE hora.tipo=0 AND hora.idasignatura 
             IN (SELECT id FROM app_db.asignatura WHERE asignatura.nombre='si')
 
 --Sacar id aula
