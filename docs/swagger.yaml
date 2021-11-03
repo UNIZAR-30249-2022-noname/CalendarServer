@@ -97,4 +97,12 @@ paths:
         "200":
           description: Receive the date of the latests entry modification with format
             dd/mm/aaaa
+  /ping/:
+    get:
+      description: Response "pong" if the server is currrently available
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: 'Returns "pong" '
 swagger: "2.0"

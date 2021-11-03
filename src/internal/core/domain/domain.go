@@ -8,7 +8,8 @@ const (
 	EXERCISES = 3
 )
 
-//modelo de horas disponibles
+//AvaialableHours is a struct which represents the available hours
+//per [Terna]
 type AvailableHours struct {
 	Subject   Subject
 	Remaining int
@@ -26,6 +27,8 @@ func (s Subject) IsValid() error {
 	return nil
 }
 
+//Terna is a struct which represent the relation among
+// bachelors, year and group
 type Terna struct {
 	Titulacion string
 	Curso      int
@@ -53,6 +56,9 @@ func (h Hour) IsLaterThan(h2 Hour) bool {
 		return false
 	}
 	return true
+}
+func HourToInt(h Hour) int {
+	return h.hour*100 + h.min
 }
 
 type Room struct {

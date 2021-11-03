@@ -8,14 +8,18 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 )
 
+//HorarioServiceImp is the implemetation of [HorarioService] interface.
 type HorarioServiceImp struct {
 	horarioRepositorio ports.HorarioRepositorio
 }
 
+//New is a function which creates a new [HorarioServiceImp]
 func New(horarioRepositorio ports.HorarioRepositorio) *HorarioServiceImp {
 	return &HorarioServiceImp{horarioRepositorio: horarioRepositorio}
 }
 
+//GetAvaiabledHours is a function which returns a set of [AvailableHours]
+//given a completed [Terna] (not null fields)
 func (srv *HorarioServiceImp) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours, error) {
 	res, err := srv.horarioRepositorio.GetAvailableHours(terna)
 	if err != nil {
