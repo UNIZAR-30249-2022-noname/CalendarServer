@@ -2,7 +2,6 @@ package horarioRepositorio
 
 import (
 	"database/sql"
-	"fmt"
 	"time"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
@@ -55,8 +54,8 @@ func (repo *repo) CreateNewEntry(entry domain.Entry) (error) {
 	if err != nil { return apperrors.ErrSql }
 	now := time.Now()
   	ultModificacion := now.Format("2006-02-01")
-	results, err := repo.db.Exec(consultas.InsertEntradaHorario, entry.Init, entry.End, idhoras, idaula, idgrupo, ultModificacion)
-	fmt.Printf("%v", results)
+	_ , err = repo.db.Exec(consultas.InsertEntradaHorario, domain.HourToInt(entry.Init), 
+								 domain.HourToInt(entry.End), idhoras, idaula, idgrupo, ultModificacion)
 	if err != nil { return apperrors.ErrSql }
 	return nil
 }
