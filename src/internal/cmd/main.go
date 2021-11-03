@@ -10,6 +10,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+//SetupRouter is a func which bind each uri with a handler function
 func SetupRouter() *gin.Engine {
 
 	r := gin.Default()
@@ -18,6 +19,7 @@ func SetupRouter() *gin.Engine {
 	horarioHandler := handlers.NewHTTPHandler(horariosrv)
 	r.GET("/ping", handlers.Ping)
 	r.GET("/availableHours", horarioHandler.GetAvailableHours)
+	r.POST("/newEntry", horarioHandler.PostNewEntry)
 
 	return r
 }
