@@ -13,14 +13,12 @@ func TestBasico(t *testing.T) {
 	err := apperrors.ErrSql
 	hoursexpected := []domain.AvailableHours{
 		{
-			Kind:      0,
-			Subject:   "si",
+			Subject:   domain.Subject{Kind: 0,Name: "si"},
 			Remaining: 20,
 			Max:       21,
 		},
 		{
-			Kind:      0,
-			Subject:   "si",
+			Subject:   domain.Subject{Kind: 0,Name: "si"},
 			Remaining: 25,
 			Max:       26,
 		},
