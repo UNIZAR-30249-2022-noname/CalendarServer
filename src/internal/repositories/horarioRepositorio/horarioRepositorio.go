@@ -95,7 +95,7 @@ func (repo *repo) updateHours(ini, fin domain.Hour, idhora int, create bool) (er
 		if newhDisponibles > horastotales { return apperrors.ErrIllegalOperation }
 	}
 	//TODO Updateo
-	res , err := repo.db.Exec(consultas.DeleteEntradaHorario, newhDisponibles, idhora)
+	res , err := repo.db.Exec(consultas.UpdateHours, newhDisponibles, idhora)
 	if err != nil { return apperrors.ErrSql }
 	count, err := res.RowsAffected()
 	if err != nil || count < 1 { return apperrors.ErrSql }

@@ -44,7 +44,7 @@ func TestCreateEntry(t *testing.T) {
 	entryAsked := domain.Entry{
 		Init: domain.NewHour(1,30),
 		End: domain.NewHour(2,40),
-		Subject: domain.Subject{Kind: 0, Name: "si"},
+		Subject: domain.Subject{Kind: 1, Name: "si"},
 		Room: domain.Room{Name: "1"},
 		Week: "",
 		Group: "",
