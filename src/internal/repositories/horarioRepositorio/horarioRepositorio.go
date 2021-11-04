@@ -46,7 +46,6 @@ func (repo *repo) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours
 }
 
 func (repo *repo) CreateNewEntry(entry domain.Entry) (error) {
-	//TODO modificar las horas disponibles
 	var idhoras, idgrupo, idaula int
 	err := repo.db.QueryRow(consultas.SelectIdHoraGrupo,
 			entry.Subject.Kind, entry.Group, entry.Week, entry.Subject.Name).Scan(&idhoras, &idgrupo)
@@ -60,11 +59,11 @@ func (repo *repo) CreateNewEntry(entry domain.Entry) (error) {
 	if err != nil { return apperrors.ErrSql }
 	count, err := res.RowsAffected()
 	if err != nil || count < 1 { return apperrors.ErrSql }
+	repo.updateHours(entry.Init,entry.End,idhoras,true)
 	return nil
 }
 
 func (repo *repo) DeleteEntry(entry domain.Entry) (error){
-	//TODO Actualizar las horas disponibles
 	var idhoras, idgrupo, idaula int
 	err := repo.db.QueryRow(consultas.SelectIdHoraGrupo,
 		entry.Subject.Kind, entry.Group, entry.Week, entry.Subject.Name).Scan(&idhoras, &idgrupo)
@@ -73,6 +72,30 @@ func (repo *repo) DeleteEntry(entry domain.Entry) (error){
 	if err != nil { return apperrors.ErrSql }
 	res , err := repo.db.Exec(consultas.DeleteEntradaHorario, domain.HourToInt(entry.Init), 						 
 	domain.HourToInt(entry.End), idhoras, idaula, idgrupo)
+	if err != nil { return apperrors.ErrSql }
+	count, err := res.RowsAffected()
+	if err != nil || count < 1 { return apperrors.ErrSql }
+	repo.updateHours(entry.Init,entry.End,idhoras,false)
+	return nil
+}
+
+func (repo *repo) updateHours(ini, fin domain.Hour, idhora int, create bool) (error){
+	//Create es para quitar las horas de disponibles si es true y añadirlas si es false
+	var horastotales, horasdisponibles, newhDisponibles int
+	err := repo.db.QueryRow(consultas.SearchHours,
+		idhora).Scan(&horastotales, &horasdisponibles)
+	if err != nil { return apperrors.ErrSql }
+	hDisponibles := domain.IntToHour(horasdisponibles)
+	haQuitar := domain.IntToHour(domain.SubstractHour(fin, ini))
+	if create {
+		newhDisponibles = domain.SubstractHour(hDisponibles,haQuitar)
+		if newhDisponibles < 0 { return apperrors.ErrIllegalOperation }
+	} else {
+		newhDisponibles = domain.AddHour(hDisponibles,haQuitar)
+		if newhDisponibles > horastotales { return apperrors.ErrIllegalOperation }
+	}
+	//TODO Updateo
+	res , err := repo.db.Exec(consultas.DeleteEntradaHorario, newhDisponibles, idhora)
 	if err != nil { return apperrors.ErrSql }
 	count, err := res.RowsAffected()
 	if err != nil || count < 1 { return apperrors.ErrSql }

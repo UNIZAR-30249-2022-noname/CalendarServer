@@ -57,8 +57,35 @@ func (h Hour) IsLaterThan(h2 Hour) bool {
 	}
 	return true
 }
+
+//Los minutos no pueden pasar de 60
+//Una hora y media devolveria 130
 func HourToInt(h Hour) int {
 	return h.hour*100 + h.min
+}
+
+func IntToHour(h int) Hour {
+	return Hour{hour: h/100, min:h%100}
+}
+
+func AddHour(h1, h2 Hour) (int) {
+	mins := h1.min + h2.min 
+	hours := h1.hour + h2.hour
+	if mins >= 60 {
+		mins -= 60
+		hours += 1
+	}
+	return hours*100 + mins
+}
+
+func SubstractHour(h1, h2 Hour) (int) {
+	mins := h1.min - h2.min 
+	hours := h1.hour - h2.hour
+	if mins < 0 {
+		mins += 60
+		hours -= 1
+	}
+	return hours*100 + mins
 }
 
 type Room struct {
