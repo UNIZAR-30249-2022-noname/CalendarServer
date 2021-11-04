@@ -151,7 +151,7 @@ func TestNewEntries(t *testing.T) {
 		args: args{entry: simpleEntry()},
 		want: want{result: currentDate(), err: nil},
 		mocks: func(m mocks) {
-			m.horarioRepository.EXPECT().SaveEntry(simpleEntry()).Return(nil)
+			m.horarioRepository.EXPECT().CreateNewEntry(simpleEntry()).Return(nil)
 		},
 	},
 		{
@@ -159,7 +159,7 @@ func TestNewEntries(t *testing.T) {
 			args: args{entry: simpleEntry()},
 			want: want{result: "", err: apperrors.ErrInternal},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().SaveEntry(simpleEntry()).Return(apperrors.ErrInternal)
+				m.horarioRepository.EXPECT().CreateNewEntry(simpleEntry()).Return(apperrors.ErrInternal)
 			},
 		},
 	}

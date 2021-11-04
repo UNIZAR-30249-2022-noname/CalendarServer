@@ -40,7 +40,7 @@ func (srv *HorarioServiceImp) CreateNewEntry(entry domain.Entry) (string, error)
 		return "", apperrors.ErrInvalidInput
 	}
 
-	err = srv.horarioRepositorio.SaveEntry(entry)
+	err = srv.horarioRepositorio.CreateNewEntry(entry)
 	if err != nil {
 		return "", apperrors.ErrInternal
 	}
