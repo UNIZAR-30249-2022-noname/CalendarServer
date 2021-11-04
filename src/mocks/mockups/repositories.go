@@ -34,6 +34,34 @@ func (m *MockHorarioRepositorio) EXPECT() *MockHorarioRepositorioMockRecorder {
 	return m.recorder
 }
 
+// CreateNewEntry mocks base method.
+func (m *MockHorarioRepositorio) CreateNewEntry(arg0 domain.Entry) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateNewEntry", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateNewEntry indicates an expected call of CreateNewEntry.
+func (mr *MockHorarioRepositorioMockRecorder) CreateNewEntry(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewEntry", reflect.TypeOf((*MockHorarioRepositorio)(nil).CreateNewEntry), arg0)
+}
+
+// DeleteEntry mocks base method.
+func (m *MockHorarioRepositorio) DeleteEntry(arg0 domain.Entry) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteEntry", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteEntry indicates an expected call of DeleteEntry.
+func (mr *MockHorarioRepositorioMockRecorder) DeleteEntry(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteEntry", reflect.TypeOf((*MockHorarioRepositorio)(nil).DeleteEntry), arg0)
+}
+
 // GetAvailableHours mocks base method.
 func (m *MockHorarioRepositorio) GetAvailableHours(arg0 domain.Terna) ([]domain.AvailableHours, error) {
 	m.ctrl.T.Helper()
@@ -47,18 +75,4 @@ func (m *MockHorarioRepositorio) GetAvailableHours(arg0 domain.Terna) ([]domain.
 func (mr *MockHorarioRepositorioMockRecorder) GetAvailableHours(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAvailableHours", reflect.TypeOf((*MockHorarioRepositorio)(nil).GetAvailableHours), arg0)
-}
-
-// CreateNewEntry mocks base method.
-func (m *MockHorarioRepositorio) CreateNewEntry(arg0 domain.Entry) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateNewEntry", arg0)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// CreateNewEntry indicates an expected call of CreateNewEntry.
-func (mr *MockHorarioRepositorioMockRecorder) CreateNewEntry(arg0 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewEntry", reflect.TypeOf((*MockHorarioRepositorio)(nil).CreateNewEntry), arg0)
 }
