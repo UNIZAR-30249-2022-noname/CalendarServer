@@ -38,3 +38,66 @@ func TestBasico(t *testing.T) {
 	}
 	repos.CloseConn()
 }
+
+func TestCreateEntry(t *testing.T) {
+	err := apperrors.ErrSql
+	entryAsked := domain.Entry{
+		Init: domain.NewHour(1,30),
+		End: domain.NewHour(2,40),
+		Subject: domain.Subject{Kind: 0, Name: "si"},
+		Room: domain.Room{Name: "1"},
+		Week: "",
+		Group: "",
+	}
+	repos := horarioRepositorio.New()
+	error := repos.CreateNewEntry(entryAsked)
+	if error != nil {
+		assert.Equal(t, err, error)
+	} else {
+		assert.Equal(t, true, true)
+	}
+
+	repos.CloseConn()
+}
+
+func TestCreateEntryPract(t *testing.T) {
+	err := apperrors.ErrSql
+	entryAsked := domain.Entry{
+		Init: domain.NewHour(1,30),
+		End: domain.NewHour(2,40),
+		Subject: domain.Subject{Kind: 2, Name: "no"},
+		Room: domain.Room{Name: "1"},
+		Week: "a",
+		Group: "mananas",
+	}
+	repos := horarioRepositorio.New()
+	error := repos.CreateNewEntry(entryAsked)
+	if error != nil {
+		assert.Equal(t, err, error)
+	} else {
+		assert.Equal(t, true, true)
+	}
+
+	repos.CloseConn()
+}
+
+func TestCreateEntryProb(t *testing.T) {
+	err := apperrors.ErrSql
+	entryAsked := domain.Entry{
+		Init: domain.NewHour(1,30),
+		End: domain.NewHour(2,40),
+		Subject: domain.Subject{Kind: 3, Name: "no"},
+		Room: domain.Room{Name: "1"},
+		Week: "",
+		Group: "niapar",
+	}
+	repos := horarioRepositorio.New()
+	error := repos.CreateNewEntry(entryAsked)
+	if error != nil {
+		assert.Equal(t, err, error)
+	} else {
+		assert.Equal(t, true, true)
+	}
+
+	repos.CloseConn()
+}

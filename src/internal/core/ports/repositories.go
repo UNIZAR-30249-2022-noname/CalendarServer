@@ -6,5 +6,6 @@ import "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 //scheduler data related
 type HorarioRepositorio interface {
 	GetAvailableHours(domain.Terna) ([]domain.AvailableHours, error)
-	SaveEntry(domain.Entry) error
+	CreateNewEntry(domain.Entry) error
+	DeleteEntry(domain.Entry) error
 }

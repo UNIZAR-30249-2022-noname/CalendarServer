@@ -38,6 +38,8 @@ CREATE TABLE app_db.hora (
     disponibles int not null,
     totales int not null,
     tipo int not null,
+    grupo varchar(20),
+    semana varchar(10),
     idasignatura int not null,
     idgrupo int not null,
     FOREIGN KEY (idasignatura) REFERENCES app_db.asignatura (id),
