@@ -101,3 +101,24 @@ func TestCreateEntryProb(t *testing.T) {
 
 	repos.CloseConn()
 }
+
+func TestDeleteEntry(t *testing.T) {
+	err := apperrors.ErrSql
+	entryAsked := domain.Entry{
+		Init: domain.NewHour(1,30),
+		End: domain.NewHour(2,40),
+		Subject: domain.Subject{Kind: 1, Name: "si"},
+		Room: domain.Room{Name: "1"},
+		Week: "",
+		Group: "",
+	}
+	repos := horarioRepositorio.New()
+	error := repos.DeleteEntry(entryAsked)
+	if error != nil {
+		assert.Equal(t, err, error)
+	} else {
+		assert.Equal(t, true, true)
+	}
+
+	repos.CloseConn()
+}
