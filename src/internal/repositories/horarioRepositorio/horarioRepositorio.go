@@ -46,6 +46,7 @@ func (repo *repo) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours
 }
 
 func (repo *repo) CreateNewEntry(entry domain.Entry) (error) {
+	//TODO modificar las horas disponibles
 	var idhoras, idgrupo, idaula int
 	err := repo.db.QueryRow(consultas.SelectIdHoraGrupo,
 			entry.Subject.Kind, entry.Group, entry.Week, entry.Subject.Name).Scan(&idhoras, &idgrupo)
@@ -54,8 +55,26 @@ func (repo *repo) CreateNewEntry(entry domain.Entry) (error) {
 	if err != nil { return apperrors.ErrSql }
 	now := time.Now()
   	ultModificacion := now.Format("2006-02-01")
-	_ , err = repo.db.Exec(consultas.InsertEntradaHorario, domain.HourToInt(entry.Init), 						 
+	res, err := repo.db.Exec(consultas.InsertEntradaHorario, domain.HourToInt(entry.Init), 						 
 				domain.HourToInt(entry.End), idhoras, idaula, idgrupo, ultModificacion)
 	if err != nil { return apperrors.ErrSql }
+	count, err := res.RowsAffected()
+	if err != nil || count < 1 { return apperrors.ErrSql }
+	return nil
+}
+
+func (repo *repo) DeleteEntry(entry domain.Entry) (error){
+	//TODO Actualizar las horas disponibles
+	var idhoras, idgrupo, idaula int
+	err := repo.db.QueryRow(consultas.SelectIdHoraGrupo,
+		entry.Subject.Kind, entry.Group, entry.Week, entry.Subject.Name).Scan(&idhoras, &idgrupo)
+	if err != nil { return apperrors.ErrSql }
+	err = repo.db.QueryRow(consultas.SelectIdAula, entry.Room.Name).Scan(&idaula)
+	if err != nil { return apperrors.ErrSql }
+	res , err := repo.db.Exec(consultas.DeleteEntradaHorario, domain.HourToInt(entry.Init), 						 
+	domain.HourToInt(entry.End), idhoras, idaula, idgrupo)
+	if err != nil { return apperrors.ErrSql }
+	count, err := res.RowsAffected()
+	if err != nil || count < 1 { return apperrors.ErrSql }
 	return nil
 }

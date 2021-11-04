@@ -21,3 +21,5 @@ const SelectIdAula = "SELECT id FROM app_db.aula WHERE aula.nombre=?"
 
 const InsertEntradaHorario = "INSERT INTO app_db.entradahorario (inicio, fin, idhoras, idaula, idgrupo, ultModificacion) " +
 	"VALUES (?, ?, ?, ?, ?, ?)"
+
+const DeleteEntradaHorario = "DELETE FROM app_db.entradahorario WHERE inicio = ? AND fin = ? AND idhoras = ? AND idaula = ? AND idgrupo = ?"
