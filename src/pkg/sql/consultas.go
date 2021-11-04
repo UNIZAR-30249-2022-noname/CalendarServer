@@ -14,10 +14,10 @@ const SelectAvaiableHours = "SELECT a.disponibles, a.totales, a.tipo, a.nombre F
 
 const SelectIdHoraGrupo = "SELECT id, idgrupo " +
 	"FROM app_db.hora " +
-	"WHERE hora.tipo=? AND hora.idasignatura " +
+	"WHERE hora.tipo=? AND hora.grupo = ? AND hora.semana = ? AND hora.idasignatura " +
 	"IN (SELECT id FROM app_db.asignatura WHERE asignatura.nombre=?)"
 
 const SelectIdAula = "SELECT id FROM app_db.aula WHERE aula.nombre=?"
 
-const InsertEntradaHorario = "INSERT INTO app_db.entradahorario (inicio, fin, idhoras, idaula, idgrupo, ultModificacion, grupo, semana) " +
-	"VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+const InsertEntradaHorario = "INSERT INTO app_db.entradahorario (inicio, fin, idhoras, idaula, idgrupo, ultModificacion) " +
+	"VALUES (?, ?, ?, ?, ?, ?)"
