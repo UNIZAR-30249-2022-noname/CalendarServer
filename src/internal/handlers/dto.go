@@ -8,6 +8,15 @@ type TernaDto struct {
 	Grupo      int    `json:"grupo"`
 }
 
+type SchedulerDTO struct {
+	AvailableHours []domain.AvailableHours `json:"availableHours"`
+}
+
+func NewScheduler(availableHours []domain.AvailableHours) SchedulerDTO {
+	return SchedulerDTO{AvailableHours: availableHours}
+
+}
+
 type EntryDTO struct {
 	InitHour int    `json:"initHour"`
 	InitMin  int    `json:"initMin"`
