@@ -303,7 +303,7 @@ func TestListDegrees(t *testing.T) {
 	// · Mocks · //
 
 	// · Test · //
-	path := "/ListDegrees"
+	path := "/listDegrees"
 
 	type want struct {
 		result interface{}

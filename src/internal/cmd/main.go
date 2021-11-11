@@ -20,7 +20,7 @@ func SetupRouter() *gin.Engine {
 	r.GET("/ping", handlers.Ping)
 	r.GET("/availableHours", horarioHandler.GetAvailableHours)
 	r.POST("/newEntry", horarioHandler.PostNewEntry)
-	r.GET("/ListDegrees", horarioHandler.ListDegrees)
+	r.GET("/listDegrees", horarioHandler.ListDegrees)
 
 	return r
 }
@@ -30,8 +30,7 @@ func main() {
 	docs.SwaggerInfo.Title = "API UNIZAR calendar and schedule"
 	docs.SwaggerInfo.Description = "This is API for managing and visulizating the calendar and schedule of Unizar."
 	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.Host = "http://localhost:8080/swagger/index.html"
-	docs.SwaggerInfo.BasePath = "/v1"
+	docs.SwaggerInfo.Host = "localhost:8080/"
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	r := SetupRouter()

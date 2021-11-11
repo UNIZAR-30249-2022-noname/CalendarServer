@@ -77,6 +77,31 @@ var doc = `{
                 }
             }
         },
+        "/listDegrees/": {
+            "get": {
+                "description": "List all degrees' descriptions avaiable, it do not require any parameter",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/handlers.ListDegreesDTO"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            }
+        },
         "/newEntry/": {
             "post": {
                 "description": "Requesting a new entry for the scheduler. The entry will be definied by the initial hour\nand the ending hour, adintional info must be indicated depending of the kind of hours\nthe kinds of subject hours are:\n- Theorical = 1\n- Practices = 2\n- Exercises = 3",
@@ -119,9 +144,6 @@ var doc = `{
         "domain.AvailableHours": {
             "type": "object",
             "properties": {
-                "kind": {
-                    "type": "integer"
-                },
                 "max": {
                     "type": "integer"
                 },
@@ -129,6 +151,34 @@ var doc = `{
                     "type": "integer"
                 },
                 "subject": {
+                    "$ref": "#/definitions/domain.Subject"
+                }
+            }
+        },
+        "domain.DegreeDescription": {
+            "type": "object",
+            "properties": {
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "lastYear": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Subject": {
+            "type": "object",
+            "properties": {
+                "kind": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 }
             }
@@ -170,6 +220,17 @@ var doc = `{
             "properties": {
                 "message": {
                     "type": "string"
+                }
+            }
+        },
+        "handlers.ListDegreesDTO": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.DegreeDescription"
+                    }
                 }
             }
         }

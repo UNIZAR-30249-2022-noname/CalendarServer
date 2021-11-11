@@ -90,9 +90,9 @@ func (hdl *HTTPHandler) PostNewEntry(c *gin.Context) {
 //@Description List all degrees' descriptions avaiable, it do not require any parameter
 //@Tag Scheduler
 //@Produce json
-//@Success 200 {array} domain.AvailableHours
+//@Success 200 {array} handlers.ListDegreesDTO
 // @Failure 500 {object} ErrorHttp
-//@Router /ListDegrees/ [get]
+//@Router /listDegrees/ [get]
 func (hdl *HTTPHandler) ListDegrees(c *gin.Context) {
 	list, err := hdl.horarioService.ListAllDegrees()
 	if err == nil {
