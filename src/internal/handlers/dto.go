@@ -34,6 +34,10 @@ type ListDegreesDTO struct {
 	List []domain.DegreeDescription `json:"list"`
 }
 
+func NewListDegrees(l []domain.DegreeDescription) ListDegreesDTO {
+	return ListDegreesDTO{List: l}
+}
+
 type ErrorHttp struct {
 	Message string `json:"message"`
 }

@@ -52,7 +52,7 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 
 	} else if err != nil {
 
-		c.AbortWithStatusJSON(500, ErrorHttp{Message: "unkown"})
+		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
 	} else {
 		c.JSON(http.StatusOK, availableHours)
 	}
@@ -83,4 +83,22 @@ func (hdl *HTTPHandler) PostNewEntry(c *gin.Context) {
 
 	}
 
+}
+
+//ListDegrees is the handler for getting the list of all degrees' descriptions avaiable
+//@Sumary Get degrees description
+//@Description List all degrees' descriptions avaiable, it do not require any parameter
+//@Tag Scheduler
+//@Produce json
+//@Success 200 {array} domain.AvailableHours
+// @Failure 500 {object} ErrorHttp
+//@Router /ListDegrees/ [get]
+func (hdl *HTTPHandler) ListDegrees(c *gin.Context) {
+	list, err := hdl.horarioService.ListAllDegrees()
+	if err == nil {
+
+		c.JSON(http.StatusOK, NewListDegrees(list))
+	} else {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
+	}
 }

@@ -324,7 +324,7 @@ func TestListDegrees(t *testing.T) {
 
 		{
 			name: "Repo failure",
-			want: want{result: handlers.ListDegreesDTO{}, code: http.StatusInternalServerError},
+			want: want{result: handlers.ErrorHttp{Message: "unkown"}, code: http.StatusInternalServerError},
 			mocks: func(m mocks) {
 				m.horarioService.EXPECT().ListAllDegrees().Return(nil, apperrors.ErrInternal)
 			},
@@ -342,7 +342,7 @@ func TestListDegrees(t *testing.T) {
 			setUpRouter := func() *gin.Engine {
 				horarioHandler := handlers.NewHTTPHandler(m.horarioService)
 				r := gin.Default()
-				r.POST(path, horarioHandler.PostNewEntry)
+				r.GET(path, horarioHandler.ListDegrees)
 				return r
 
 			}
@@ -356,7 +356,10 @@ func TestListDegrees(t *testing.T) {
 			r.ServeHTTP(w, req)
 			assert.Equal(t, tt.want.code, w.Code)
 
-			assert.Equal(t, tt.want.result, w.Body.String())
+			//assert.Equal(t, tt.want.result, w.Body.String())
+
+			wantedJson, _ := json.Marshal(tt.want.result)
+			assert.Equal(t, bytes.NewBuffer(wantedJson), w.Body)
 
 		})
 

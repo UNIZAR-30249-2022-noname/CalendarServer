@@ -20,6 +20,7 @@ func SetupRouter() *gin.Engine {
 	r.GET("/ping", handlers.Ping)
 	r.GET("/availableHours", horarioHandler.GetAvailableHours)
 	r.POST("/newEntry", horarioHandler.PostNewEntry)
+	r.GET("/ListDegrees", horarioHandler.ListDegrees)
 
 	return r
 }
