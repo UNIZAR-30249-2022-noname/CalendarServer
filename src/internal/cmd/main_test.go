@@ -316,7 +316,7 @@ func TestListDegrees(t *testing.T) {
 	}{
 		{
 			name: "Succeded",
-			want: want{result: , code: http.StatusOK},
+			want: want{result: handlers.ListDegreesDTO{List: simpleListDegreeDescriptions()}, code: http.StatusOK},
 			mocks: func(m mocks) {
 				m.horarioService.EXPECT().ListAllDegrees().Return(simpleListDegreeDescriptions(), nil)
 			},
@@ -324,7 +324,7 @@ func TestListDegrees(t *testing.T) {
 
 		{
 			name: "Repo failure",
-			want: want{result: , code: http.StatusInternalServerError},
+			want: want{result: handlers.ListDegreesDTO{}, code: http.StatusInternalServerError},
 			mocks: func(m mocks) {
 				m.horarioService.EXPECT().ListAllDegrees().Return(nil, apperrors.ErrInternal)
 			},

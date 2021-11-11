@@ -30,6 +30,10 @@ func (e EntryDTO) ToEntry() domain.Entry {
 
 }
 
+type ListDegreesDTO struct {
+	List []domain.DegreeDescription `json:"list"`
+}
+
 type ErrorHttp struct {
 	Message string `json:"message"`
 }
