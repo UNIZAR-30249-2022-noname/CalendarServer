@@ -294,3 +294,86 @@ func simpleExercisesEntry() handlers.EntryDTO {
 		Group:    "1",
 	}
 }
+
+/////////////////////////////
+// TEST LIST DEGREES      ///
+/////////////////////////////
+
+func TestListDegrees(t *testing.T) {
+	// · Mocks · //
+
+	// · Test · //
+	path := "/ListDegrees"
+
+	type want struct {
+		result interface{}
+		code   int
+	}
+	tests := []struct {
+		name  string
+		want  want
+		mocks func(m mocks)
+	}{
+		{
+			name: "Succeded",
+			want: want{result: , code: http.StatusOK},
+			mocks: func(m mocks) {
+				m.horarioService.EXPECT().ListAllDegrees().Return(simpleListDegreeDescriptions(), nil)
+			},
+		},
+
+		{
+			name: "Repo failure",
+			want: want{result: , code: http.StatusInternalServerError},
+			mocks: func(m mocks) {
+				m.horarioService.EXPECT().ListAllDegrees().Return(nil, apperrors.ErrInternal)
+			},
+		},
+	}
+
+	// · Runner · //
+	for _, tt := range tests {
+
+		t.Run(tt.name, func(t *testing.T) {
+			//Prepare
+			m := mocks{
+				horarioService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
+			}
+			setUpRouter := func() *gin.Engine {
+				horarioHandler := handlers.NewHTTPHandler(m.horarioService)
+				r := gin.Default()
+				r.POST(path, horarioHandler.PostNewEntry)
+				return r
+
+			}
+			tt.mocks(m)
+
+			//Execute
+			r := setUpRouter()
+			w := httptest.NewRecorder()
+			uri := path
+			req, _ := http.NewRequest("GET", uri, nil)
+			r.ServeHTTP(w, req)
+			assert.Equal(t, tt.want.code, w.Code)
+
+			assert.Equal(t, tt.want.result, w.Body.String())
+
+		})
+
+	}
+}
+
+func simpleListDegreeDescriptions() []domain.DegreeDescription {
+	return []domain.DegreeDescription{
+		{
+			Name:     "A",
+			Groups:   []string{"a", "b"},
+			LastYear: 4,
+		},
+		{
+			Name:     "B",
+			Groups:   []string{"c", "d", "e"},
+			LastYear: 4,
+		},
+	}
+}
