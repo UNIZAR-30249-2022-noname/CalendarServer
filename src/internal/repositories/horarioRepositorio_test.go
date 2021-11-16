@@ -6,11 +6,14 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
+	consultas "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/sql"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestBasico(t *testing.T) {
 	//err := apperrors.ErrSql
+	assert := assert.New(t)
+	//Prepare
 	hoursexpected := []domain.AvailableHours{
 		{
 			Subject:   domain.Subject{Kind: 1,Name: "Proyecto Software"},
@@ -28,16 +31,29 @@ func TestBasico(t *testing.T) {
 		Curso:      1,
 		Grupo:      1,
 	}
+
 	repos := horarioRepositorio.New()
+	repos.RawExec(consultas.Titulacion1)
+	repos.RawExec(consultas.Titulacion2)
+	repos.RawExec(consultas.Curso1)
+	repos.RawExec(consultas.Curso2)
+	repos.RawExec(consultas.Asignatura1)
+	repos.RawExec(consultas.Asignatura2)
+	repos.RawExec(consultas.Grupodocente1)
+	repos.RawExec(consultas.Grupodocente2)
+	repos.RawExec(consultas.Hora1)
+	repos.RawExec(consultas.Hora2)
+
+	//Start
 	hoursgot, _ := repos.GetAvailableHours(ternaAsked)
 	/*
 	if error != nil {
 		assert.Equal(t, err, error)
 	}
 	*/
-	assert.Equal(t, len(hoursgot), len(hoursexpected))
+	assert.Equal(len(hoursgot), len(hoursexpected), "Should be the same length")
 	for i, h := range hoursgot {
-		assert.Equal(t, h, hoursexpected[i])
+		assert.Equal(h, hoursexpected[i], "Should be the same AvaiableHours")
 	}
 	repos.CloseConn()
 }

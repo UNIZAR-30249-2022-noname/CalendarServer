@@ -110,3 +110,8 @@ func (repo *repo) updateHours(ini, fin domain.Hour, idhora int, create bool) (er
 	if err != nil || count < 1 { return apperrors.ErrSql }
 	return nil
 }
+
+func (repo *repo) RawExec(exec string) (error){
+	_ , err := repo.db.Exec(exec)
+	return err
+}
