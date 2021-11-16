@@ -10,29 +10,32 @@ import (
 )
 
 func TestBasico(t *testing.T) {
-	err := apperrors.ErrSql
+	//err := apperrors.ErrSql
 	hoursexpected := []domain.AvailableHours{
 		{
-			Subject:   domain.Subject{Kind: 0,Name: "si"},
-			Remaining: 20,
-			Max:       21,
+			Subject:   domain.Subject{Kind: 1,Name: "Proyecto Software"},
+			Remaining: 30,
+			Max:       30,
 		},
 		{
-			Subject:   domain.Subject{Kind: 0,Name: "si"},
+			Subject:   domain.Subject{Kind: 2, Name: "Sistemas Operativos"},
 			Remaining: 25,
-			Max:       26,
+			Max:       25,
 		},
 	}
 	ternaAsked := domain.Terna{
-		Titulacion: "uwu",
+		Titulacion: "Ing. Informatica",
 		Curso:      1,
-		Grupo:      0,
+		Grupo:      1,
 	}
 	repos := horarioRepositorio.New()
-	hoursgot, error := repos.GetAvailableHours(ternaAsked)
+	hoursgot, _ := repos.GetAvailableHours(ternaAsked)
+	/*
 	if error != nil {
 		assert.Equal(t, err, error)
 	}
+	*/
+	assert.Equal(t, len(hoursgot), len(hoursexpected))
 	for i, h := range hoursgot {
 		assert.Equal(t, h, hoursexpected[i])
 	}

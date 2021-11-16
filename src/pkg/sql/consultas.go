@@ -2,11 +2,11 @@ package consultas
 
 const SelectAvaiableHours = "SELECT a.disponibles, a.totales, a.tipo, a.nombre FROM " +
 	"(SELECT hora.*, a.nombre FROM hora INNER JOIN " +
-	"(SELECT * FROM asignatura " +
+	"(SELECT asignatura.id, asignatura.nombre FROM asignatura " +
 	"INNER JOIN titulacion ON asignatura.idT=titulacion.id WHERE titulacion.nombre=?) a " +
 	"ON a.id=hora.idasignatura) a " +
 	"INNER JOIN " +
-	"(SELECT * FROM hora WHERE id " +
+	"(SELECT * FROM hora WHERE idgrupo " +
 	"IN (SELECT grupodocente.id FROM `grupodocente` " +
 	"INNER JOIN curso ON grupodocente.idcurso=curso.id WHERE curso.numero=? AND grupodocente.numero=?)) b " +
 	"ON a.id=b.id"
