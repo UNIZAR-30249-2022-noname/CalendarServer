@@ -161,9 +161,17 @@ var doc = `{
                 "groups": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/domain.GroupDescription"
                     }
                 },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.GroupDescription": {
+            "type": "object",
+            "properties": {
                 "lastYear": {
                     "type": "integer"
                 },

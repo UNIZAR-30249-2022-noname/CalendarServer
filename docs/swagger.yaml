@@ -12,8 +12,13 @@ definitions:
     properties:
       groups:
         items:
-          type: string
+          $ref: '#/definitions/domain.GroupDescription'
         type: array
+      name:
+        type: string
+    type: object
+  domain.GroupDescription:
+    properties:
       lastYear:
         type: integer
       name:
