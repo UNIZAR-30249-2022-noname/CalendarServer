@@ -28,11 +28,16 @@ func (s Subject) IsValid() error {
 }
 
 //DegreeDescription is a struct which represent the charactersitics
-//of a specific degree, it fields are its name, the grups it has and
-//the years it has
+//of a specific degree, it fields are its name and the grups it has
 type DegreeDescription struct {
+	Name   string
+	Groups []GroupDescription
+}
+
+//GroupDescription is a struct whicjh has the info about a certain group in a degree.
+//This type has no sense alone, it must me in a [DegreeDescription]
+type GroupDescription struct {
 	Name     string
-	Groups   []string
 	LastYear int
 }
 

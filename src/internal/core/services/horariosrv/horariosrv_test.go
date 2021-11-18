@@ -277,14 +277,19 @@ func TestListSubject(t *testing.T) {
 func simpleListDegreeDescriptions() []domain.DegreeDescription {
 	return []domain.DegreeDescription{
 		{
-			Name:     "A",
-			Groups:   []string{"a", "b"},
-			LastYear: 4,
+			Name: "A",
+			Groups: []domain.GroupDescription{
+				{Name: "a", LastYear: 4},
+				{Name: "b", LastYear: 4},
+			},
 		},
 		{
-			Name:     "B",
-			Groups:   []string{"c", "d", "e"},
-			LastYear: 4,
+			Name: "B",
+			Groups: []domain.GroupDescription{
+				{Name: "c", LastYear: 4},
+				{Name: "d", LastYear: 4},
+				{Name: "e", LastYear: 4},
+			},
 		},
 	}
 }
