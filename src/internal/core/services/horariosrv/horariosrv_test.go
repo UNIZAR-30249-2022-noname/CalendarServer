@@ -17,7 +17,7 @@ type mocks struct {
 	horarioRepository *mock_ports.MockHorarioRepositorio
 }
 
-//Comprueba si dada una [Terna] devuelve las horas disponibles correctamente
+//Checks all the cases for the function GetAvailableHours of the service [horariosrv]
 func TestGetAvailableHours(t *testing.T) {
 	// · Mocks · //
 	AvailableHours := simpleAvailableHours()
@@ -108,6 +108,7 @@ func TestGetAvailableHours(t *testing.T) {
 	}
 }
 
+//Returns a slice for having different cases in the tests
 func simpleAvailableHours() []domain.AvailableHours {
 
 	return []domain.AvailableHours{
@@ -202,7 +203,8 @@ func simpleEntry() domain.Entry {
 			Kind: domain.THEORICAL,
 			Name: "Prog 1",
 		},
-		Room: domain.Room{Name: "1"},
+		Room:    domain.Room{Name: "1"},
+		Weekday: domain.MOONDAY,
 	}
 }
 

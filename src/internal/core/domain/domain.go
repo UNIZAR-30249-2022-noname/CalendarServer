@@ -8,6 +8,16 @@ const (
 	EXERCISES = 3
 )
 
+const (
+	MOONDAY   = 0
+	TUESDAY   = 1
+	WEDNESDAY = 2
+	THUERSDAY = 3
+	FRIDAY    = 4
+	SATURDAY  = 5
+	SUNDAY    = 6
+)
+
 //AvaialableHours is a struct which represents the available hours
 //per [Terna]
 type AvailableHours struct {
@@ -72,6 +82,7 @@ type Entry struct {
 	Room    Room
 	Week    string
 	Group   string
+	Weekday int
 }
 
 func (e Entry) IsValid() error {
