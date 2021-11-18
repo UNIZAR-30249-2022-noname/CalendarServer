@@ -370,17 +370,16 @@ func simpleListDegreeDescriptions() []domain.DegreeDescription {
 	return []domain.DegreeDescription{
 		{
 			Name: "A",
-			Groups: []domain.GroupDescription{
-				{Name: "a", LastYear: 4},
-				{Name: "b", LastYear: 4},
+			Groups: []domain.YearDescription{
+				{Name: 1, Groups: []string{"a", "b"}},
+				{Name: 2, Groups: []string{"a", "b"}},
 			},
 		},
 		{
 			Name: "B",
-			Groups: []domain.GroupDescription{
-				{Name: "c", LastYear: 4},
-				{Name: "d", LastYear: 4},
-				{Name: "e", LastYear: 4},
+			Groups: []domain.YearDescription{
+				{Name: 1, Groups: []string{"a"}},
+				{Name: 2, Groups: []string{"a", "b", "c"}},
 			},
 		},
 	}
