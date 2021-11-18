@@ -32,7 +32,7 @@ func (s Subject) IsValid() error {
 type Terna struct {
 	Titulacion string
 	Curso      int
-	Grupo      int
+	Grupo      string
 }
 
 type Hour struct {
