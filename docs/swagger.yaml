@@ -10,19 +10,12 @@ definitions:
     type: object
   domain.DegreeDescription:
     properties:
-      groups:
+      name:
+        type: string
+      years:
         items:
-          $ref: '#/definitions/domain.GroupDescription'
+          $ref: '#/definitions/domain.YearDescription'
         type: array
-      name:
-        type: string
-    type: object
-  domain.GroupDescription:
-    properties:
-      lastYear:
-        type: integer
-      name:
-        type: string
     type: object
   domain.Subject:
     properties:
@@ -30,6 +23,15 @@ definitions:
         type: integer
       name:
         type: string
+    type: object
+  domain.YearDescription:
+    properties:
+      groups:
+        items:
+          type: string
+        type: array
+      name:
+        type: integer
     type: object
   handlers.EntryDTO:
     properties:

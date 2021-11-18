@@ -158,25 +158,14 @@ var doc = `{
         "domain.DegreeDescription": {
             "type": "object",
             "properties": {
-                "groups": {
+                "name": {
+                    "type": "string"
+                },
+                "years": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.GroupDescription"
+                        "$ref": "#/definitions/domain.YearDescription"
                     }
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "domain.GroupDescription": {
-            "type": "object",
-            "properties": {
-                "lastYear": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
                 }
             }
         },
@@ -188,6 +177,20 @@ var doc = `{
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "domain.YearDescription": {
+            "type": "object",
+            "properties": {
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "name": {
+                    "type": "integer"
                 }
             }
         },

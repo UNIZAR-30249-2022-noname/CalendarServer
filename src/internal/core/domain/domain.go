@@ -30,15 +30,15 @@ func (s Subject) IsValid() error {
 //DegreeDescription is a struct which represent the charactersitics
 //of a specific degree, it fields are its name and the grups it has
 type DegreeDescription struct {
-	Name   string             `json:"name"`
-	Groups []GroupDescription `json:"groups"`
+	Name   string            `json:"name"`
+	Groups []YearDescription `json:"years"`
 }
 
-//GroupDescription is a struct whicjh has the info about a certain group in a degree.
+//YearDescription is a struct whicjh has the info about a certain year in a degree.
 //This type has no sense alone, it must me in a [DegreeDescription]
-type GroupDescription struct {
-	Name     string `json:"name"`
-	LastYear int    `json:"lastYear"`
+type YearDescription struct {
+	Name   int      `json:"name"`
+	Groups []string `json:"groups"`
 }
 
 //Set is a struct which represent the relation among
