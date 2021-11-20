@@ -46,3 +46,8 @@ func (srv *HorarioServiceImp) CreateNewEntry(entry domain.Entry) (string, error)
 	}
 	return time.Now().Format("02/01/2006"), nil
 }
+
+func (srv *HorarioServiceImp) ListAllDegrees() ([]domain.DegreeDescription, error) {
+	list, err := srv.horarioRepositorio.ListAllDegrees()
+	return list, err
+}
