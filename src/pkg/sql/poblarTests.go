@@ -13,9 +13,14 @@ const Grupodocente1 = "INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VA
 const Grupodocente2 = "INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('2', '2', '1')"
 
 const Hora1 = "INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('1', '30', '30', '1', '', '', '1', '1')"
+const Hora12 = "INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('3', '20', '20', '2', 'mananas', 'a', '1', '1')"
+const Hora13 = "INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('4', '10', '10', '3', 'niapar', '', '1', '1')"
 const Hora2 = "INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('2', '25', '25', '2', '', '', '2', '1')"
 
 const Aula1 = "INSERT INTO `aula` (`id`, `numero`, `nombre`) VALUES ('1', '1', '1')"
+const Aula2 = "INSERT INTO `aula` (`id`, `numero`, `nombre`) VALUES ('2', '2', '2')"
+const Aula3 = "INSERT INTO `aula` (`id`, `numero`, `nombre`) VALUES ('3', '3', '3')"
+
 const TruncHora = "DELETE from app_db.hora WHERE id > 0;"
 const TruncGrupo = "DELETE from app_db.grupodocente WHERE id > 0;"
 const TruncAsignatura = "DELETE from app_db.asignatura WHERE id > 0;"
