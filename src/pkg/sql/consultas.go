@@ -19,10 +19,15 @@ const SelectIdHoraGrupo = "SELECT id, idgrupo " +
 const SelectIdAula = "SELECT id FROM app_db.aula WHERE aula.nombre=?"
 
 const InsertEntradaHorario = "INSERT INTO app_db.entradahorario (inicio, fin, idhoras, idaula, idgrupo, ultModificacion) " +
-	"VALUES (?, ?, ?, ?, ?, ?)"
+	"VALUES (?, ?, ?, ?, ?, STR_TO_DATE(?,'%Y-%d-%m'))"
 
 const DeleteEntradaHorario = "DELETE FROM app_db.entradahorario WHERE inicio = ? AND fin = ? AND idhoras = ? AND idaula = ? AND idgrupo = ?"
 
 const SearchHours = "SELECT hora.totales, hora.disponibles FROM app_db.hora WHERE hora.id=?"
 
 const UpdateHours = "UPDATE app_db.hora SET hora.disponibles = ? WHERE hora.id=?"
+
+const SearchEntry = "SELECT * FROM entradahorario " +
+	"WHERE entradahorario.inicio=? AND entradahorario.fin=? " +
+	"AND entradahorario.idhoras IN (SELECT id FROM hora WHERE hora.tipo=? AND hora.semana=? AND hora.grupo=? " +
+	"AND hora.idasignatura IN (SELECT id FROM asignatura WHERE asignatura.nombre=?))"

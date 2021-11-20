@@ -115,3 +115,14 @@ func (repo *repo) RawExec(exec string) (error){
 	_ , err := repo.db.Exec(exec)
 	return err
 }
+
+//Sirve para ver si una entrada existe en la BD
+func (repo *repo) EntryFound(entry domain.Entry) (bool){
+
+	res, err := repo.db.Query(consultas.SearchEntry,
+		domain.HourToInt(entry.Init), domain.HourToInt(entry.End), 
+		entry.Subject.Kind, entry.Week, entry.Group, entry.Subject.Name)
+	found := res.Next()
+	_ = err
+	return found
+}

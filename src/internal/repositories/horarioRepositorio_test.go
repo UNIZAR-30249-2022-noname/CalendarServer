@@ -56,9 +56,11 @@ func TestBasico(t *testing.T) {
 	repos.CloseConn()
 }
 
-//TODO crear una funcion search entry para ver si se ha creado o deleteado
+
 func TestCreateEntry(t *testing.T) {
-	err := apperrors.ErrSql
+
+	//Prepare
+	//err := apperrors.ErrSql
 	entryAsked := domain.Entry{
 		Init: domain.NewHour(1,30),
 		End: domain.NewHour(2,40),
@@ -68,14 +70,22 @@ func TestCreateEntry(t *testing.T) {
 		Group: "",
 	}
 	repos := horarioRepositorio.New()
+	repos.RawExec(consultas.Titulacion1); 	repos.RawExec(consultas.Titulacion2)
+	repos.RawExec(consultas.Curso1); 		repos.RawExec(consultas.Curso2)
+	repos.RawExec(consultas.Asignatura1); 	repos.RawExec(consultas.Asignatura2)
+	repos.RawExec(consultas.Grupodocente1); repos.RawExec(consultas.Grupodocente2)
+	repos.RawExec(consultas.Hora1); 		repos.RawExec(consultas.Hora2)
 	repos.RawExec(consultas.Aula1);
-	error := repos.CreateNewEntry(entryAsked)
-	if error != nil {
-		assert.Equal(t, err, error)
-	} else {
-		assert.Equal(t, true, true)
-	}
 
+	repos.CreateNewEntry(entryAsked)
+	
+	assert.Equal(t, repos.EntryFound(entryAsked), true)
+
+	//Delete
+	repos.RawExec(consultas.TruncHora); 		repos.RawExec(consultas.TruncGrupo)
+	repos.RawExec(consultas.TruncAsignatura); 	repos.RawExec(consultas.TruncCurso)
+	repos.RawExec(consultas.TruncTitulacion);	repos.RawExec(consultas.TruncAula)
+	repos.RawExec(consultas.TruncEntry)
 	repos.CloseConn()
 }
 
