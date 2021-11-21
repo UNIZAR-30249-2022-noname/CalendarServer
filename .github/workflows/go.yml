@@ -23,6 +23,6 @@ jobs:
       
     - name: Create tables
       run: cd src/pkg/sql/ ; sleep 10; ./create.sh ; cd -
-        
+
     - name: Test
       run: go test -v ./...
