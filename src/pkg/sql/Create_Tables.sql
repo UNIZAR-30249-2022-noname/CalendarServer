@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS app_db.grupodocente (
 
 CREATE TABLE IF NOT EXISTS app_db.aula (
     id int PRIMARY KEY AUTO_INCREMENT,
-    numero int not null
-    nombre varchar(50),
+    numero int not null,
+    nombre varchar(50)
 );
 
 CREATE TABLE IF NOT EXISTS app_db.hora (
