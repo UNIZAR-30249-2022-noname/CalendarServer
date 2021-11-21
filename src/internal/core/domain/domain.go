@@ -27,6 +27,15 @@ func (s Subject) IsValid() error {
 	return nil
 }
 
+//DegreeDescription is a struct which represent the charactersitics
+//of a specific degree, it fields are its name, the grups it has and
+//the years it has
+type DegreeDescription struct {
+	Name     string
+	Groups   []string
+	LastYear int
+}
+
 //Terna is a struct which represent the relation among
 // bachelors, year and group
 type Terna struct {

@@ -211,3 +211,80 @@ func currentDate() string {
 	return time.Now().Format("02/01/2006")
 
 }
+
+/////////////////////////////
+// TEST LIST DEGREES      ///
+/////////////////////////////
+
+func TestListSubject(t *testing.T) {
+	// · Mocks · //
+
+	// · Test · //
+
+	type want struct {
+		result []domain.DegreeDescription
+		err    error
+	}
+	tests := []struct {
+		name  string
+		want  want
+		mocks func(m mocks)
+	}{
+		{
+			name: "Succeded",
+			want: want{result: simpleListDegreeDescriptions(), err: nil},
+			mocks: func(m mocks) {
+				m.horarioRepository.EXPECT().ListAllDegrees().Return(simpleListDegreeDescriptions(), nil)
+			},
+		},
+
+		{
+			name: "Repo failure",
+			want: want{result: nil, err: apperrors.ErrInternal},
+			mocks: func(m mocks) {
+				m.horarioRepository.EXPECT().ListAllDegrees().Return(nil, apperrors.ErrInternal)
+			},
+		},
+	}
+
+	// · Runner · //
+	for _, tt := range tests {
+
+		t.Run(tt.name, func(t *testing.T) {
+			//Prepare
+			m := mocks{
+				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+			}
+
+			tt.mocks(m)
+			service := horariosrv.New(m.horarioRepository)
+
+			//Execute
+			result, err := service.ListAllDegrees()
+
+			//Verify operation succeded
+			if tt.want.err != nil && err != nil {
+				assert.Equal(t, tt.want.err.Error(), err.Error())
+			}
+
+			assert.Equal(t, tt.want.result, result)
+
+		})
+
+	}
+}
+
+func simpleListDegreeDescriptions() []domain.DegreeDescription {
+	return []domain.DegreeDescription{
+		{
+			Name:     "A",
+			Groups:   []string{"a", "b"},
+			LastYear: 4,
+		},
+		{
+			Name:     "B",
+			Groups:   []string{"c", "d", "e"},
+			LastYear: 4,
+		},
+	}
+}
