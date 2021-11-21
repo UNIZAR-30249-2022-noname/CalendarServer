@@ -22,7 +22,7 @@ jobs:
       run: docker compose up -d
       
     - name: Create tables
-      run: cd src/pkg/sql/ ; sleep 5; ./drop.sh ; ./create.sh ; cd -
+      run: cd src/pkg/sql/ ; sleep 10; ./create.sh ; cd -
         
     - name: Test
       run: go test -v ./...
