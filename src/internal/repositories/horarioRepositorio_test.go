@@ -61,12 +61,14 @@ func TestCreateEntry(t *testing.T) {
 	//Prepare
 	//err := apperrors.ErrSql
 	entryAsked := domain.Entry{
+
 		Init: domain.NewHour(1,30),
 		End: domain.NewHour(2,40),
 		Subject: domain.Subject{Kind: 1, Name: "Proyecto Software"},
 		Room: domain.Room{Name: "1"},
 		Week: "",
 		Group: "",
+
 	}
 	
 	repos := horarioRepositorio.New()
@@ -94,12 +96,14 @@ func TestCreateEntryPract(t *testing.T) {
 
 	//Prepare
 	entryAsked := domain.Entry{
+
 		Init: domain.NewHour(2,50),
 		End: domain.NewHour(4,50),
 		Subject: domain.Subject{Kind: 2, Name: "Proyecto Software"},
 		Room: domain.Room{Name: "2"},
 		Week: "a",
 		Group: "mananas",
+
 	}
 
 	repos := horarioRepositorio.New()
@@ -127,12 +131,14 @@ func TestCreateEntryPract(t *testing.T) {
 func TestCreateEntryProb(t *testing.T) {
 
 	entryAsked := domain.Entry{
+
 		Init: domain.NewHour(5,30),
 		End: domain.NewHour(6,20),
 		Subject: domain.Subject{Kind: 3, Name: "Proyecto Software"},
 		Room: domain.Room{Name: "3"},
 		Week: "",
 		Group: "niapar",
+
 	}
 
 	repos := horarioRepositorio.New()

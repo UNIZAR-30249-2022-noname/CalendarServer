@@ -8,6 +8,16 @@ const (
 	EXERCISES = 3
 )
 
+const (
+	MOONDAY   = 0
+	TUESDAY   = 1
+	WEDNESDAY = 2
+	THUERSDAY = 3
+	FRIDAY    = 4
+	SATURDAY  = 5
+	SUNDAY    = 6
+)
+
 //AvaialableHours is a struct which represents the available hours
 //per [Terna]
 type AvailableHours struct {
@@ -28,20 +38,25 @@ func (s Subject) IsValid() error {
 }
 
 //DegreeDescription is a struct which represent the charactersitics
-//of a specific degree, it fields are its name, the grups it has and
-//the years it has
+//of a specific degree, it fields are its name and the grups it has
 type DegreeDescription struct {
-	Name     string
-	Groups   []string
-	LastYear int
+	Name   string            `json:"name"`
+	Groups []YearDescription `json:"years"`
 }
 
-//Terna is a struct which represent the relation among
-// bachelors, year and group
+//YearDescription is a struct whicjh has the info about a certain year in a degree.
+//This type has no sense alone, it must me in a [DegreeDescription]
+type YearDescription struct {
+	Name   int      `json:"name"`
+	Groups []string `json:"groups"`
+}
+
+//Set is a struct which represent the relation among
+// degrees, year and group
 type Terna struct {
 	Titulacion string
 	Curso      int
-	Grupo      int
+	Grupo      string
 }
 
 type Hour struct {
@@ -108,6 +123,7 @@ type Entry struct {
 	Room    Room
 	Week    string
 	Group   string
+	Weekday int
 }
 
 func (e Entry) IsValid() error {
