@@ -38,16 +38,21 @@ func (s Subject) IsValid() error {
 }
 
 //DegreeDescription is a struct which represent the charactersitics
-//of a specific degree, it fields are its name, the grups it has and
-//the years it has
+//of a specific degree, it fields are its name and the grups it has
 type DegreeDescription struct {
-	Name     string
-	Groups   []string
-	LastYear int
+	Name   string            `json:"name"`
+	Groups []YearDescription `json:"years"`
 }
 
-//Terna is a struct which represent the relation among
-// bachelors, year and group
+//YearDescription is a struct whicjh has the info about a certain year in a degree.
+//This type has no sense alone, it must me in a [DegreeDescription]
+type YearDescription struct {
+	Name   int      `json:"name"`
+	Groups []string `json:"groups"`
+}
+
+//Set is a struct which represent the relation among
+// degrees, year and group
 type Terna struct {
 	Titulacion string
 	Curso      int

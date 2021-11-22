@@ -295,3 +295,93 @@ func simpleExercisesEntry() handlers.EntryDTO {
 		Group:    "1",
 	}
 }
+
+/////////////////////////////
+// TEST LIST DEGREES      ///
+/////////////////////////////
+
+func TestListDegrees(t *testing.T) {
+	// · Mocks · //
+
+	// · Test · //
+	path := "/listDegrees"
+
+	type want struct {
+		result interface{}
+		code   int
+	}
+	tests := []struct {
+		name  string
+		want  want
+		mocks func(m mocks)
+	}{
+		{
+			name: "Succeded",
+			want: want{result: handlers.ListDegreesDTO{List: simpleListDegreeDescriptions()}, code: http.StatusOK},
+			mocks: func(m mocks) {
+				m.horarioService.EXPECT().ListAllDegrees().Return(simpleListDegreeDescriptions(), nil)
+			},
+		},
+
+		{
+			name: "Repo failure",
+			want: want{result: handlers.ErrorHttp{Message: "unkown"}, code: http.StatusInternalServerError},
+			mocks: func(m mocks) {
+				m.horarioService.EXPECT().ListAllDegrees().Return(nil, apperrors.ErrInternal)
+			},
+		},
+	}
+
+	// · Runner · //
+	for _, tt := range tests {
+
+		t.Run(tt.name, func(t *testing.T) {
+			//Prepare
+			m := mocks{
+				horarioService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
+			}
+			setUpRouter := func() *gin.Engine {
+				horarioHandler := handlers.NewHTTPHandler(m.horarioService)
+				r := gin.Default()
+				r.GET(path, horarioHandler.ListDegrees)
+				return r
+
+			}
+			tt.mocks(m)
+
+			//Execute
+			r := setUpRouter()
+			w := httptest.NewRecorder()
+			uri := path
+			req, _ := http.NewRequest("GET", uri, nil)
+			r.ServeHTTP(w, req)
+			assert.Equal(t, tt.want.code, w.Code)
+
+			//assert.Equal(t, tt.want.result, w.Body.String())
+
+			wantedJson, _ := json.Marshal(tt.want.result)
+			assert.Equal(t, bytes.NewBuffer(wantedJson), w.Body)
+
+		})
+
+	}
+}
+
+func simpleListDegreeDescriptions() []domain.DegreeDescription {
+	return []domain.DegreeDescription{
+		{
+			Name: "A",
+			Groups: []domain.YearDescription{
+				{Name: 1, Groups: []string{"a", "b"}},
+				{Name: 2, Groups: []string{"a", "b"}},
+			},
+		},
+		{
+			Name: "B",
+			Groups: []domain.YearDescription{
+				{Name: 1, Groups: []string{"a"}},
+				{Name: 2, Groups: []string{"a", "b", "c"}},
+			},
+		},
+	}
+}
