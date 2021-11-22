@@ -36,25 +36,27 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 
 	titulacion := c.Query("titulacion")
 	curso, _ := strconv.Atoi(c.Query("year"))
-	grupo, _ := strconv.Atoi(c.Query("group"))
+	grupo := c.Query("group")
 	terna := domain.Terna{
 		Curso:      curso,
 		Titulacion: titulacion,
 		Grupo:      grupo,
 	}
 	availableHours, err := hdl.horarioService.GetAvailableHours(terna)
-	if err == apperrors.ErrInvalidInput {
+
+	if err == apperrors.ErrInvalidInput { //The set request wasn' correct
 
 		c.AbortWithStatusJSON(http.StatusBadRequest, ErrorHttp{Message: "Parámetros incorrectos"})
 
-	} else if err == apperrors.ErrNotFound {
+	} else if err == apperrors.ErrNotFound { //The set request does not exist
 		c.AbortWithStatusJSON(http.StatusNotFound, ErrorHttp{Message: "La terna no existe"})
 
-	} else if err != nil {
+	} else if err != nil { //Internal error
 
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
 	} else {
 		c.JSON(http.StatusOK, availableHours)
+
 	}
 
 }

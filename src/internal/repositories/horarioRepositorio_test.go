@@ -13,12 +13,12 @@ func TestBasico(t *testing.T) {
 	err := apperrors.ErrSql
 	hoursexpected := []domain.AvailableHours{
 		{
-			Subject:   domain.Subject{Kind: 0,Name: "si"},
+			Subject:   domain.Subject{Kind: 0, Name: "si"},
 			Remaining: 20,
 			Max:       21,
 		},
 		{
-			Subject:   domain.Subject{Kind: 0,Name: "si"},
+			Subject:   domain.Subject{Kind: 0, Name: "si"},
 			Remaining: 25,
 			Max:       26,
 		},
@@ -26,7 +26,7 @@ func TestBasico(t *testing.T) {
 	ternaAsked := domain.Terna{
 		Titulacion: "uwu",
 		Curso:      1,
-		Grupo:      0,
+		Grupo:      "0",
 	}
 	repos := horarioRepositorio.New()
 	hoursgot, error := repos.GetAvailableHours(ternaAsked)
@@ -42,12 +42,12 @@ func TestBasico(t *testing.T) {
 func TestCreateEntry(t *testing.T) {
 	err := apperrors.ErrSql
 	entryAsked := domain.Entry{
-		Init: domain.NewHour(1,30),
-		End: domain.NewHour(2,40),
+		Init:    domain.NewHour(1, 30),
+		End:     domain.NewHour(2, 40),
 		Subject: domain.Subject{Kind: 0, Name: "si"},
-		Room: domain.Room{Name: "1"},
-		Week: "",
-		Group: "",
+		Room:    domain.Room{Name: "1"},
+		Week:    "",
+		Group:   "",
 	}
 	repos := horarioRepositorio.New()
 	error := repos.CreateNewEntry(entryAsked)
@@ -63,12 +63,12 @@ func TestCreateEntry(t *testing.T) {
 func TestCreateEntryPract(t *testing.T) {
 	err := apperrors.ErrSql
 	entryAsked := domain.Entry{
-		Init: domain.NewHour(1,30),
-		End: domain.NewHour(2,40),
+		Init:    domain.NewHour(1, 30),
+		End:     domain.NewHour(2, 40),
 		Subject: domain.Subject{Kind: 2, Name: "no"},
-		Room: domain.Room{Name: "1"},
-		Week: "a",
-		Group: "mananas",
+		Room:    domain.Room{Name: "1"},
+		Week:    "a",
+		Group:   "mananas",
 	}
 	repos := horarioRepositorio.New()
 	error := repos.CreateNewEntry(entryAsked)
@@ -84,15 +84,36 @@ func TestCreateEntryPract(t *testing.T) {
 func TestCreateEntryProb(t *testing.T) {
 	err := apperrors.ErrSql
 	entryAsked := domain.Entry{
-		Init: domain.NewHour(1,30),
-		End: domain.NewHour(2,40),
+		Init:    domain.NewHour(1, 30),
+		End:     domain.NewHour(2, 40),
 		Subject: domain.Subject{Kind: 3, Name: "no"},
-		Room: domain.Room{Name: "1"},
-		Week: "",
-		Group: "niapar",
+		Room:    domain.Room{Name: "1"},
+		Week:    "",
+		Group:   "niapar",
 	}
 	repos := horarioRepositorio.New()
 	error := repos.CreateNewEntry(entryAsked)
+	if error != nil {
+		assert.Equal(t, err, error)
+	} else {
+		assert.Equal(t, true, true)
+	}
+
+	repos.CloseConn()
+}
+
+func TestDeleteEntry(t *testing.T) {
+	err := apperrors.ErrSql
+	entryAsked := domain.Entry{
+		Init: domain.NewHour(1,30),
+		End: domain.NewHour(2,40),
+		Subject: domain.Subject{Kind: 1, Name: "si"},
+		Room: domain.Room{Name: "1"},
+		Week: "",
+		Group: "",
+	}
+	repos := horarioRepositorio.New()
+	error := repos.DeleteEntry(entryAsked)
 	if error != nil {
 		assert.Equal(t, err, error)
 	} else {

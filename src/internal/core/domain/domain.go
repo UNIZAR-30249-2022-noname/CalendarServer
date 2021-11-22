@@ -8,6 +8,16 @@ const (
 	EXERCISES = 3
 )
 
+const (
+	MOONDAY   = 0
+	TUESDAY   = 1
+	WEDNESDAY = 2
+	THUERSDAY = 3
+	FRIDAY    = 4
+	SATURDAY  = 5
+	SUNDAY    = 6
+)
+
 //AvaialableHours is a struct which represents the available hours
 //per [Terna]
 type AvailableHours struct {
@@ -46,7 +56,7 @@ type YearDescription struct {
 type Terna struct {
 	Titulacion string
 	Curso      int
-	Grupo      int
+	Grupo      string
 }
 
 type Hour struct {
@@ -71,8 +81,35 @@ func (h Hour) IsLaterThan(h2 Hour) bool {
 	}
 	return true
 }
+
+//Los minutos no pueden pasar de 60
+//Una hora y media devolveria 130
 func HourToInt(h Hour) int {
 	return h.hour*100 + h.min
+}
+
+func IntToHour(h int) Hour {
+	return Hour{hour: h/100, min:h%100}
+}
+
+func AddHour(h1, h2 Hour) (int) {
+	mins := h1.min + h2.min 
+	hours := h1.hour + h2.hour
+	if mins >= 60 {
+		mins -= 60
+		hours += 1
+	}
+	return hours*100 + mins
+}
+
+func SubstractHour(h1, h2 Hour) (int) {
+	mins := h1.min - h2.min 
+	hours := h1.hour - h2.hour
+	if mins < 0 {
+		mins += 60
+		hours -= 1
+	}
+	return hours*100 + mins
 }
 
 type Room struct {
@@ -86,6 +123,7 @@ type Entry struct {
 	Room    Room
 	Week    string
 	Group   string
+	Weekday int
 }
 
 func (e Entry) IsValid() error {
