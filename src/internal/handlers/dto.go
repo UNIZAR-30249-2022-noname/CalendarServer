@@ -5,7 +5,7 @@ import "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 type TernaDto struct {
 	Titulacion string `json:"titulacion"`
 	Curso      int    `json:"curso"`
-	Grupo      int    `json:"grupo"`
+	Grupo      string `json:"grupo"`
 }
 
 type SchedulerDTO struct {
@@ -27,6 +27,7 @@ type EntryDTO struct {
 	Room     string `json:"room"`
 	Week     string `json:"semana"`
 	Group    string `json:"grupo"`
+	Weekday  int    `json:"weekday"`
 }
 
 func (e EntryDTO) ToEntry() domain.Entry {
@@ -35,6 +36,7 @@ func (e EntryDTO) ToEntry() domain.Entry {
 		End:     domain.NewHour(e.EndHour, e.EndMin),
 		Subject: domain.Subject{Kind: e.Kind, Name: e.Subject},
 		Room:    domain.Room{Name: e.Room},
+		Weekday: e.Weekday,
 	}
 
 }

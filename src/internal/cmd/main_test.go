@@ -61,14 +61,14 @@ func TestGetAvailableHours(t *testing.T) {
 			args: args{terna: handlers.TernaDto{
 				Titulacion: "Ing.Informática",
 				Curso:      2,
-				Grupo:      1,
+				Grupo:      "1",
 			}},
 			want: want{result: availableHours, code: http.StatusOK},
 			mocks: func(m mocks) {
 				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
 					Titulacion: "Ing.Informática",
 					Curso:      2,
-					Grupo:      1}).Return(simpleAvailableHours(), nil)
+					Grupo:      "1"}).Return(simpleAvailableHours(), nil)
 			},
 		},
 		{
@@ -76,13 +76,13 @@ func TestGetAvailableHours(t *testing.T) {
 			args: args{terna: handlers.TernaDto{
 
 				Curso: 2,
-				Grupo: 1,
+				Grupo: "1",
 			}},
 			want: want{result: errorParam, code: http.StatusBadRequest},
 			mocks: func(m mocks) {
 				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
 					Curso: 2,
-					Grupo: 1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+					Grupo: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 		{
@@ -90,13 +90,13 @@ func TestGetAvailableHours(t *testing.T) {
 			args: args{terna: handlers.TernaDto{
 
 				Titulacion: "Ing.Informática",
-				Grupo:      1,
+				Grupo:      "1",
 			}},
 			want: want{result: errorParam, code: http.StatusBadRequest},
 			mocks: func(m mocks) {
 				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
 					Titulacion: "Ing.Informática",
-					Grupo:      1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+					Grupo:      "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 		{
@@ -118,14 +118,14 @@ func TestGetAvailableHours(t *testing.T) {
 			args: args{terna: handlers.TernaDto{
 				Titulacion: "Ing.Informática",
 				Curso:      2,
-				Grupo:      1,
+				Grupo:      "1",
 			}},
 			want: want{result: handlers.ErrorHttp{Message: "La terna no existe"}, code: http.StatusNotFound},
 			mocks: func(m mocks) {
 				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
 					Titulacion: "Ing.Informática",
 					Curso:      2,
-					Grupo:      1}).Return([]domain.AvailableHours{}, apperrors.ErrNotFound)
+					Grupo:      "1"}).Return([]domain.AvailableHours{}, apperrors.ErrNotFound)
 			},
 		},
 	}
@@ -147,7 +147,8 @@ func TestGetAvailableHours(t *testing.T) {
 			}
 			r := setUpRouter()
 			w := httptest.NewRecorder()
-			uri := "/availableHours?titulacion=" + tt.args.terna.Titulacion + "&year=" + strconv.Itoa(tt.args.terna.Curso) + "&group=" + strconv.Itoa(tt.args.terna.Grupo)
+			uri := "/availableHours?titulacion=" + tt.args.terna.Titulacion +
+				"&year=" + strconv.Itoa(tt.args.terna.Curso) + "&group=" + tt.args.terna.Grupo
 			req, _ := http.NewRequest("GET", uri, nil)
 			r.ServeHTTP(w, req)
 			assert.Equal(t, tt.want.code, w.Code)

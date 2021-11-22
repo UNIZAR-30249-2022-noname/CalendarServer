@@ -17,14 +17,14 @@ type mocks struct {
 	horarioRepository *mock_ports.MockHorarioRepositorio
 }
 
-//Comprueba si dada una [Terna] devuelve las horas disponibles correctamente
+//Checks all the cases for the function GetAvailableHours of the service [horariosrv]
 func TestGetAvailableHours(t *testing.T) {
 	// · Mocks · //
 	AvailableHours := simpleAvailableHours()
 	ternaAsked := domain.Terna{
 		Titulacion: "Ing.Informática",
 		Curso:      2,
-		Grupo:      1,
+		Grupo:      "1",
 	}
 
 	// · Test · //
@@ -58,18 +58,18 @@ func TestGetAvailableHours(t *testing.T) {
 		},
 		{
 			name: "Should return error when [titulación] is empty",
-			args: args{terna: domain.Terna{Curso: 1, Grupo: 1}},
+			args: args{terna: domain.Terna{Curso: 1, Grupo: "1"}},
 			want: want{result: []domain.AvailableHours{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Curso: 1, Grupo: 1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Curso: 1, Grupo: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 		{
 			name: "Should return error when [curso] is empty",
-			args: args{terna: domain.Terna{Titulacion: "A", Grupo: 1}},
+			args: args{terna: domain.Terna{Titulacion: "A", Grupo: "1"}},
 			want: want{result: []domain.AvailableHours{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Titulacion: "A", Grupo: 1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Titulacion: "A", Grupo: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 		{
@@ -108,6 +108,7 @@ func TestGetAvailableHours(t *testing.T) {
 	}
 }
 
+//Returns a slice for having different cases in the tests
 func simpleAvailableHours() []domain.AvailableHours {
 
 	return []domain.AvailableHours{
@@ -202,7 +203,8 @@ func simpleEntry() domain.Entry {
 			Kind: domain.THEORICAL,
 			Name: "Prog 1",
 		},
-		Room: domain.Room{Name: "1"},
+		Room:    domain.Room{Name: "1"},
+		Weekday: domain.MOONDAY,
 	}
 }
 

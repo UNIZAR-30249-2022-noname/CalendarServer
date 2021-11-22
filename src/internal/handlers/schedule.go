@@ -36,7 +36,7 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 
 	titulacion := c.Query("titulacion")
 	curso, _ := strconv.Atoi(c.Query("year"))
-	grupo, _ := strconv.Atoi(c.Query("group"))
+	grupo := c.Query("group")
 	terna := domain.Terna{
 		Curso:      curso,
 		Titulacion: titulacion,
