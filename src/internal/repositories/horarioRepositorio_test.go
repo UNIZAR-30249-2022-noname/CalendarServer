@@ -30,7 +30,7 @@ func TestBasico(t *testing.T) {
 	ternaAsked := domain.Terna{
 		Titulacion: "Ing. Informatica",
 		Curso:      1,
-		Grupo:      1,
+		Grupo:      "1",
 	}
 
 	repos := horarioRepositorio.New()
