@@ -102,9 +102,22 @@ var doc = `{
                 }
             }
         },
-        "/newEntry/": {
+        "/ping/": {
+            "get": {
+                "description": "Response \"pong\" if the server is currrently available",
+                "produces": [
+                    "text/plain"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns \"pong\" "
+                    }
+                }
+            }
+        },
+        "/updateScheduler/": {
             "post": {
-                "description": "Requesting a new entry for the scheduler. The entry will be definied by the initial hour\nand the ending hour, adintional info must be indicated depending of the kind of hours\nthe kinds of subject hours are:\n- Theorical = 1\n- Practices = 2\n- Exercises = 3",
+                "description": "The request will erase the current scheduler an create one new with\nthe requested entries for the scheduler. The entry will be definied by the initial hour\nand the ending hour, adintional info must be indicated depending of the kind of hours\nthe kinds of subject hours are:\n- Theorical = 1\n- Practices = 2\n- Exercises = 3",
                 "produces": [
                     "text/plain"
                 ],
@@ -115,26 +128,16 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/handlers.EntryDTO"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/handlers.EntryDTO"
+                            }
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "Receive the date of the latests entry modification with format dd/mm/aaaa"
-                    }
-                }
-            }
-        },
-        "/ping/": {
-            "get": {
-                "description": "Response \"pong\" if the server is currrently available",
-                "produces": [
-                    "text/plain"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Returns \"pong\" "
                     }
                 }
             }
@@ -223,6 +226,9 @@ var doc = `{
                 },
                 "subject": {
                     "type": "string"
+                },
+                "weekday": {
+                    "type": "integer"
                 }
             }
         },

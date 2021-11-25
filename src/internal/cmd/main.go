@@ -21,7 +21,7 @@ func SetupRouter() *gin.Engine {
 	horarioHandler := handlers.NewHTTPHandler(horariosrv)
 	r.GET("/ping", handlers.Ping)
 	r.GET("/availableHours", horarioHandler.GetAvailableHours)
-	r.POST("/newEntry", horarioHandler.PostNewEntry)
+	r.POST("/updateScheduler", horarioHandler.PostUpdateScheduler)
 	r.GET("/listDegrees", horarioHandler.ListDegrees)
 
 	return r

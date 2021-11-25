@@ -52,7 +52,25 @@ func (srv *HorarioServiceImp) ListAllDegrees() ([]domain.DegreeDescription, erro
 	return list, err
 }
 
-func (srv *HorarioServiceImp) UpdateScheduler(entry []domain.Entry) (string, error) {
-	//TODO
-	return "", nil
+func (srv *HorarioServiceImp) UpdateScheduler(entries []domain.Entry) (string, error) {
+	var lastMod string
+	err := srv.horarioRepositorio.DeleteAllEntries()
+	if err != nil {
+		return "", apperrors.ErrSql
+	}
+
+	lastMod = time.Now().Format("02/01/2006")
+
+	for i, e := range entries {
+		//add
+		date, err := srv.CreateNewEntry(e)
+		if err != nil {
+			return "", apperrors.ErrSql
+		}
+		if len(entries)-1 == i {
+			lastMod = date
+		}
+
+	}
+	return lastMod, nil
 }
