@@ -51,3 +51,8 @@ func (srv *HorarioServiceImp) ListAllDegrees() ([]domain.DegreeDescription, erro
 	list, err := srv.horarioRepositorio.ListAllDegrees()
 	return list, err
 }
+
+func (srv *HorarioServiceImp) UpdateScheduler(entry []domain.Entry) (string, error) {
+	//TODO
+	return "", nil
+}

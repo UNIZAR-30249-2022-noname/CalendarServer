@@ -5,6 +5,7 @@ import (
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/horariosrv"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -15,7 +16,8 @@ func SetupRouter() *gin.Engine {
 
 	r := gin.Default()
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	horariosrv := horariosrv.New(nil)
+	horariorepo := horarioRepositorio.New()
+	horariosrv := horariosrv.New(horariorepo)
 	horarioHandler := handlers.NewHTTPHandler(horariosrv)
 	r.GET("/ping", handlers.Ping)
 	r.GET("/availableHours", horarioHandler.GetAvailableHours)
