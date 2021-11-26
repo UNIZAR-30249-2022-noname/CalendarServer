@@ -20,4 +20,6 @@ var (
 	//ErrInternal is an error returned when the system fails and
 	//no reason is known
 	ErrInternal = errors.New("internal")
+
+	ErrNoRowsAffected = errors.New("no_rows_affected")
 )

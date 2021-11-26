@@ -97,7 +97,7 @@ func (repo *repo) DeleteEntry(entry domain.Entry) (error){
 //in the database given an initial and final [Hour], an id of the hora row to update
 //and a boolean (true if it was a create -> substracts the hour 
 //				and false if it was a delete -> adds the hour)
-func (repo *repo) updateHours(ini, fin domain.Hour, idhora int, create bool) (error){
+func (repo *repo) updateHours(ini, fin domain.Hour, idhora int, create bool) (error) {
 	//Create is to remove the available hours if true and add them if false
 	var horastotales, horasdisponibles, newhDisponibles int
 	//We get the total and available hours from 'hora'
@@ -119,6 +119,15 @@ func (repo *repo) updateHours(ini, fin domain.Hour, idhora int, create bool) (er
 	count, err := res.RowsAffected()
 	if err != nil || count < 1 { return apperrors.ErrSql }
 	return nil
+}
+
+func (repo *repo) DeleteAllEntries(terna domain.Terna) error {
+	res, err := repo.db.Exec(consultas.DeleteEntradas, terna.Titulacion, terna.Grupo, terna.Curso)
+	rows, _ := res.RowsAffected()
+	if(rows < 1){
+		return apperrors.ErrNoRowsAffected
+	}
+	return err
 }
 
 func (repo *repo) RawExec(exec string) (error){
