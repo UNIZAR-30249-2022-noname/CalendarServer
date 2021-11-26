@@ -53,6 +53,8 @@ definitions:
         type: string
       subject:
         type: string
+      weekday:
+        type: integer
     type: object
   handlers.ErrorHttp:
     properties:
@@ -122,10 +124,19 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/handlers.ErrorHttp'
-  /newEntry/:
+  /ping/:
+    get:
+      description: Response "pong" if the server is currrently available
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: 'Returns "pong" '
+  /updateScheduler/:
     post:
       description: |-
-        Requesting a new entry for the scheduler. The entry will be definied by the initial hour
+        The request will erase the current scheduler an create one new with
+        the requested entries for the scheduler. The entry will be definied by the initial hour
         and the ending hour, adintional info must be indicated depending of the kind of hours
         the kinds of subject hours are:
         - Theorical = 1
@@ -137,19 +148,13 @@ paths:
         name: entry
         required: true
         schema:
-          $ref: '#/definitions/handlers.EntryDTO'
+          items:
+            $ref: '#/definitions/handlers.EntryDTO'
+          type: array
       produces:
       - text/plain
       responses:
         "200":
           description: Receive the date of the latests entry modification with format
             dd/mm/aaaa
-  /ping/:
-    get:
-      description: Response "pong" if the server is currrently available
-      produces:
-      - text/plain
-      responses:
-        "200":
-          description: 'Returns "pong" '
 swagger: "2.0"

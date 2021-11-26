@@ -41,6 +41,15 @@ func (e EntryDTO) ToEntry() domain.Entry {
 
 }
 
+func EntriesDTOtoDomain(dtos []EntryDTO) []domain.Entry {
+	ls := []domain.Entry{}
+	for _, e := range dtos {
+		ls = append(ls, e.ToEntry())
+	}
+	return ls
+
+}
+
 type ListDegreesDTO struct {
 	List []domain.DegreeDescription `json:"list"`
 }

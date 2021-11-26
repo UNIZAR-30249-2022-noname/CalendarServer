@@ -127,16 +127,16 @@ func simpleAvailableHours() []domain.AvailableHours {
 
 }
 
-/////////////////////////////
-// TEST SCHEDULER ENTRIES ///
-/////////////////////////////
+/////////////////////////////////////
+// TEST UPDATE SCHEDULER ENTRIES ///
+///////////////////////////////////
 
-func TestNewEntries(t *testing.T) {
+func TestUpdateEntries(t *testing.T) {
 	// · Mocks · //
 
 	// · Test · //
 	type args struct {
-		entry domain.Entry
+		entries []domain.Entry
 	}
 	type want struct {
 		result string
@@ -149,18 +149,21 @@ func TestNewEntries(t *testing.T) {
 		mocks func(m mocks)
 	}{{
 		name: "Create entry succed",
-		args: args{entry: simpleEntry()},
+		args: args{entries: simpleEntries()},
 		want: want{result: currentDate(), err: nil},
 		mocks: func(m mocks) {
-			m.horarioRepository.EXPECT().CreateNewEntry(simpleEntry()).Return(nil)
+			m.horarioRepository.EXPECT().CreateNewEntry(simpleEntries()[0]).Return(nil)
+			m.horarioRepository.EXPECT().CreateNewEntry(simpleEntries()[1]).Return(nil)
+			m.horarioRepository.EXPECT().DeleteAllEntries().Return(nil)
 		},
 	},
 		{
 			name: "Should return error if repository fails",
-			args: args{entry: simpleEntry()},
-			want: want{result: "", err: apperrors.ErrInternal},
+			args: args{entries: simpleEntries()},
+			want: want{result: "", err: apperrors.ErrSql},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().CreateNewEntry(simpleEntry()).Return(apperrors.ErrInternal)
+				m.horarioRepository.EXPECT().CreateNewEntry(simpleEntries()[0]).Return(apperrors.ErrInternal)
+				m.horarioRepository.EXPECT().DeleteAllEntries().Return(nil)
 			},
 		},
 	}
@@ -177,7 +180,7 @@ func TestNewEntries(t *testing.T) {
 			service := horariosrv.New(m.horarioRepository)
 
 			//Execute
-			result, err := service.CreateNewEntry(tt.args.entry)
+			result, err := service.UpdateScheduler(tt.args.entries)
 
 			//Verify operation succeded
 			if tt.want.err != nil && err != nil {
@@ -195,16 +198,28 @@ func TestNewEntries(t *testing.T) {
 	}
 }
 
-func simpleEntry() domain.Entry {
-	return domain.Entry{
-		Init: domain.NewHour(1, 1),
-		End:  domain.NewHour(2, 2),
-		Subject: domain.Subject{
-			Kind: domain.THEORICAL,
-			Name: "Prog 1",
+func simpleEntries() []domain.Entry {
+	return []domain.Entry{
+		{
+			Init: domain.NewHour(1, 1),
+			End:  domain.NewHour(2, 2),
+			Subject: domain.Subject{
+				Kind: domain.THEORICAL,
+				Name: "Prog 1",
+			},
+			Room:    domain.Room{Name: "1"},
+			Weekday: domain.MOONDAY,
 		},
-		Room:    domain.Room{Name: "1"},
-		Weekday: domain.MOONDAY,
+		{
+			Init: domain.NewHour(5, 0),
+			End:  domain.NewHour(9, 0),
+			Subject: domain.Subject{
+				Kind: domain.THEORICAL,
+				Name: "Prog 2",
+			},
+			Room:    domain.Room{Name: "2"},
+			Weekday: domain.THUERSDAY,
+		},
 	}
 }
 

@@ -61,25 +61,28 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 
 }
 
-//PostNewEntry is the handler for creating a new schedluer entry
-//@Sumary Post new scheduler entry
-//@Description Requesting a new entry for the scheduler. The entry will be definied by the initial hour
+//PostNewEntry is the handler for updating a schedluer
+//@Sumary Post update a scheduler
+//@Description The request will erase the current scheduler an create one new with
+//@Description the requested entries for the scheduler. The entry will be definied by the initial hour
 //@Description and the ending hour, adintional info must be indicated depending of the kind of hours
 //@Description the kinds of subject hours are:
 //@Description  - Theorical = 1
 //@Description  - Practices = 2
 //@Description  - Exercises = 3
 //@Tag Scheduler
-//@Param entry body  EntryDTO true "Entry to create"
+//@Param entry body  []EntryDTO true "Entry to create"
 //@Produce text/plain
 //@Success 200 "Receive the date of the latests entry modification with format dd/mm/aaaa"
-//@Router /newEntry/ [post]
-func (hdl *HTTPHandler) PostNewEntry(c *gin.Context) {
+//@Router /updateScheduler/ [post]
+func (hdl *HTTPHandler) PostUpdateScheduler(c *gin.Context) {
 	//Read the body request
-	body := EntryDTO{}
+	body := []EntryDTO{}
 	c.BindJSON(&body)
+	listEntries := EntriesDTOtoDomain(body)
+
 	//Execute service
-	lastMod, err := hdl.horarioService.CreateNewEntry(body.ToEntry())
+	lastMod, err := hdl.horarioService.UpdateScheduler(listEntries)
 	if err == nil {
 		c.String(http.StatusOK, lastMod)
 
