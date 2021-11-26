@@ -121,6 +121,7 @@ func TestCreateEntry(t *testing.T) {
 func TestCreateEntryPract(t *testing.T) {
 
 	//Prepare
+	assert := assert.New(t)
 	entryAsked := domain.Entry{
 
 		Init: domain.NewHour(2,50),
@@ -144,7 +145,36 @@ func TestCreateEntryPract(t *testing.T) {
 	//Start
 	repos.CreateNewEntry(entryAsked)
 	
-	assert.Equal(t, repos.EntryFound(entryAsked), true)
+	assert.Equal(repos.EntryFound(entryAsked), true, "Should be the same entries")
+
+	//Empty group
+	entryAsked = domain.Entry{
+
+		Init: domain.NewHour(5,30),
+		End: domain.NewHour(6,20),
+		Subject: domain.Subject{Kind: 2, Name: "Proyecto Software"},
+		Room: domain.Room{Name: "3"},
+		Week: "a",
+		Group: "",
+	}
+
+	err := repos.CreateNewEntry(entryAsked)
+	if err != nil { assert.Equal(apperrors.ErrInvalidKind, err, "Should be the same error") }
+
+	//Empty group
+	entryAsked = domain.Entry{
+
+		Init: domain.NewHour(5,30),
+		End: domain.NewHour(6,20),
+		Subject: domain.Subject{Kind: 2, Name: "Proyecto Software"},
+		Room: domain.Room{Name: "3"},
+		Week: "",
+		Group: "mananas",
+	}
+
+	err = repos.CreateNewEntry(entryAsked)
+	if err != nil { assert.Equal(apperrors.ErrInvalidKind, err, "Should be the same error") }
+
 
 	//Delete
 	repos.RawExec(consultas.TruncHora); 		repos.RawExec(consultas.TruncGrupo)
@@ -155,7 +185,7 @@ func TestCreateEntryPract(t *testing.T) {
 }
 
 func TestCreateEntryProb(t *testing.T) {
-
+	assert := assert.New(t)
 	entryAsked := domain.Entry{
 
 		Init: domain.NewHour(5,30),
@@ -177,10 +207,24 @@ func TestCreateEntryProb(t *testing.T) {
 	repos.RawExec(consultas.Aula1);			repos.RawExec(consultas.Aula2)
 	repos.RawExec(consultas.Aula3)
 
-	//Start
+	//Start (Everything Ok)
 	repos.CreateNewEntry(entryAsked)
 	
-	assert.Equal(t, repos.EntryFound(entryAsked), true)
+	assert.Equal(repos.EntryFound(entryAsked), true, "Should be the same entries")
+
+	//Empty group
+	entryAsked = domain.Entry{
+
+		Init: domain.NewHour(5,30),
+		End: domain.NewHour(6,20),
+		Subject: domain.Subject{Kind: 3, Name: "Proyecto Software"},
+		Room: domain.Room{Name: "3"},
+		Week: "",
+		Group: "",
+	}
+
+	err := repos.CreateNewEntry(entryAsked)
+	if err != nil { assert.Equal(apperrors.ErrInvalidKind, err, "Should be the same error") }
 
 	//Delete
 	repos.RawExec(consultas.TruncHora); 		repos.RawExec(consultas.TruncGrupo)

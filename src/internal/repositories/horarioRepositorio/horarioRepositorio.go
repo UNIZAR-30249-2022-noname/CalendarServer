@@ -53,6 +53,18 @@ func (repo *repo) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours
 //given a completed [Entry] 
 func (repo *repo) CreateNewEntry(entry domain.Entry) (error) {
 	var idhoras, idgrupo, idaula int
+	if entry.Subject.Kind == 2 {
+		if entry.Week == "" || &entry.Week == nil {
+			return apperrors.ErrInvalidKind
+		}
+		if entry.Group == "" || &entry.Group == nil {
+			return apperrors.ErrInvalidKind
+		}
+	} else if entry.Subject.Kind == 3 {
+		if entry.Group == "" || &entry.Group == nil {
+			return apperrors.ErrInvalidKind
+		}
+	}
 	//We get idhoras & idgrupo for the entry
 	err := repo.db.QueryRow(consultas.SelectIdHoraGrupo,
 			entry.Subject.Kind, entry.Group, entry.Week, entry.Subject.Name).Scan(&idhoras, &idgrupo)
