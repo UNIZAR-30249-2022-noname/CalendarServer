@@ -126,7 +126,8 @@ func (repo *repo) RawExec(exec string) (error){
 	return err
 }
 
-//Sirve para ver si una entrada existe en la BD
+//EntryFound is a function which returns true if the given
+//entry [Entry] is in the database
 func (repo *repo) EntryFound(entry domain.Entry) (bool){
 
 	res, err := repo.db.Query(consultas.SearchEntry,
