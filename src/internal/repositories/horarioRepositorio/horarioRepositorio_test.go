@@ -117,7 +117,7 @@ func TestCreateEntry(t *testing.T) {
 	repos.CloseConn()
 }
 
-//Empty tests already at TestCreateEntry
+//Create entry practicas & try to create entry practicas without the week and group
 func TestCreateEntryPract(t *testing.T) {
 
 	//Prepare
@@ -184,6 +184,7 @@ func TestCreateEntryPract(t *testing.T) {
 	repos.CloseConn()
 }
 
+//Create entry problemas & try to create entry problemas without the group
 func TestCreateEntryProb(t *testing.T) {
 	assert := assert.New(t)
 	entryAsked := domain.Entry{
