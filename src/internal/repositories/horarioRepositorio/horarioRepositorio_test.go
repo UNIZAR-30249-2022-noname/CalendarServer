@@ -5,6 +5,7 @@ import (
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	consultas "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/sql"
 	"github.com/stretchr/testify/assert"
 )
@@ -41,7 +42,7 @@ func TestGetAvaiableHours(t *testing.T) {
 
 	//Start
 	hoursgot, _ := repos.GetAvailableHours(ternaAsked)
-	
+
 	assert.Equal(len(hoursgot), len(hoursexpected), "Should be the same length")
 	for i, h := range hoursgot {
 		assert.Equal(h, hoursexpected[i], "Should be the same AvaiableHours")
@@ -54,11 +55,10 @@ func TestGetAvaiableHours(t *testing.T) {
 	repos.CloseConn()
 }
 
-
 func TestCreateEntry(t *testing.T) {
 
 	//Prepare
-	//err := apperrors.ErrSql
+	assert := assert.New(t)
 	entryAsked := domain.Entry{
 
 		Init: domain.NewHour(1,30),
@@ -78,10 +78,36 @@ func TestCreateEntry(t *testing.T) {
 	repos.RawExec(consultas.Hora1); 		repos.RawExec(consultas.Hora2)
 	repos.RawExec(consultas.Aula1);
 
-	//Start
+	//Start (Everything OK)
 	repos.CreateNewEntry(entryAsked)
 	
-	assert.Equal(t, repos.EntryFound(entryAsked), true)
+	assert.Equal(repos.EntryFound(entryAsked), true, "Should be the same entries")
+
+	//Start (Empty name)
+	entryAsked = domain.Entry{
+		Init: domain.NewHour(1,30),
+		End: domain.NewHour(2,40),
+		Subject: domain.Subject{Kind: 1, Name: ""},
+		Room: domain.Room{Name: "1"},
+		Week: "",
+		Group: "",
+	}
+
+	err := repos.CreateNewEntry(entryAsked)
+	if err != nil { assert.Equal(apperrors.ErrSql, err, "Should be the same error") }
+
+	//Start (Empty room)
+	entryAsked = domain.Entry{
+		Init: domain.NewHour(1,30),
+		End: domain.NewHour(2,40),
+		Subject: domain.Subject{Kind: 1, Name: "Proyecto Software"},
+		Room: domain.Room{Name: ""},
+		Week: "",
+		Group: "",
+	}
+
+	err = repos.CreateNewEntry(entryAsked)
+	if err != nil { assert.Equal(apperrors.ErrSql, err, "Should be the same error") }
 
 	//Delete
 	repos.RawExec(consultas.TruncHora); 		repos.RawExec(consultas.TruncGrupo)
@@ -91,6 +117,7 @@ func TestCreateEntry(t *testing.T) {
 	repos.CloseConn()
 }
 
+//Empty tests already at TestCreateEntry
 func TestCreateEntryPract(t *testing.T) {
 
 	//Prepare
