@@ -20,4 +20,8 @@ var (
 	//ErrInternal is an error returned when the system fails and
 	//no reason is known
 	ErrInternal = errors.New("internal")
+
+	//ErrInvalidKind is an error returned when the Kind is incompatible
+	//with the Group and Week
+	ErrInvalidKind = errors.New("invalid_subject_kind")
 )

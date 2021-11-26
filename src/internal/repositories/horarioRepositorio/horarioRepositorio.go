@@ -53,6 +53,18 @@ func (repo *repo) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours
 //given a completed [Entry]
 func (repo *repo) CreateNewEntry(entry domain.Entry) error {
 	var idhoras, idgrupo, idaula int
+	if entry.Subject.Kind == domain.PRACTICES {
+		if entry.Week == "" || &entry.Week == nil {
+			return apperrors.ErrInvalidKind
+		}
+		if entry.Group == "" || &entry.Group == nil {
+			return apperrors.ErrInvalidKind
+		}
+	} else if entry.Subject.Kind == domain.EXERCISES {
+		if entry.Group == "" || &entry.Group == nil {
+			return apperrors.ErrInvalidKind
+		}
+	}
 	//We get idhoras & idgrupo for the entry
 	err := repo.db.QueryRow(consultas.SelectIdHoraGrupo,
 		entry.Subject.Kind, entry.Group, entry.Week, entry.Subject.Name).Scan(&idhoras, &idgrupo)
@@ -117,7 +129,7 @@ func (repo *repo) updateHours(ini, fin domain.Hour, idhora int, create bool) err
 	//Create is to remove the available hours if true and add them if false
 	var horastotales, horasdisponibles, newhDisponibles int
 	//We get the total and available hours from 'hora'
-	err := repo.db.QueryRow(consultas.SearchHours,
+	err := repo.db.QueryRow(consultas.SearchHours, 
 		idhora).Scan(&horastotales, &horasdisponibles)
 	if err != nil {
 		return apperrors.ErrSql
@@ -145,6 +157,23 @@ func (repo *repo) updateHours(ini, fin domain.Hour, idhora int, create bool) err
 		return apperrors.ErrSql
 	}
 	return nil
+}
+
+func (repo *repo) RawExec(exec string) (error){
+	_ , err := repo.db.Exec(exec)
+	return err
+}
+
+//EntryFound is a function which returns true if the given
+//entry [Entry] is in the database
+func (repo *repo) EntryFound(entry domain.Entry) (bool){
+
+	res, err := repo.db.Query(consultas.SearchEntry,
+		domain.HourToInt(entry.Init), domain.HourToInt(entry.End), 
+		entry.Subject.Kind, entry.Week, entry.Group, entry.Subject.Name)
+	found := res.Next()
+	_ = err
+	return found
 }
 
 func (repo *repo) ListAllDegrees() ([]domain.DegreeDescription, error) {
