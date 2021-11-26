@@ -10,10 +10,9 @@ import (
 )
 
 
-func TestBasico(t *testing.T) {
+func TestGetAvaiableHours(t *testing.T) {
 	
 	//Prepare
-	//err := apperrors.ErrSql
 	assert := assert.New(t)
 	hoursexpected := []domain.AvailableHours{
 		{
@@ -42,7 +41,7 @@ func TestBasico(t *testing.T) {
 
 	//Start
 	hoursgot, _ := repos.GetAvailableHours(ternaAsked)
-	//if error != nil { assert.Equal(t, err, error)}
+	
 	assert.Equal(len(hoursgot), len(hoursexpected), "Should be the same length")
 	for i, h := range hoursgot {
 		assert.Equal(h, hoursexpected[i], "Should be the same AvaiableHours")
