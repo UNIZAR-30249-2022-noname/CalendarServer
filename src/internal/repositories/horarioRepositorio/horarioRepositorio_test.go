@@ -192,7 +192,7 @@ func TestCreateEntryProb(t *testing.T) {
 
 func TestDeleteEntry(t *testing.T) {
 	//Prepare
-	//err := apperrors.ErrSql
+	assert := assert.New(t)
 	entryAsked := domain.Entry{
 		Init: domain.NewHour(1,30),
 		End: domain.NewHour(2,40),
@@ -210,14 +210,41 @@ func TestDeleteEntry(t *testing.T) {
 	repos.RawExec(consultas.Hora1); 		repos.RawExec(consultas.Hora2)
 	repos.RawExec(consultas.Aula1);
 
-	//Start
+	//Start (Everything Ok)
 	repos.CreateNewEntry(entryAsked)
 	
-	assert.Equal(t, repos.EntryFound(entryAsked), true)
+	assert.Equal(repos.EntryFound(entryAsked), true, "Should have been deleted")
 
 	repos.DeleteEntry(entryAsked)
 
-	assert.Equal(t, repos.EntryFound(entryAsked), false)
+	assert.Equal(repos.EntryFound(entryAsked), false, "")
+
+
+	//Empty name
+	entryAsked = domain.Entry{
+		Init: domain.NewHour(1,30),
+		End: domain.NewHour(2,40),
+		Subject: domain.Subject{Kind: 1, Name: ""},
+		Room: domain.Room{Name: "1"},
+		Week: "",
+		Group: "",
+	}
+
+	err := repos.DeleteEntry(entryAsked)
+	if err != nil { assert.Equal(apperrors.ErrSql, err, "Should be the same error") }
+
+	//Empty room
+	entryAsked = domain.Entry{
+		Init: domain.NewHour(1,30),
+		End: domain.NewHour(2,40),
+		Subject: domain.Subject{Kind: 1, Name: "Proyecto Software"},
+		Room: domain.Room{Name: ""},
+		Week: "",
+		Group: "",
+	}
+
+	err = repos.DeleteEntry(entryAsked)
+	if err != nil { assert.Equal(apperrors.ErrSql, err, "Should be the same error") }
 
 	//Delete
 	repos.RawExec(consultas.TruncHora); 		repos.RawExec(consultas.TruncGrupo)
