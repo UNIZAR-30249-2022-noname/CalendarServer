@@ -101,7 +101,7 @@ func (repo *repo) updateHours(ini, fin domain.Hour, idhora int, create bool) (er
 	//Create is to remove the available hours if true and add them if false
 	var horastotales, horasdisponibles, newhDisponibles int
 	//We get the total and available hours from 'hora'
-	err := repo.db.QueryRow(consultas.SearchHours,
+	err := repo.db.QueryRow(consultas.SearchHours, 
 		idhora).Scan(&horastotales, &horasdisponibles)
 	if err != nil { return apperrors.ErrSql }
 	hDisponibles := domain.IntToHour(horasdisponibles)
