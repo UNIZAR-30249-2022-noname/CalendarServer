@@ -13,7 +13,9 @@ CREATE TABLE IF NOT EXISTS app_db.asignatura (
 
 CREATE TABLE IF NOT EXISTS app_db.curso (
     id int PRIMARY KEY AUTO_INCREMENT,
-    numero int not null
+    numero int not null,
+    idT int not null,
+    FOREIGN KEY (idT) REFERENCES app_db.titulacion (id)
 );
 
 CREATE TABLE IF NOT EXISTS app_db.grupodocente (
