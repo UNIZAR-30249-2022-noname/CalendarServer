@@ -40,3 +40,9 @@ const SearchEntry = "SELECT * FROM entradahorario " +
 	"WHERE entradahorario.inicio=? AND entradahorario.fin=? " +
 	"AND entradahorario.idhoras IN (SELECT id FROM hora WHERE hora.tipo=? AND hora.semana=? AND hora.grupo=? " +
 	"AND hora.idasignatura IN (SELECT id FROM asignatura WHERE asignatura.nombre=?))"
+
+const SelectIdNameDegree = ""
+
+const SelectIdNumberYear = ""
+
+const SelectNameGroup = ""

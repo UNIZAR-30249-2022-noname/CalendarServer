@@ -187,6 +187,39 @@ func (repo *repo) EntryFound(entry domain.Entry) (bool){
 
 
 func (repo *repo) ListAllDegrees() ([]domain.DegreeDescription, error) {
-	//TODO
-	return []domain.DegreeDescription{}, nil
+	res := make([]domain.DegreeDescription, 0)
+	//TODO Explicar lo que hace cada query
+	results, err := repo.db.Query(consultas.SelectIdNameDegree)
+	if err != nil { return []domain.DegreeDescription{}, apperrors.ErrSql }
+
+	for results.Next() { //SQL iteration loop
+		var auxv domain.DegreeDescription
+		var id int
+		// for each row, scan the result into our tag composite object
+		err = results.Scan(&id, &auxv.Name)
+		if err != nil { return []domain.DegreeDescription{}, apperrors.ErrSql }
+		results2, _ := repo.db.Query(consultas.SelectIdNumberYear, id)
+		
+		for results2.Next() { //SQL iteration loop
+			var auxv2 domain.YearDescription
+			var id2 int
+			results2.Scan(&id2, &auxv2.Name)
+			results3, _ := repo.db.Query(consultas.SelectNameGroup, id)
+
+			i:=0
+			for results3.Next() { //SQL iteration loop
+				var auxv3 string
+				results2.Scan(&auxv3)
+				auxv.Groups[i].Groups = append(auxv.Groups[i].Groups, auxv3)
+				i++
+			}
+
+			auxv.Groups = append(auxv.Groups, auxv2)
+		}
+
+		res = append(res, auxv) //We introduce the result to the slice
+
+	}
+
+	return res, nil
 }
