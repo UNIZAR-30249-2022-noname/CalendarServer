@@ -14,10 +14,10 @@ const Grupodocente1 = "INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VA
 const Grupodocente2 = "INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('2', '2', '1')"
 const Grupodocente3 = "INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('2', '2', '1')"
 
-const Hora1 = "INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('1', '30', '30', '1', '', '', '1', '1')"
-const Hora12 = "INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('3', '20', '20', '2', 'mananas', 'a', '1', '1')"
-const Hora13 = "INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('4', '10', '10', '3', 'niapar', '', '1', '1')"
-const Hora2 = "INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('2', '25', '25', '2', '', '', '2', '1')"
+const Hora1 = "INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('1', '3000', '3000', '1', '', '', '1', '1')"
+const Hora12 = "INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('3', '2000', '2000', '2', 'mananas', 'a', '1', '1')"
+const Hora13 = "INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('4', '1000', '1000', '3', 'niapar', '', '1', '1')"
+const Hora2 = "INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('2', '2500', '2500', '2', '', '', '2', '1')"
 const Hora3 = "INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('5', '2500', '2500', '1', '', '', '3', '2')"
 
 const Aula1 = "INSERT INTO `aula` (`id`, `numero`, `nombre`) VALUES ('1', '1', '1')"

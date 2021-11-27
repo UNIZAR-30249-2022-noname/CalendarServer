@@ -166,9 +166,9 @@ func simpleAvailableHours() []domain.AvailableHours {
 	return []domain.AvailableHours{}
 }
 
-/////////////////////////////
-// TEST SCHEDULER ENTRIES ///
-/////////////////////////////
+/////////////////////////////////////
+// TEST UPDATE SCHEDULER  ENTRIES ///
+/////////////////////////////////////
 
 func TestPostSchedulerEntry(t *testing.T) {
 
@@ -177,10 +177,10 @@ func TestPostSchedulerEntry(t *testing.T) {
 	//errorParam := handlers.ErrorHttp{Message: "Parámetros incorrectos"}
 
 	// · Test · //
-	path := "/newEntry"
+	path := "/updateScheduler"
 
 	type args struct {
-		newEntry handlers.EntryDTO
+		newEntry []handlers.EntryDTO
 	}
 
 	type want struct {
@@ -194,33 +194,43 @@ func TestPostSchedulerEntry(t *testing.T) {
 		mocks func(m mocks)
 	}{
 		{
-			name: "Should create a new entry succesfully for theorical classes",
+			name: "Should update  new entries succesfully with  only theorical classes",
 			args: args{
-				newEntry: simpleTheoricalEntry()},
+				newEntry: []handlers.EntryDTO{simpleTheoricalEntry(), simpleTheoricalEntry()}},
 			want: want{result: "01/01/2021", code: http.StatusOK},
 			mocks: func(m mocks) {
 
-				m.horarioService.EXPECT().CreateNewEntry(simpleTheoricalEntry().ToEntry()).Return("01/01/2021", nil)
+				m.horarioService.EXPECT().UpdateScheduler(handlers.EntriesDTOtoDomain([]handlers.EntryDTO{simpleTheoricalEntry(), simpleTheoricalEntry()})).Return("01/01/2021", nil)
 			},
 		},
 		{
-			name: "Should create a new entry succesfully for practices classes",
+			name: "Should update  new entries succesfully with with practices classes",
 			args: args{
-				newEntry: simplePracticeEntry()},
+				newEntry: []handlers.EntryDTO{simpleTheoricalEntry(), simplePracticeEntry()}},
 			want: want{result: "01/01/2021", code: http.StatusOK},
 			mocks: func(m mocks) {
 
-				m.horarioService.EXPECT().CreateNewEntry(simplePracticeEntry().ToEntry()).Return("01/01/2021", nil)
+				m.horarioService.EXPECT().UpdateScheduler(handlers.EntriesDTOtoDomain([]handlers.EntryDTO{simpleTheoricalEntry(), simplePracticeEntry()})).Return("01/01/2021", nil)
 			},
 		},
 		{
-			name: "Should create a new entry succesfully for exercises classes",
+			name: "Should update  new entries succesfully with for exercises classes",
 			args: args{
-				newEntry: simpleExercisesEntry()},
+				newEntry: []handlers.EntryDTO{simpleTheoricalEntry(), simpleExercisesEntry()}},
 			want: want{result: "01/01/2021", code: http.StatusOK},
 			mocks: func(m mocks) {
 
-				m.horarioService.EXPECT().CreateNewEntry(simpleExercisesEntry().ToEntry()).Return("01/01/2021", nil)
+				m.horarioService.EXPECT().UpdateScheduler(handlers.EntriesDTOtoDomain([]handlers.EntryDTO{simpleTheoricalEntry(), simpleExercisesEntry()})).Return("01/01/2021", nil)
+			},
+		},
+		{
+			name: "Should update  succesfully with no entries",
+			args: args{
+				newEntry: []handlers.EntryDTO{}},
+			want: want{result: "01/01/2021", code: http.StatusOK},
+			mocks: func(m mocks) {
+
+				m.horarioService.EXPECT().UpdateScheduler([]domain.Entry{}).Return("01/01/2021", nil)
 			},
 		},
 	}
@@ -235,7 +245,7 @@ func TestPostSchedulerEntry(t *testing.T) {
 			setUpRouter := func() *gin.Engine {
 				horarioHandler := handlers.NewHTTPHandler(m.horarioService)
 				r := gin.Default()
-				r.POST(path, horarioHandler.PostNewEntry)
+				r.POST(path, horarioHandler.PostUpdateScheduler)
 				return r
 
 			}

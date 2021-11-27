@@ -22,4 +22,9 @@ var (
 	ErrInternal = errors.New("internal")
 
 	ErrNoRowsAffected = errors.New("no_rows_affected")
+
+	//ErrInvalidKind is an error returned when the Kind is incompatible
+	//with the Group and Week
+	ErrInvalidKind = errors.New("invalid_subject_kind")
+  
 )
