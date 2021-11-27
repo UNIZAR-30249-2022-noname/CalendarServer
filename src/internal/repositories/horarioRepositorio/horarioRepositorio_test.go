@@ -320,7 +320,7 @@ func TestDeleteAllEntries(t *testing.T) {
 	repos.RawExec(consultas.Asignatura3)
 	repos.RawExec(consultas.Grupodocente1); repos.RawExec(consultas.Grupodocente2)
 	repos.RawExec(consultas.Grupodocente3)
-	repos.RawExec(consultas.Hora1); 		repos.RawExec(consultas.Hora2)
+	repos.RawExec(consultas.Hora1); 		repos.RawExec(consultas.Hora12)
 	repos.RawExec(consultas.Hora3)
 	repos.RawExec(consultas.Aula1);
 
