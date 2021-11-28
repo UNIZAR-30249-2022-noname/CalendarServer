@@ -41,8 +41,8 @@ const SearchEntry = "SELECT * FROM entradahorario " +
 	"AND entradahorario.idhoras IN (SELECT id FROM hora WHERE hora.tipo=? AND hora.semana=? AND hora.grupo=? " +
 	"AND hora.idasignatura IN (SELECT id FROM asignatura WHERE asignatura.nombre=?))"
 
-const SelectIdNameDegree = ""
+const SelectIdNameDegree = "SELECT * FROM `titulacion`"
 
-const SelectIdNumberYear = ""
+const SelectIdNumberYear = "SELECT curso.id, curso.numero FROM `curso` WHERE curso.idT = ?"
 
-const SelectNameGroup = ""
+const SelectNameGroup = "SELECT grupodocente.numero FROM `grupodocente` WHERE grupodocente.idcurso = ?"

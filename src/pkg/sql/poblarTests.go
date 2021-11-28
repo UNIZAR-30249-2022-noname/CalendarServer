@@ -4,6 +4,7 @@ const Titulacion1 = "INSERT INTO `titulacion` (`id`, `nombre`) VALUES ('1', 'Ing
 const Titulacion2 = "INSERT INTO `titulacion` (`id`, `nombre`) VALUES ('2', 'Ing. Mecanica')"
 
 const Curso1 = "INSERT INTO `curso` (`id`, `numero`, `idT`) VALUES ('1', '1', '1')"
+const Curso12 = "INSERT INTO `curso` (`id`, `numero`, `idT`) VALUES ('3', '2', '1')"
 const Curso2 = "INSERT INTO `curso` (`id`, `numero`, `idT`) VALUES ('2', '1', '2')"
 
 const Asignatura1 = "INSERT INTO `asignatura` (`id`, `codigo`, `nombre`, `idT`) VALUES ('1', '1', 'Proyecto Software', '1')"

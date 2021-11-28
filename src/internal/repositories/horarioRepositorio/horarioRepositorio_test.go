@@ -373,3 +373,110 @@ func TestDeleteAllEntries(t *testing.T) {
 	repos.CloseConn()
 }
 
+func TestListAllDegrees(t *testing.T) {
+	
+	//Prepare
+	assert := assert.New(t)
+
+	repos := horarioRepositorio.New()
+
+	//Only 1 Degree
+
+	repos.RawExec(consultas.Titulacion1)
+	degreeExpected := []domain.DegreeDescription{
+		{Name: "Ing. Informatica"},
+	}
+
+	res, _ := repos.ListAllDegrees()
+	assert.Equal(len(degreeExpected), len(res), "Should be the same length")
+	for i := range res {
+		assert.Equal(degreeExpected[i].Name, res[i].Name, "Should be the same Name")
+		assert.Equal(len(degreeExpected[i].Groups), len(res[i].Groups), "Should be the same length")
+	}
+
+	//Degree with year
+
+	repos.RawExec(consultas.Curso1);
+	degreeExpected = []domain.DegreeDescription{
+		{	
+			Name: "Ing. Informatica", 
+			Groups: []domain.YearDescription{
+				{Name: 1},
+			},
+		},
+	}
+
+	res, _ = repos.ListAllDegrees()
+	assert.Equal(len(degreeExpected), len(res), "Should be the same length")
+	for i := range res {
+		assert.Equal(degreeExpected[i].Name, res[i].Name, "Should be the same Name")
+		assert.Equal(len(degreeExpected[i].Groups), len(res[i].Groups), "Should be the same length")
+		for j := range res[i].Groups {
+			assert.Equal(degreeExpected[i].Groups[j].Name, res[i].Groups[j].Name, "Should be the same Name")
+			assert.Equal(len(degreeExpected[i].Groups[j].Groups), len(res[i].Groups[j].Groups), "Should be the same length")
+		}
+	}
+
+	//DegreeWithYearWith2Groups
+
+	repos.RawExec(consultas.Grupodocente1); repos.RawExec(consultas.Grupodocente2)
+	degreeExpected = []domain.DegreeDescription{
+		{	
+			Name: "Ing. Informatica", 
+			Groups: []domain.YearDescription{
+				{Name: 1, Groups: []string {"1", "2"}},
+			},
+		},
+	}
+
+	res, _ = repos.ListAllDegrees()
+	assert.Equal(len(degreeExpected), len(res), "Should be the same length")
+	for i := range res {
+		assert.Equal(degreeExpected[i].Name, res[i].Name, "Should be the same Name")
+		assert.Equal(len(degreeExpected[i].Groups), len(res[i].Groups), "Should be the same length")
+		for j := range res[i].Groups {
+			assert.Equal(degreeExpected[i].Groups[j].Name, res[i].Groups[j].Name, "Should be the same Name")
+			assert.Equal(len(degreeExpected[i].Groups[j].Groups), len(res[i].Groups[j].Groups), "Should be the same length")
+			for k := range res[j].Groups {
+				assert.Equal(degreeExpected[i].Groups[j].Groups[k], res[i].Groups[j].Groups[k], "Should be the same Name")
+			}
+		}
+	}
+
+	//2Degree-> 1 of them With2Year -> 1 of them With2Groups
+	repos.RawExec(consultas.Titulacion2); repos.RawExec(consultas.Curso12)
+	degreeExpected = []domain.DegreeDescription{
+		{	
+			Name: "Ing. Informatica", 
+			Groups: []domain.YearDescription{
+				{Name: 1, Groups: []string {"1", "2"}},
+				{Name: 2},
+			},
+		},
+		{	
+			Name: "Ing. Mecanica", 
+		},
+	}
+
+	res, _ = repos.ListAllDegrees()
+	assert.Equal(len(degreeExpected), len(res), "Should be the same length")
+	for i := range res {
+		assert.Equal(degreeExpected[i].Name, res[i].Name, "Should be the same Name")
+		assert.Equal(len(degreeExpected[i].Groups), len(res[i].Groups), "Should be the same length")
+		for j := range res[i].Groups {
+			assert.Equal(degreeExpected[i].Groups[j].Name, res[i].Groups[j].Name, "Should be the same Name")
+			assert.Equal(len(degreeExpected[i].Groups[j].Groups), len(res[i].Groups[j].Groups), "Should be the same length")
+			for k := range res[j].Groups {
+				assert.Equal(degreeExpected[i].Groups[j].Groups[k], res[i].Groups[j].Groups[k], "Should be the same Name")
+			}
+		}
+	}
+
+
+	//Delete
+	repos.RawExec(consultas.TruncHora); 		repos.RawExec(consultas.TruncGrupo)
+	repos.RawExec(consultas.TruncAsignatura); 	repos.RawExec(consultas.TruncCurso)
+	repos.RawExec(consultas.TruncTitulacion)
+	repos.CloseConn()
+}
+
