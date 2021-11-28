@@ -154,7 +154,7 @@ func TestUpdateEntries(t *testing.T) {
 		mocks: func(m mocks) {
 			m.horarioRepository.EXPECT().CreateNewEntry(simpleEntries()[0]).Return(nil)
 			m.horarioRepository.EXPECT().CreateNewEntry(simpleEntries()[1]).Return(nil)
-			m.horarioRepository.EXPECT().DeleteAllEntries().Return(nil)
+			m.horarioRepository.EXPECT().DeleteAllEntries(domain.Terna{}).Return(nil) //TODO
 		},
 	},
 		{
@@ -163,7 +163,7 @@ func TestUpdateEntries(t *testing.T) {
 			want: want{result: "", err: apperrors.ErrSql},
 			mocks: func(m mocks) {
 				m.horarioRepository.EXPECT().CreateNewEntry(simpleEntries()[0]).Return(apperrors.ErrInternal)
-				m.horarioRepository.EXPECT().DeleteAllEntries().Return(nil)
+				m.horarioRepository.EXPECT().DeleteAllEntries(domain.Terna{}).Return(nil) //TODO
 			},
 		},
 	}

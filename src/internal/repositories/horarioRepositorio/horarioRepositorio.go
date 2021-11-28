@@ -159,6 +159,15 @@ func (repo *repo) updateHours(ini, fin domain.Hour, idhora int, create bool) err
 	return nil
 }
 
+func (repo *repo) DeleteAllEntries(terna domain.Terna) error {
+	res, err := repo.db.Exec(consultas.DeleteEntradas, terna.Titulacion, terna.Grupo, terna.Curso)
+	rows, _ := res.RowsAffected()
+	if(rows < 1){
+		return apperrors.ErrNoRowsAffected
+	}
+	return err
+}
+
 func (repo *repo) RawExec(exec string) (error){
 	_ , err := repo.db.Exec(exec)
 	return err
@@ -176,12 +185,8 @@ func (repo *repo) EntryFound(entry domain.Entry) (bool){
 	return found
 }
 
+
 func (repo *repo) ListAllDegrees() ([]domain.DegreeDescription, error) {
 	//TODO
 	return []domain.DegreeDescription{}, nil
-}
-
-func (repo *repo) DeleteAllEntries() error {
-	//TODO
-	return nil
 }

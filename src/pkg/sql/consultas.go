@@ -23,6 +23,15 @@ const InsertEntradaHorario = "INSERT INTO app_db.entradahorario (inicio, fin, id
 
 const DeleteEntradaHorario = "DELETE FROM app_db.entradahorario WHERE inicio = ? AND fin = ? AND idhoras = ? AND idaula = ? AND idgrupo = ?"
 
+const DeleteEntradas = "DELETE FROM app_db.entradahorario WHERE idhoras IN ( " +
+	"SELECT hora.id FROM app_db.hora WHERE idasignatura IN ( " +
+	"SELECT asignatura.id FROM app_db.asignatura WHERE idT IN ( " +
+	"SELECT titulacion.id FROM app_db.titulacion WHERE nombre = ? ))) " +
+	"AND idgrupo IN ( " +
+	"SELECT grupodocente.id FROM app_db.grupodocente WHERE numero = ? " +
+	"AND idcurso IN ( " +
+	"SELECT curso.id FROM app_db.curso WHERE numero = ?))"
+
 const SearchHours = "SELECT hora.totales, hora.disponibles FROM app_db.hora WHERE hora.id=?"
 
 const UpdateHours = "UPDATE app_db.hora SET hora.disponibles = ? WHERE hora.id=?"

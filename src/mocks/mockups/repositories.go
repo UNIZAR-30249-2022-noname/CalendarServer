@@ -49,17 +49,17 @@ func (mr *MockHorarioRepositorioMockRecorder) CreateNewEntry(arg0 interface{}) *
 }
 
 // DeleteAllEntries mocks base method.
-func (m *MockHorarioRepositorio) DeleteAllEntries() error {
+func (m *MockHorarioRepositorio) DeleteAllEntries(terna domain.Terna) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteAllEntries")
+	ret := m.ctrl.Call(m, "DeleteAllEntries", terna)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // DeleteAllEntries indicates an expected call of DeleteAllEntries.
-func (mr *MockHorarioRepositorioMockRecorder) DeleteAllEntries() *gomock.Call {
+func (mr *MockHorarioRepositorioMockRecorder) DeleteAllEntries(terna interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteAllEntries", reflect.TypeOf((*MockHorarioRepositorio)(nil).DeleteAllEntries))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteAllEntries", reflect.TypeOf((*MockHorarioRepositorio)(nil).DeleteAllEntries), terna)
 }
 
 // DeleteEntry mocks base method.
