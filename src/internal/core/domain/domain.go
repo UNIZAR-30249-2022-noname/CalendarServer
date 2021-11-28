@@ -21,9 +21,11 @@ const (
 //AvaialableHours is a struct which represents the available hours
 //per [Terna]
 type AvailableHours struct {
-	Subject   Subject
-	Remaining int
-	Max       int
+	Subject        Subject
+	RemainingHours int
+	MaxHours       int
+	RemainingMin   int
+	MaxMin         int
 }
 type Subject struct {
 	Kind int
@@ -89,11 +91,11 @@ func HourToInt(h Hour) int {
 }
 
 func IntToHour(h int) Hour {
-	return Hour{hour: h/100, min:h%100}
+	return Hour{hour: h / 100, min: h % 100}
 }
 
-func AddHour(h1, h2 Hour) (int) {
-	mins := h1.min + h2.min 
+func AddHour(h1, h2 Hour) int {
+	mins := h1.min + h2.min
 	hours := h1.hour + h2.hour
 	if mins >= 60 {
 		mins -= 60
@@ -102,8 +104,8 @@ func AddHour(h1, h2 Hour) (int) {
 	return hours*100 + mins
 }
 
-func SubstractHour(h1, h2 Hour) (int) {
-	mins := h1.min - h2.min 
+func SubstractHour(h1, h2 Hour) int {
+	mins := h1.min - h2.min
 	hours := h1.hour - h2.hour
 	if mins < 0 {
 		mins += 60

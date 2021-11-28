@@ -147,10 +147,16 @@ var doc = `{
         "domain.AvailableHours": {
             "type": "object",
             "properties": {
-                "max": {
+                "maxHours": {
                     "type": "integer"
                 },
-                "remaining": {
+                "maxMin": {
+                    "type": "integer"
+                },
+                "remainingHours": {
+                    "type": "integer"
+                },
+                "remainingMin": {
                     "type": "integer"
                 },
                 "subject": {
@@ -305,5 +311,5 @@ func (s *s) ReadDoc() string {
 }
 
 func init() {
-	swag.Register(swag.Name, &s{})
+	swag.Register("swagger", &s{})
 }
