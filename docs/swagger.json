@@ -128,10 +128,16 @@
         "domain.AvailableHours": {
             "type": "object",
             "properties": {
-                "max": {
+                "maxHours": {
                     "type": "integer"
                 },
-                "remaining": {
+                "maxMin": {
+                    "type": "integer"
+                },
+                "remainingHours": {
+                    "type": "integer"
+                },
+                "remainingMin": {
                     "type": "integer"
                 },
                 "subject": {

@@ -10,5 +10,7 @@ type AuxAvaiableHours struct {
 }
 
 func AuxToReal(auxv AuxAvaiableHours) domain.AvailableHours {
-	return domain.AvailableHours{Subject: domain.Subject{Kind: auxv.Kind, Name: auxv.Subject}, Remaining: auxv.Remaining/100, Max: auxv.Max/100}
+	return domain.AvailableHours{Subject: domain.Subject{Kind: auxv.Kind, Name: auxv.Subject}, 
+								RemainingHours: auxv.Remaining/100, RemainingMin: auxv.Remaining % 100,
+								MaxHours: auxv.Max/100, MaxMin: auxv.Max % 100}
 }
