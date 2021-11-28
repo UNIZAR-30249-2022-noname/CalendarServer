@@ -11,6 +11,14 @@ import (
 )
 
 
+func TestDeleteAllBeforeTest(t *testing.T) {
+	repos := horarioRepositorio.New()
+	repos.RawExec(consultas.TruncHora); 		repos.RawExec(consultas.TruncGrupo)
+	repos.RawExec(consultas.TruncAsignatura); 	repos.RawExec(consultas.TruncCurso)
+	repos.RawExec(consultas.TruncTitulacion);	repos.RawExec(consultas.TruncAula)
+	repos.RawExec(consultas.TruncEntry)
+}
+
 func TestGetAvaiableHours(t *testing.T) {
 	
 	//Prepare
@@ -379,6 +387,11 @@ func TestListAllDegrees(t *testing.T) {
 	assert := assert.New(t)
 
 	repos := horarioRepositorio.New()
+
+	repos.RawExec(consultas.TruncHora); 		repos.RawExec(consultas.TruncGrupo)
+	repos.RawExec(consultas.TruncAsignatura); 	repos.RawExec(consultas.TruncCurso)
+	repos.RawExec(consultas.TruncTitulacion);	repos.RawExec(consultas.TruncAula)
+	repos.RawExec(consultas.TruncEntry)
 
 	//Only 1 Degree
 
