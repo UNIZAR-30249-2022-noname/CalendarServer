@@ -18,13 +18,17 @@ func TestGetAvaiableHours(t *testing.T) {
 	hoursexpected := []domain.AvailableHours{
 		{
 			Subject:   domain.Subject{Kind: 1,Name: "Proyecto Software"},
-			Remaining: 30,
-			Max:       30,
+			RemainingHours: 30,
+			MaxHours:       30,
+			RemainingMin: 0,
+			MaxMin: 0,
 		},
 		{
 			Subject:   domain.Subject{Kind: 2, Name: "Sistemas Operativos"},
-			Remaining: 25,
-			Max:       25,
+			RemainingHours: 25,
+			MaxHours:       25,
+			RemainingMin: 0,
+			MaxMin: 0,
 		},
 	}
 	ternaAsked := domain.Terna{
