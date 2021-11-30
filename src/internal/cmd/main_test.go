@@ -258,7 +258,7 @@ func TestPostSchedulerEntry(t *testing.T) {
 
 			r := setUpRouter()
 			w := httptest.NewRecorder()
-			uri := path + "?titulacion=" + tt.args.terna.Titulacion +
+			uri := path + "?degree=" + tt.args.terna.Titulacion +
 				"&year=" + strconv.Itoa(tt.args.terna.Curso) + "&group=" + tt.args.terna.Grupo
 			body, _ := json.Marshal(tt.args.newEntry)
 			bytes.NewBuffer(body)
