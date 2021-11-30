@@ -395,3 +395,58 @@ func simpleListDegreeDescriptions() []domain.DegreeDescription {
 		},
 	}
 }
+
+////////////////////////
+// TEST GET  ENTRIES ///
+///////////////////////
+
+func TestGetEntries(t *testing.T) {
+	// · Mocks · //
+
+	// · Test · //
+	path := "/getEntries"
+	type args struct {
+		terna handlers.TernaDto
+	}
+	type want struct {
+		result interface{}
+		code   int
+	}
+	tests := []struct {
+		args  args
+		name  string
+		want  want
+		mocks func(m mocks)
+	}{}
+
+	// · Runner · //
+	for _, tt := range tests {
+
+		t.Run(tt.name, func(t *testing.T) {
+			//Prepare
+			m := mocks{
+				horarioService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
+			}
+			tt.mocks(m)
+			setUpRouter := func() *gin.Engine {
+				horarioHandler := handlers.NewHTTPHandler(m.horarioService)
+				r := gin.Default()
+				r.GET(path, horarioHandler.GetEntries)
+				return r
+
+			}
+			r := setUpRouter()
+			w := httptest.NewRecorder()
+			uri := path + "?titulacion=" + tt.args.terna.Titulacion +
+				"&year=" + strconv.Itoa(tt.args.terna.Curso) + "&group=" + tt.args.terna.Grupo
+			req, _ := http.NewRequest("GET", uri, nil)
+			r.ServeHTTP(w, req)
+			assert.Equal(t, tt.want.code, w.Code)
+
+			wantedJson, _ := json.Marshal(tt.want.result)
+			assert.Equal(t, bytes.NewBuffer(wantedJson), w.Body)
+
+		})
+
+	}
+}
