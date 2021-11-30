@@ -107,3 +107,44 @@ func (hdl *HTTPHandler) ListDegrees(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
 	}
 }
+
+//GetEntries is the handler for getting entries endpoint
+//@Sumary Get entries
+//@Description List all the entries of the  schedule
+//@Tag Scheduler
+//@Produce json
+//@Param titulacion query string true "titulacion de las horas a obtener"
+//@Param curso query int true "curso de las horas a obtener"
+//@Param grupo query int true "grupo de las horas a obtener"
+//@Success 200 {array} domain.AvailableHours
+// @Failure 400,404 {object} ErrorHttp
+//@Router /availableHours/ [get]
+func (hdl *HTTPHandler) GetEntries(c *gin.Context) {
+
+	titulacion := c.Query("titulacion")
+	curso, _ := strconv.Atoi(c.Query("year"))
+	grupo := c.Query("group")
+	terna := domain.Terna{
+		Curso:      curso,
+		Titulacion: titulacion,
+		Grupo:      grupo,
+	}
+	entries, err := hdl.horarioService.GetEntries(terna)
+
+	if err == apperrors.ErrInvalidInput { //The set request wasn' correct
+
+		c.AbortWithStatusJSON(http.StatusBadRequest, ErrorHttp{Message: "Parámetros incorrectos"})
+
+	} else if err == apperrors.ErrNotFound { //The set request does not exist
+		c.AbortWithStatusJSON(http.StatusNotFound, ErrorHttp{Message: "La terna no existe"})
+
+	} else if err != nil { //Internal error
+
+		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
+	} else {
+		entriesDto := EntriesDomaintoDTO(entries)
+		c.JSON(http.StatusOK, entriesDto)
+
+	}
+
+}

@@ -37,6 +37,24 @@ func (e EntryDTO) ToEntry() domain.Entry {
 		Subject: domain.Subject{Kind: e.Kind, Name: e.Subject},
 		Room:    domain.Room{Name: e.Room},
 		Weekday: e.Weekday,
+		Week:    e.Week,
+		Group:   e.Group,
+	}
+
+}
+
+func EntryDomainToDTO(d domain.Entry) EntryDTO {
+	return EntryDTO{
+		InitHour: d.Init.Hour,
+		InitMin:  d.Init.Min,
+		EndHour:  d.End.Hour,
+		EndMin:   d.End.Min,
+		Subject:  d.Subject.Name,
+		Kind:     d.Subject.Kind,
+		Room:     d.Room.Name,
+		Week:     d.Week,
+		Group:    d.Group,
+		Weekday:  d.Weekday,
 	}
 
 }
@@ -45,6 +63,15 @@ func EntriesDTOtoDomain(dtos []EntryDTO) []domain.Entry {
 	ls := []domain.Entry{}
 	for _, e := range dtos {
 		ls = append(ls, e.ToEntry())
+	}
+	return ls
+
+}
+
+func EntriesDomaintoDTO(entries []domain.Entry) []EntryDTO {
+	ls := []EntryDTO{}
+	for _, e := range entries {
+		ls = append(ls, EntryDomainToDTO(e))
 	}
 	return ls
 

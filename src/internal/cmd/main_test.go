@@ -417,7 +417,16 @@ func TestGetEntries(t *testing.T) {
 		name  string
 		want  want
 		mocks func(m mocks)
-	}{}
+	}{
+		{
+			name: "Should return entries succesfully",
+			args: args{terna: simpleTernaDTO()},
+			want: want{result: simpleListEntriesDTO(), code: http.StatusOK},
+			mocks: func(m mocks) {
+				m.horarioService.EXPECT().GetEntries(simpleTerna()).Return(handlers.EntriesDTOtoDomain(simpleListEntriesDTO()), nil)
+			},
+		},
+	}
 
 	// · Runner · //
 	for _, tt := range tests {
@@ -449,4 +458,25 @@ func TestGetEntries(t *testing.T) {
 		})
 
 	}
+}
+
+func simpleTernaDTO() handlers.TernaDto {
+	return handlers.TernaDto{
+		Titulacion: "Ing.Informática",
+		Curso:      2,
+		Grupo:      "1",
+	}
+}
+
+func simpleTerna() domain.Terna {
+	return domain.Terna{
+		Titulacion: "Ing.Informática",
+		Curso:      2,
+		Grupo:      "1",
+	}
+}
+
+func simpleListEntriesDTO() []handlers.EntryDTO {
+
+	return []handlers.EntryDTO{simpleExercisesEntry(), simpleTheoricalEntry()}
 }

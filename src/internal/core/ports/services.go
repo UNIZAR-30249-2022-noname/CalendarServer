@@ -10,4 +10,5 @@ type HorarioService interface {
 	GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours, error)
 	ListAllDegrees() ([]domain.DegreeDescription, error)
 	UpdateScheduler(entries []domain.Entry) (string, error)
+	GetEntries(terna domain.Terna) ([]domain.Entry, error)
 }

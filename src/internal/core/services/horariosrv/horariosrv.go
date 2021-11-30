@@ -74,3 +74,8 @@ func (srv *HorarioServiceImp) UpdateScheduler(entries []domain.Entry) (string, e
 	}
 	return lastMod, nil
 }
+
+func (srv *HorarioServiceImp) GetEntries(terna domain.Terna) ([]domain.Entry, error) {
+	return []domain.Entry{}, nil
+
+}
