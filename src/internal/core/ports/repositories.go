@@ -10,4 +10,5 @@ type HorarioRepositorio interface {
 	DeleteEntry(domain.Entry) error
 	ListAllDegrees() ([]domain.DegreeDescription, error)
 	DeleteAllEntries(terna domain.Terna) error
+	GetEntries(domain.Terna) ([]domain.Entry, error)
 }
