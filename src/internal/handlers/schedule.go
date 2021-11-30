@@ -71,6 +71,9 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 //@Description  - Practices = 2
 //@Description  - Exercises = 3
 //@Tag Scheduler
+//@Param titulacion query string true "titulacion de las horas a obtener"
+//@Param curso query int true "curso de las horas a obtener"
+//@Param grupo query int true "grupo de las horas a obtener"
 //@Param entry body  []EntryDTO true "Entry to create"
 //@Produce text/plain
 //@Success 200 "Receive the date of the latests entry modification with format dd/mm/aaaa"
