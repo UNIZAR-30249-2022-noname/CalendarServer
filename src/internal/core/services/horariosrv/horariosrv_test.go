@@ -164,7 +164,7 @@ func TestUpdateEntries(t *testing.T) {
 	},
 		{
 			name: "Should return error if repository fails",
-			args: args{entries: simpleEntries()},
+			args: args{entries: simpleEntries(), terna: simpleTerna()},
 			want: want{result: "", err: apperrors.ErrSql},
 			mocks: func(m mocks) {
 				m.horarioRepository.EXPECT().CreateNewEntry(simpleEntries()[0]).Return(apperrors.ErrInternal)
