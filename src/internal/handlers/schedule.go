@@ -76,13 +76,22 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 //@Success 200 "Receive the date of the latests entry modification with format dd/mm/aaaa"
 //@Router /updateScheduler/ [post]
 func (hdl *HTTPHandler) PostUpdateScheduler(c *gin.Context) {
+
+	titulacion := c.Query("titulacion")
+	curso, _ := strconv.Atoi(c.Query("year"))
+	grupo := c.Query("group")
+	terna := domain.Terna{
+		Curso:      curso,
+		Titulacion: titulacion,
+		Grupo:      grupo,
+	}
 	//Read the body request
 	body := []EntryDTO{}
 	c.BindJSON(&body)
 	listEntries := EntriesDTOtoDomain(body)
 
 	//Execute service
-	lastMod, err := hdl.horarioService.UpdateScheduler(listEntries)
+	lastMod, err := hdl.horarioService.UpdateScheduler(listEntries, terna)
 	if err == nil {
 		c.String(http.StatusOK, lastMod)
 
