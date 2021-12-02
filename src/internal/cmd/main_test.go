@@ -341,7 +341,7 @@ func TestListDegrees(t *testing.T) {
 	}{
 		{
 			name: "Succeded",
-			want: want{result: handlers.ListDegreesDTO{List: simpleListDegreeDescriptions()}, code: http.StatusOK},
+			want: want{result: simpleListDegreeDescriptions(), code: http.StatusOK},
 			mocks: func(m mocks) {
 				m.horarioService.EXPECT().ListAllDegrees().Return(simpleListDegreeDescriptions(), nil)
 			},

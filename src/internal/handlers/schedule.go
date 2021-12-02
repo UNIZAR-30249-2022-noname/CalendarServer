@@ -114,7 +114,7 @@ func (hdl *HTTPHandler) ListDegrees(c *gin.Context) {
 	list, err := hdl.horarioService.ListAllDegrees()
 	if err == nil {
 
-		c.JSON(http.StatusOK, NewListDegrees(list))
+		c.JSON(http.StatusOK, list)
 	} else {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
 	}
