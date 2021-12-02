@@ -45,7 +45,7 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "grupo de las horas a obtener",
                         "name": "grupo",
                         "in": "query",

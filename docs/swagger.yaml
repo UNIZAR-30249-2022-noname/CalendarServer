@@ -93,7 +93,7 @@ paths:
         in: query
         name: grupo
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
