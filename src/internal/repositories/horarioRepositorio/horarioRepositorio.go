@@ -239,6 +239,24 @@ func (repo *repo) ListAllDegrees() ([]domain.DegreeDescription, error) {
 	return res, nil
 }
 
-func (repo *repo) GetEntries(domain.Terna) ([]domain.Entry, error) {
-	return []domain.Entry{}, nil
+func (repo *repo) GetEntries(terna domain.Terna) ([]domain.Entry, error) {
+	res := make([]domain.Entry, 0)
+	//Select hours given a degree, course and group
+	//(returns remaining hours, max hours, kind and the subject's name)
+	results, err := repo.db.Query(consultas.SelectEntries, terna.Grupo, terna.Curso, terna.Titulacion)
+	if err != nil {
+		return []domain.Entry{}, apperrors.ErrSql
+	}
+
+	for results.Next() { //SQL iteration loop
+		var auxv domain.Entry
+		var trash int
+		// for each row, scan the result into our tag composite object
+		err = results.Scan(&auxv.Init.Hour,&auxv.End.Hour,&trash,&auxv.Room.Name,&auxv.Subject.Kind,&auxv.Group,&auxv.Week,&auxv.Weekday,&trash,&auxv.Subject.Name)
+		if err != nil {
+			return []domain.Entry{}, apperrors.ErrSql
+		}
+		res = append(res, auxv) //We introduce the result to the slice
+	}
+	return res, nil
 }
