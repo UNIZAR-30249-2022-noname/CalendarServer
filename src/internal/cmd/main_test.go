@@ -475,20 +475,17 @@ func TestGetEntries(t *testing.T) {
 }
 
 func simpleTernaDTO() handlers.TernaDto {
-	return handlers.TernaDto{
-		Titulacion: "Ing.Informática",
-		Curso:      2,
-		Grupo:      "1",
-	}
+	return handlers.TernaDto(simpleTerna())
 }
 
+/*
 func simpleTerna() domain.Terna {
 	return domain.Terna{
 		Titulacion: "Ing.Informática",
 		Curso:      2,
 		Grupo:      "1",
 	}
-}
+}*/
 
 func simpleListEntriesDTO() []handlers.EntryDTO {
 
