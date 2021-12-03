@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS app_db.entradahorario (
     id int PRIMARY KEY AUTO_INCREMENT,
     inicio int not null,
     fin int not null,
+    diaSemana int,
     idhoras int not null,
     idaula int,
     idgrupo int,
