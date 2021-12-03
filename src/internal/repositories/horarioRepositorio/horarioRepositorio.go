@@ -80,7 +80,7 @@ func (repo *repo) CreateNewEntry(entry domain.Entry) error {
 	ultModificacion := now.Format("2006-02-01") //Sacamos la fecha formateada para introducirla
 	//Insert
 	res, err := repo.db.Exec(consultas.InsertEntradaHorario, domain.HourToInt(entry.Init),
-		domain.HourToInt(entry.End), idhoras, idaula, idgrupo, ultModificacion)
+		domain.HourToInt(entry.End), idhoras, idaula, idgrupo, ultModificacion, entry.Weekday)
 	if err != nil {
 		return apperrors.ErrSql
 	}

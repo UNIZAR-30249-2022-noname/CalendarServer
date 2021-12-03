@@ -79,7 +79,7 @@ func TestCreateEntry(t *testing.T) {
 		Room: domain.Room{Name: "1"},
 		Week: "",
 		Group: "",
-
+		Weekday: 1,
 	}
 	
 	repos := horarioRepositorio.New()
@@ -510,6 +510,15 @@ func TestGetEntries(t *testing.T) {
 			Group: "",
 			Weekday: 1,
 		},
+		{
+			Init: domain.NewHour(2,50),
+			End: domain.NewHour(4,40),
+			Subject: domain.Subject{Kind: 2, Name: "Sistemas Operativos"},
+			Room: domain.Room{Name: "2"},
+			Week: "",
+			Group: "",
+			Weekday: 2,
+		},
 	}
 	ternaAsked := domain.Terna{
 		Titulacion: "Ing. Informatica",
@@ -521,10 +530,12 @@ func TestGetEntries(t *testing.T) {
 	repos.RawExec(consultas.Titulacion1); 	repos.RawExec(consultas.Titulacion2)
 	repos.RawExec(consultas.Curso1); 		repos.RawExec(consultas.Curso2)
 	repos.RawExec(consultas.Asignatura1); 	repos.RawExec(consultas.Asignatura2)
+	repos.RawExec(consultas.Asignatura3)
 	repos.RawExec(consultas.Grupodocente1); repos.RawExec(consultas.Grupodocente2)
 	repos.RawExec(consultas.Hora1); 		repos.RawExec(consultas.Hora2)
-	repos.RawExec(consultas.Aula1)
-	repos.RawExec(consultas.Entry1); 
+	repos.RawExec(consultas.Aula1);			repos.RawExec(consultas.Aula2)
+	repos.RawExec(consultas.Entry1); 		repos.RawExec(consultas.Entry2); 
+	repos.RawExec(consultas.Entry3)
 	//Start
 	entriesgot, _ := repos.GetEntries(ternaAsked)
 
