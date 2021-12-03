@@ -181,6 +181,7 @@ func TestPostSchedulerEntry(t *testing.T) {
 
 	type args struct {
 		newEntry []handlers.EntryDTO
+		terna    domain.Terna
 	}
 
 	type want struct {
@@ -196,41 +197,45 @@ func TestPostSchedulerEntry(t *testing.T) {
 		{
 			name: "Should update  new entries succesfully with  only theorical classes",
 			args: args{
-				newEntry: []handlers.EntryDTO{simpleTheoricalEntry(), simpleTheoricalEntry()}},
+				newEntry: []handlers.EntryDTO{simpleTheoricalEntry(), simpleTheoricalEntry()},
+				terna:    simpleTerna()},
 			want: want{result: "01/01/2021", code: http.StatusOK},
 			mocks: func(m mocks) {
 
-				m.horarioService.EXPECT().UpdateScheduler(handlers.EntriesDTOtoDomain([]handlers.EntryDTO{simpleTheoricalEntry(), simpleTheoricalEntry()})).Return("01/01/2021", nil)
+				m.horarioService.EXPECT().UpdateScheduler(handlers.EntriesDTOtoDomain([]handlers.EntryDTO{simpleTheoricalEntry(), simpleTheoricalEntry()}), simpleTerna()).Return("01/01/2021", nil)
 			},
 		},
 		{
 			name: "Should update  new entries succesfully with with practices classes",
 			args: args{
-				newEntry: []handlers.EntryDTO{simpleTheoricalEntry(), simplePracticeEntry()}},
+				newEntry: []handlers.EntryDTO{simpleTheoricalEntry(), simplePracticeEntry()},
+				terna:    simpleTerna()},
 			want: want{result: "01/01/2021", code: http.StatusOK},
 			mocks: func(m mocks) {
 
-				m.horarioService.EXPECT().UpdateScheduler(handlers.EntriesDTOtoDomain([]handlers.EntryDTO{simpleTheoricalEntry(), simplePracticeEntry()})).Return("01/01/2021", nil)
+				m.horarioService.EXPECT().UpdateScheduler(handlers.EntriesDTOtoDomain([]handlers.EntryDTO{simpleTheoricalEntry(), simplePracticeEntry()}), simpleTerna()).Return("01/01/2021", nil)
 			},
 		},
 		{
 			name: "Should update  new entries succesfully with for exercises classes",
 			args: args{
-				newEntry: []handlers.EntryDTO{simpleTheoricalEntry(), simpleExercisesEntry()}},
+				newEntry: []handlers.EntryDTO{simpleTheoricalEntry(), simpleExercisesEntry()},
+				terna:    simpleTerna()},
 			want: want{result: "01/01/2021", code: http.StatusOK},
 			mocks: func(m mocks) {
 
-				m.horarioService.EXPECT().UpdateScheduler(handlers.EntriesDTOtoDomain([]handlers.EntryDTO{simpleTheoricalEntry(), simpleExercisesEntry()})).Return("01/01/2021", nil)
+				m.horarioService.EXPECT().UpdateScheduler(handlers.EntriesDTOtoDomain([]handlers.EntryDTO{simpleTheoricalEntry(), simpleExercisesEntry()}), simpleTerna()).Return("01/01/2021", nil)
 			},
 		},
 		{
 			name: "Should update  succesfully with no entries",
 			args: args{
-				newEntry: []handlers.EntryDTO{}},
+				newEntry: []handlers.EntryDTO{},
+				terna:    simpleTerna()},
 			want: want{result: "01/01/2021", code: http.StatusOK},
 			mocks: func(m mocks) {
 
-				m.horarioService.EXPECT().UpdateScheduler([]domain.Entry{}).Return("01/01/2021", nil)
+				m.horarioService.EXPECT().UpdateScheduler([]domain.Entry{}, simpleTerna()).Return("01/01/2021", nil)
 			},
 		},
 	}
@@ -253,7 +258,8 @@ func TestPostSchedulerEntry(t *testing.T) {
 
 			r := setUpRouter()
 			w := httptest.NewRecorder()
-			uri := path
+			uri := path + "?degree=" + tt.args.terna.Titulacion +
+				"&year=" + strconv.Itoa(tt.args.terna.Curso) + "&group=" + tt.args.terna.Grupo
 			body, _ := json.Marshal(tt.args.newEntry)
 			bytes.NewBuffer(body)
 			req, _ := http.NewRequest("POST", uri, bytes.NewBuffer(body))
@@ -306,6 +312,14 @@ func simpleExercisesEntry() handlers.EntryDTO {
 	}
 }
 
+func simpleTerna() domain.Terna {
+	return domain.Terna{
+		Grupo:      "1",
+		Curso:      1,
+		Titulacion: "Ing Informática",
+	}
+}
+
 /////////////////////////////
 // TEST LIST DEGREES      ///
 /////////////////////////////
@@ -327,7 +341,7 @@ func TestListDegrees(t *testing.T) {
 	}{
 		{
 			name: "Succeded",
-			want: want{result: handlers.ListDegreesDTO{List: simpleListDegreeDescriptions()}, code: http.StatusOK},
+			want: want{result: simpleListDegreeDescriptions(), code: http.StatusOK},
 			mocks: func(m mocks) {
 				m.horarioService.EXPECT().ListAllDegrees().Return(simpleListDegreeDescriptions(), nil)
 			},

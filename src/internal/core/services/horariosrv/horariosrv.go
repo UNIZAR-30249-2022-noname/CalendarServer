@@ -52,9 +52,9 @@ func (srv *HorarioServiceImp) ListAllDegrees() ([]domain.DegreeDescription, erro
 	return list, err
 }
 
-func (srv *HorarioServiceImp) UpdateScheduler(entries []domain.Entry) (string, error) {
+func (srv *HorarioServiceImp) UpdateScheduler(entries []domain.Entry, terna domain.Terna) (string, error) {
 	var lastMod string
-	err := srv.horarioRepositorio.DeleteAllEntries(domain.Terna{}) //TODO pasar la correcta
+	err := srv.horarioRepositorio.DeleteAllEntries(terna)
 	if err != nil {
 		return "", apperrors.ErrSql
 	}

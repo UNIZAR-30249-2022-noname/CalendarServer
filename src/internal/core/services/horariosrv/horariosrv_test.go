@@ -141,6 +141,7 @@ func TestUpdateEntries(t *testing.T) {
 	// · Test · //
 	type args struct {
 		entries []domain.Entry
+		terna   domain.Terna
 	}
 	type want struct {
 		result string
@@ -153,21 +154,21 @@ func TestUpdateEntries(t *testing.T) {
 		mocks func(m mocks)
 	}{{
 		name: "Create entry succed",
-		args: args{entries: simpleEntries()},
+		args: args{entries: simpleEntries(), terna: simpleTerna()},
 		want: want{result: currentDate(), err: nil},
 		mocks: func(m mocks) {
 			m.horarioRepository.EXPECT().CreateNewEntry(simpleEntries()[0]).Return(nil)
 			m.horarioRepository.EXPECT().CreateNewEntry(simpleEntries()[1]).Return(nil)
-			m.horarioRepository.EXPECT().DeleteAllEntries(domain.Terna{}).Return(nil) //TODO
+			m.horarioRepository.EXPECT().DeleteAllEntries(simpleTerna()).Return(nil)
 		},
 	},
 		{
 			name: "Should return error if repository fails",
-			args: args{entries: simpleEntries()},
+			args: args{entries: simpleEntries(), terna: simpleTerna()},
 			want: want{result: "", err: apperrors.ErrSql},
 			mocks: func(m mocks) {
 				m.horarioRepository.EXPECT().CreateNewEntry(simpleEntries()[0]).Return(apperrors.ErrInternal)
-				m.horarioRepository.EXPECT().DeleteAllEntries(domain.Terna{}).Return(nil) //TODO
+				m.horarioRepository.EXPECT().DeleteAllEntries(simpleTerna()).Return(nil)
 			},
 		},
 	}
@@ -184,7 +185,7 @@ func TestUpdateEntries(t *testing.T) {
 			service := horariosrv.New(m.horarioRepository)
 
 			//Execute
-			result, err := service.UpdateScheduler(tt.args.entries)
+			result, err := service.UpdateScheduler(tt.args.entries, tt.args.terna)
 
 			//Verify operation succeded
 			if tt.want.err != nil && err != nil {
@@ -231,6 +232,14 @@ func currentDate() string {
 
 	return time.Now().Format("02/01/2006")
 
+}
+
+func simpleTerna() domain.Terna {
+	return domain.Terna{
+		Grupo:      "1",
+		Curso:      1,
+		Titulacion: "Ing Informática",
+	}
 }
 
 /////////////////////////////
