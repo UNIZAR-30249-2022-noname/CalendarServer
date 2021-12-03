@@ -25,6 +25,8 @@ const Aula1 = "INSERT INTO `aula` (`id`, `numero`, `nombre`) VALUES ('1', '1', '
 const Aula2 = "INSERT INTO `aula` (`id`, `numero`, `nombre`) VALUES ('2', '2', '2')"
 const Aula3 = "INSERT INTO `aula` (`id`, `numero`, `nombre`) VALUES ('3', '3', '3')"
 
+const Entry1 = "INSERT INTO `entradahorario` (`id`, `inicio`, `fin`, `idhoras`, `idaula`, `idgrupo`, `diaSemana`) VALUES ('1', '130', '240', '1', '1', '1', '1')"
+
 const TruncHora = "DELETE from app_db.hora WHERE id > 0;"
 const TruncGrupo = "DELETE from app_db.grupodocente WHERE id > 0;"
 const TruncAsignatura = "DELETE from app_db.asignatura WHERE id > 0;"

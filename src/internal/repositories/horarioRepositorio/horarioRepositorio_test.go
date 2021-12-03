@@ -502,12 +502,13 @@ func TestGetEntries(t *testing.T) {
 	assert := assert.New(t)
 	entriesexpected := []domain.Entry{
 		{
-			Subject:   domain.Subject{Kind: 1,Name: "Proyecto Software"},
-
-		},
-		{
-			Subject:   domain.Subject{Kind: 2, Name: "Sistemas Operativos"},
-
+			Init: domain.NewHour(1,30),
+			End: domain.NewHour(2,40),
+			Subject: domain.Subject{Kind: 1, Name: "Proyecto Software"},
+			Room: domain.Room{Name: "1"},
+			Week: "",
+			Group: "",
+			Weekday: 1,
 		},
 	}
 	ternaAsked := domain.Terna{
@@ -522,7 +523,8 @@ func TestGetEntries(t *testing.T) {
 	repos.RawExec(consultas.Asignatura1); 	repos.RawExec(consultas.Asignatura2)
 	repos.RawExec(consultas.Grupodocente1); repos.RawExec(consultas.Grupodocente2)
 	repos.RawExec(consultas.Hora1); 		repos.RawExec(consultas.Hora2)
-
+	repos.RawExec(consultas.Aula1)
+	repos.RawExec(consultas.Entry1); 
 	//Start
 	entriesgot, _ := repos.GetEntries(ternaAsked)
 

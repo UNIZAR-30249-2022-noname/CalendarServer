@@ -251,7 +251,7 @@ func (repo *repo) GetEntries(terna domain.Terna) ([]domain.Entry, error) {
 		var auxv domain.Entry
 		var trash int
 		// for each row, scan the result into our tag composite object
-		err = results.Scan(&auxv.Init.Hour,&auxv.End.Hour,&trash,&auxv.Room.Name,&auxv.Subject.Kind,&auxv.Group,&auxv.Week,&auxv.Weekday,&trash,&auxv.Subject.Name)
+		err = results.Scan(&auxv.Init.Hour,&auxv.End.Hour,&trash,&auxv.Weekday,&auxv.Room.Name,&auxv.Subject.Kind,&auxv.Group,&auxv.Week,&trash,&auxv.Subject.Name)
 		auxv.Init = domain.IntToHour(auxv.Init.Hour)
 		auxv.End = domain.IntToHour(auxv.End.Hour)
 		if err != nil {

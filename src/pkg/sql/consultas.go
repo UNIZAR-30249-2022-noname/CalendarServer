@@ -48,8 +48,8 @@ const SelectIdNumberYear = "SELECT curso.id, curso.numero FROM `curso` WHERE cur
 const SelectNameGroup = "SELECT grupodocente.numero FROM `grupodocente` WHERE grupodocente.idcurso = ?"
 
 const SelectEntries = "SELECT b.*, asignatura.nombre FROM ( " +
-	"SELECT a.*, hora.tipo, hora.grupo, hora.semana, hora.diaSemana, hora.idasignatura FROM ( " +
-	"SELECT entradahorario.inicio, entradahorario.fin, entradahorario.idhoras, aula.nombre FROM app_db.entradahorario " +
+	"SELECT a.*, hora.tipo, hora.grupo, hora.semana, hora.idasignatura FROM ( " +
+	"SELECT entradahorario.inicio, entradahorario.fin, entradahorario.idhoras,entradahorario.diaSemana, aula.nombre FROM app_db.entradahorario " +
 	"INNER JOIN app_db.aula ON entradahorario.idaula = aula.id " +
 	"WHERE idgrupo IN (SELECT id FROM app_db.grupodocente " +
 	"		WHERE numero = ? AND idcurso IN (SELECT id FROM app_db.curso " +
