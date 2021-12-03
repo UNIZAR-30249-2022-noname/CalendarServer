@@ -12,7 +12,7 @@ const Asignatura3 = "INSERT INTO `asignatura` (`id`, `codigo`, `nombre`, `idT`) 
 
 const Grupodocente1 = "INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('1', '1', '1')"
 const Grupodocente2 = "INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('2', '2', '1')"
-const Grupodocente3 = "INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('2', '2', '1')"
+const Grupodocente3 = "INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('3', '2', '2')"
 
 const Hora1 = "INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('1', '3000', '3000', '1', '', '', '1', '1')"
 const Hora12 = "INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('3', '2000', '2000', '2', 'mananas', 'a', '1', '1')"
