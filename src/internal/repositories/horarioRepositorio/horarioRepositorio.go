@@ -185,8 +185,48 @@ func (repo *repo) EntryFound(entry domain.Entry) (bool){
 	return found
 }
 
-
+//ListAllDegrees is a function which returns a set of [DegreeDescription]
 func (repo *repo) ListAllDegrees() ([]domain.DegreeDescription, error) {
-	//TODO
-	return []domain.DegreeDescription{}, nil
+	res := make([]domain.DegreeDescription, 0)
+
+	//This query returns all the rows in titulacion
+	results, err := repo.db.Query(consultas.SelectIdNameDegree)
+	if err != nil { return []domain.DegreeDescription{}, apperrors.ErrSql }
+
+	for results.Next() { //SQL iteration loop
+		var auxv domain.DegreeDescription
+		var id int
+		// for each row, scan the result into our tag composite object
+		err = results.Scan(&id, &auxv.Name)
+		if err != nil { return []domain.DegreeDescription{}, apperrors.ErrSql }
+		//This query returns id and name from curso, where idT = the given id
+		results2, err := repo.db.Query(consultas.SelectIdNumberYear, id)
+		if err != nil { return []domain.DegreeDescription{}, apperrors.ErrSql }
+		
+		i:=0
+		for results2.Next() { //SQL iteration loop
+			var auxv2 domain.YearDescription
+			var id2 int
+			results2.Scan(&id2, &auxv2.Name)
+
+			//This query returns name from grupodocente, where idcurso = the given id
+			results3, err := repo.db.Query(consultas.SelectNameGroup, id2)
+			if err != nil { return []domain.DegreeDescription{}, apperrors.ErrSql }
+
+			auxv.Groups = append(auxv.Groups, auxv2)
+
+			for results3.Next() { //SQL iteration loop
+				var auxv3 string
+				results3.Scan(&auxv3)
+				auxv.Groups[i].Groups = append(auxv.Groups[i].Groups, auxv3)
+			}
+
+			i++
+		}
+
+		res = append(res, auxv) //We introduce the result to the slice
+
+	}
+
+	return res, nil
 }

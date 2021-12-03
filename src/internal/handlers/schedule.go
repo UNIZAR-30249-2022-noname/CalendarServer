@@ -28,7 +28,7 @@ func NewHTTPHandler(horarioService ports.HorarioService) *HTTPHandler {
 //@Produce json
 //@Param titulacion query string true "titulacion de las horas a obtener"
 //@Param curso query int true "curso de las horas a obtener"
-//@Param grupo query int true "grupo de las horas a obtener"
+//@Param grupo query string true "grupo de las horas a obtener"
 //@Success 200 {array} domain.AvailableHours
 // @Failure 400,404 {object} ErrorHttp
 //@Router /availableHours/ [get]
@@ -71,18 +71,30 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 //@Description  - Practices = 2
 //@Description  - Exercises = 3
 //@Tag Scheduler
+//@Param degree query string true "titulacion de las horas a obtener"
+//@Param year query int true "curso de las horas a obtener"
+//@Param group query int true "grupo de las horas a obtener"
 //@Param entry body  []EntryDTO true "Entry to create"
 //@Produce text/plain
 //@Success 200 "Receive the date of the latests entry modification with format dd/mm/aaaa"
 //@Router /updateScheduler/ [post]
 func (hdl *HTTPHandler) PostUpdateScheduler(c *gin.Context) {
+
+	titulacion := c.Query("degree")
+	curso, _ := strconv.Atoi(c.Query("year"))
+	grupo := c.Query("group")
+	terna := domain.Terna{
+		Curso:      curso,
+		Titulacion: titulacion,
+		Grupo:      grupo,
+	}
 	//Read the body request
 	body := []EntryDTO{}
 	c.BindJSON(&body)
 	listEntries := EntriesDTOtoDomain(body)
 
 	//Execute service
-	lastMod, err := hdl.horarioService.UpdateScheduler(listEntries)
+	lastMod, err := hdl.horarioService.UpdateScheduler(listEntries, terna)
 	if err == nil {
 		c.String(http.StatusOK, lastMod)
 
@@ -102,7 +114,7 @@ func (hdl *HTTPHandler) ListDegrees(c *gin.Context) {
 	list, err := hdl.horarioService.ListAllDegrees()
 	if err == nil {
 
-		c.JSON(http.StatusOK, NewListDegrees(list))
+		c.JSON(http.StatusOK, list)
 	} else {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
 	}

@@ -93,7 +93,7 @@ paths:
         in: query
         name: grupo
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -147,6 +147,21 @@ paths:
         - Practices = 2
         - Exercises = 3
       parameters:
+      - description: titulacion de las horas a obtener
+        in: query
+        name: degree
+        required: true
+        type: string
+      - description: curso de las horas a obtener
+        in: query
+        name: year
+        required: true
+        type: integer
+      - description: grupo de las horas a obtener
+        in: query
+        name: group
+        required: true
+        type: integer
       - description: Entry to create
         in: body
         name: entry

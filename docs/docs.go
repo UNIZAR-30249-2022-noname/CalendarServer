@@ -45,7 +45,7 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "grupo de las horas a obtener",
                         "name": "grupo",
                         "in": "query",
@@ -122,6 +122,27 @@ var doc = `{
                     "text/plain"
                 ],
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "titulacion de las horas a obtener",
+                        "name": "degree",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "curso de las horas a obtener",
+                        "name": "year",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "grupo de las horas a obtener",
+                        "name": "group",
+                        "in": "query",
+                        "required": true
+                    },
                     {
                         "description": "Entry to create",
                         "name": "entry",
@@ -311,5 +332,5 @@ func (s *s) ReadDoc() string {
 }
 
 func init() {
-	swag.Register("swagger", &s{})
+	swag.Register(swag.Name, &s{})
 }

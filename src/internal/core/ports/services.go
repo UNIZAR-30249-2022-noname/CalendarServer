@@ -9,5 +9,5 @@ type HorarioService interface {
 	//given a completed [Terna] (not null fields)
 	GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours, error)
 	ListAllDegrees() ([]domain.DegreeDescription, error)
-	UpdateScheduler(entries []domain.Entry) (string, error)
+	UpdateScheduler(entries []domain.Entry, terna domain.Terna) (string, error)
 }
