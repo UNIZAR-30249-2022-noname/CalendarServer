@@ -496,6 +496,7 @@ func TestListAllDegrees(t *testing.T) {
 	repos.CloseConn()
 }
 
+//Creates 3 entries, 2 of them are in terna, 1 isn't
 func TestGetEntries(t *testing.T) {
 	
 	//Prepare
