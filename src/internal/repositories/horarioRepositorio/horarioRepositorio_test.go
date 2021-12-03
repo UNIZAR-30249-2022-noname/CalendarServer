@@ -496,3 +496,44 @@ func TestListAllDegrees(t *testing.T) {
 	repos.CloseConn()
 }
 
+func TestGetEntries(t *testing.T) {
+	
+	//Prepare
+	assert := assert.New(t)
+	entriesexpected := []domain.Entry{
+		{
+			Subject:   domain.Subject{Kind: 1,Name: "Proyecto Software"},
+
+		},
+		{
+			Subject:   domain.Subject{Kind: 2, Name: "Sistemas Operativos"},
+
+		},
+	}
+	ternaAsked := domain.Terna{
+		Titulacion: "Ing. Informatica",
+		Curso:      1,
+		Grupo:      "1",
+	}
+
+	repos := horarioRepositorio.New()
+	repos.RawExec(consultas.Titulacion1); 	repos.RawExec(consultas.Titulacion2)
+	repos.RawExec(consultas.Curso1); 		repos.RawExec(consultas.Curso2)
+	repos.RawExec(consultas.Asignatura1); 	repos.RawExec(consultas.Asignatura2)
+	repos.RawExec(consultas.Grupodocente1); repos.RawExec(consultas.Grupodocente2)
+	repos.RawExec(consultas.Hora1); 		repos.RawExec(consultas.Hora2)
+
+	//Start
+	entriesgot, _ := repos.GetEntries(ternaAsked)
+
+	assert.Equal(len(entriesgot), len(entriesexpected), "Should be the same length")
+	for i, h := range entriesgot {
+		assert.Equal(h, entriesexpected[i], "Should be the same Entries")
+	}
+
+	//Delete
+	repos.RawExec(consultas.TruncHora); 		repos.RawExec(consultas.TruncGrupo)
+	repos.RawExec(consultas.TruncAsignatura); 	repos.RawExec(consultas.TruncCurso)
+	repos.RawExec(consultas.TruncTitulacion)
+	repos.CloseConn()
+}

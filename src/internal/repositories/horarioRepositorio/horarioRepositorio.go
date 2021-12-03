@@ -241,8 +241,7 @@ func (repo *repo) ListAllDegrees() ([]domain.DegreeDescription, error) {
 
 func (repo *repo) GetEntries(terna domain.Terna) ([]domain.Entry, error) {
 	res := make([]domain.Entry, 0)
-	//Select hours given a degree, course and group
-	//(returns remaining hours, max hours, kind and the subject's name)
+	//Select entries given a degree, course and group
 	results, err := repo.db.Query(consultas.SelectEntries, terna.Grupo, terna.Curso, terna.Titulacion)
 	if err != nil {
 		return []domain.Entry{}, apperrors.ErrSql
@@ -253,6 +252,8 @@ func (repo *repo) GetEntries(terna domain.Terna) ([]domain.Entry, error) {
 		var trash int
 		// for each row, scan the result into our tag composite object
 		err = results.Scan(&auxv.Init.Hour,&auxv.End.Hour,&trash,&auxv.Room.Name,&auxv.Subject.Kind,&auxv.Group,&auxv.Week,&auxv.Weekday,&trash,&auxv.Subject.Name)
+		auxv.Init = domain.IntToHour(auxv.Init.Hour)
+		auxv.End = domain.IntToHour(auxv.End.Hour)
 		if err != nil {
 			return []domain.Entry{}, apperrors.ErrSql
 		}
