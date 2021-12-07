@@ -1,0 +1,11 @@
+FROM mysql
+
+COPY src/pkg/sql/Drop_tables.sql /data/Drop_tables.sql
+COPY src/pkg/sql/Populate_Tables.sql /data/Populate_Tables.sql
+COPY src/pkg/sql/Create_Tables.sql /data/Create_Tables.sql
+
+WORKDIR data
+
+CMD mysql -h 127.0.0.1 -P 6033 -u user -puser app_db < Drop_tables.sql
+CMD mysql -h 127.0.0.1 -P 6033 -u user -puser app_db < Create_Tables.sql
+CMD mysql -h 127.0.0.1 -P 6033 -u user -puser app_db < Populate_Tables.sql
