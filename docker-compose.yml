@@ -13,10 +13,6 @@ services:
       - "6033:3306"
     volumes:
       - dbdata:/var/lib/mysql
-      #- "./src/pkg/sql/Drop_tables.sql:/data/Drop_tables.sql"
-      #- "./src/pkg/sql/Populate_Tables.sql:/data/Populate_Tables.sql"
-      #- "./src/pkg/sql/Create_Tables.sql:/data/Create_Tables.sql"
-    #command: bash -c echo "HOLI" #"cd data && mysql -h 127.0.0.1 -P 6033 -u user -puser app_db < Drop_tables.sql && mysql -h 127.0.0.1 -P 6033 -u user -puser app_db < Create_Tables.sql"
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: pma
@@ -29,9 +25,5 @@ services:
     restart: always
     ports:
       - 8081:80
-  populate:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile-Populate
 volumes:
   dbdata:

@@ -1,8 +1,8 @@
 INSERT INTO `titulacion` (`id`, `nombre`) VALUES ('1', 'Ing. Informatica');
 INSERT INTO `titulacion` (`id`, `nombre`) VALUES ('2', 'Ing. Mecanica');
 
-INSERT INTO `curso` (`id`, `numero`) VALUES ('1', '1');
-INSERT INTO `curso` (`id`, `numero`) VALUES ('2', '2');
+INSERT INTO `curso` (`id`, `numero`, `idT`) VALUES ('1', '1', '1');
+INSERT INTO `curso` (`id`, `numero`, `idT`) VALUES ('2', '2', '2');
 
 INSERT INTO `asignatura` (`id`, `codigo`, `nombre`, `idT`) VALUES ('1', '1', 'Proyecto Software', '1');
 INSERT INTO `asignatura` (`id`, `codigo`, `nombre`, `idT`) VALUES ('2', '2', 'Sistemas Operativos', '1');
