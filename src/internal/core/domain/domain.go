@@ -62,23 +62,23 @@ type Terna struct {
 }
 
 type Hour struct {
-	hour int
-	min  int
+	Hour int
+	Min  int
 }
 
 func NewHour(h, m int) Hour {
 	return Hour{
-		hour: h,
-		min:  m,
+		Hour: h,
+		Min:  m,
 	}
 }
 
 func (h Hour) IsLaterThan(h2 Hour) bool {
 	//if the hour is previus return false
-	if h.hour < h2.hour {
+	if h.Hour < h2.Hour {
 		return false
 		//if the hour is equal check the minutes
-	} else if h.hour == h2.hour && h.min <= h2.min {
+	} else if h.Hour == h2.Hour && h.Min <= h2.Min {
 		return false
 	}
 	return true
@@ -87,16 +87,16 @@ func (h Hour) IsLaterThan(h2 Hour) bool {
 //Los minutos no pueden pasar de 60
 //Una hora y media devolveria 130
 func HourToInt(h Hour) int {
-	return h.hour*100 + h.min
+	return h.Hour*100 + h.Min
 }
 
 func IntToHour(h int) Hour {
-	return Hour{hour: h / 100, min: h % 100}
+	return Hour{Hour: h / 100, Min: h % 100}
 }
 
 func AddHour(h1, h2 Hour) int {
-	mins := h1.min + h2.min
-	hours := h1.hour + h2.hour
+	mins := h1.Min + h2.Min
+	hours := h1.Hour + h2.Hour
 	if mins >= 60 {
 		mins -= 60
 		hours += 1
@@ -105,8 +105,8 @@ func AddHour(h1, h2 Hour) int {
 }
 
 func SubstractHour(h1, h2 Hour) int {
-	mins := h1.min - h2.min
-	hours := h1.hour - h2.hour
+	mins := h1.Min - h2.Min
+	hours := h1.Hour - h2.Hour
 	if mins < 0 {
 		mins += 60
 		hours -= 1

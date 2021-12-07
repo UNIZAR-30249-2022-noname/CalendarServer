@@ -18,8 +18,8 @@ const SelectIdHoraGrupo = "SELECT id, idgrupo " +
 
 const SelectIdAula = "SELECT id FROM app_db.aula WHERE aula.nombre=?"
 
-const InsertEntradaHorario = "INSERT INTO app_db.entradahorario (inicio, fin, idhoras, idaula, idgrupo, ultModificacion) " +
-	"VALUES (?, ?, ?, ?, ?, STR_TO_DATE(?,'%Y-%d-%m'))"
+const InsertEntradaHorario = "INSERT INTO app_db.entradahorario (inicio, fin, idhoras, idaula, idgrupo, ultModificacion, diaSemana) " +
+	"VALUES (?, ?, ?, ?, ?, STR_TO_DATE(?,'%Y-%d-%m'), ?)"
 
 const DeleteEntradaHorario = "DELETE FROM app_db.entradahorario WHERE inicio = ? AND fin = ? AND idhoras = ? AND idaula = ? AND idgrupo = ?"
 
@@ -46,3 +46,14 @@ const SelectIdNameDegree = "SELECT * FROM `titulacion`"
 const SelectIdNumberYear = "SELECT curso.id, curso.numero FROM `curso` WHERE curso.idT = ?"
 
 const SelectNameGroup = "SELECT grupodocente.numero FROM `grupodocente` WHERE grupodocente.idcurso = ?"
+
+const SelectEntries = "SELECT b.*, asignatura.nombre FROM ( " +
+	"SELECT a.*, hora.tipo, hora.grupo, hora.semana, hora.idasignatura FROM ( " +
+	"SELECT entradahorario.inicio, entradahorario.fin, entradahorario.idhoras,entradahorario.diaSemana, aula.nombre FROM app_db.entradahorario " +
+	"INNER JOIN app_db.aula ON entradahorario.idaula = aula.id " +
+	"WHERE idgrupo IN (SELECT id FROM app_db.grupodocente " +
+	"		WHERE numero = ? AND idcurso IN (SELECT id FROM app_db.curso " +
+	"			WHERE numero = ? AND idT IN (SELECT id FROM app_db.titulacion " +
+	"				WHERE nombre = ?)))) a " +
+	"INNER JOIN app_db.hora ON a.idhoras = hora.id ) b " +
+	"INNER JOIN app_db.asignatura ON b.idasignatura = asignatura.id"

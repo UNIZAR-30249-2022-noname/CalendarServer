@@ -80,7 +80,7 @@ func (repo *repo) CreateNewEntry(entry domain.Entry) error {
 	ultModificacion := now.Format("2006-02-01") //Sacamos la fecha formateada para introducirla
 	//Insert
 	res, err := repo.db.Exec(consultas.InsertEntradaHorario, domain.HourToInt(entry.Init),
-		domain.HourToInt(entry.End), idhoras, idaula, idgrupo, ultModificacion)
+		domain.HourToInt(entry.End), idhoras, idaula, idgrupo, ultModificacion, entry.Weekday)
 	if err != nil {
 		return apperrors.ErrSql
 	}
@@ -129,7 +129,7 @@ func (repo *repo) updateHours(ini, fin domain.Hour, idhora int, create bool) err
 	//Create is to remove the available hours if true and add them if false
 	var horastotales, horasdisponibles, newhDisponibles int
 	//We get the total and available hours from 'hora'
-	err := repo.db.QueryRow(consultas.SearchHours, 
+	err := repo.db.QueryRow(consultas.SearchHours,
 		idhora).Scan(&horastotales, &horasdisponibles)
 	if err != nil {
 		return apperrors.ErrSql
@@ -162,23 +162,23 @@ func (repo *repo) updateHours(ini, fin domain.Hour, idhora int, create bool) err
 func (repo *repo) DeleteAllEntries(terna domain.Terna) error {
 	res, err := repo.db.Exec(consultas.DeleteEntradas, terna.Titulacion, terna.Grupo, terna.Curso)
 	rows, _ := res.RowsAffected()
-	if(rows < 1){
+	if rows < 1 {
 		return apperrors.ErrNoRowsAffected
 	}
 	return err
 }
 
-func (repo *repo) RawExec(exec string) (error){
-	_ , err := repo.db.Exec(exec)
+func (repo *repo) RawExec(exec string) error {
+	_, err := repo.db.Exec(exec)
 	return err
 }
 
 //EntryFound is a function which returns true if the given
 //entry [Entry] is in the database
-func (repo *repo) EntryFound(entry domain.Entry) (bool){
+func (repo *repo) EntryFound(entry domain.Entry) bool {
 
 	res, err := repo.db.Query(consultas.SearchEntry,
-		domain.HourToInt(entry.Init), domain.HourToInt(entry.End), 
+		domain.HourToInt(entry.Init), domain.HourToInt(entry.End),
 		entry.Subject.Kind, entry.Week, entry.Group, entry.Subject.Name)
 	found := res.Next()
 	_ = err
@@ -191,19 +191,25 @@ func (repo *repo) ListAllDegrees() ([]domain.DegreeDescription, error) {
 
 	//This query returns all the rows in titulacion
 	results, err := repo.db.Query(consultas.SelectIdNameDegree)
-	if err != nil { return []domain.DegreeDescription{}, apperrors.ErrSql }
+	if err != nil {
+		return []domain.DegreeDescription{}, apperrors.ErrSql
+	}
 
 	for results.Next() { //SQL iteration loop
 		var auxv domain.DegreeDescription
 		var id int
 		// for each row, scan the result into our tag composite object
 		err = results.Scan(&id, &auxv.Name)
-		if err != nil { return []domain.DegreeDescription{}, apperrors.ErrSql }
+		if err != nil {
+			return []domain.DegreeDescription{}, apperrors.ErrSql
+		}
 		//This query returns id and name from curso, where idT = the given id
 		results2, err := repo.db.Query(consultas.SelectIdNumberYear, id)
-		if err != nil { return []domain.DegreeDescription{}, apperrors.ErrSql }
-		
-		i:=0
+		if err != nil {
+			return []domain.DegreeDescription{}, apperrors.ErrSql
+		}
+
+		i := 0
 		for results2.Next() { //SQL iteration loop
 			var auxv2 domain.YearDescription
 			var id2 int
@@ -211,7 +217,9 @@ func (repo *repo) ListAllDegrees() ([]domain.DegreeDescription, error) {
 
 			//This query returns name from grupodocente, where idcurso = the given id
 			results3, err := repo.db.Query(consultas.SelectNameGroup, id2)
-			if err != nil { return []domain.DegreeDescription{}, apperrors.ErrSql }
+			if err != nil {
+				return []domain.DegreeDescription{}, apperrors.ErrSql
+			}
 
 			auxv.Groups = append(auxv.Groups, auxv2)
 
@@ -228,5 +236,28 @@ func (repo *repo) ListAllDegrees() ([]domain.DegreeDescription, error) {
 
 	}
 
+	return res, nil
+}
+
+func (repo *repo) GetEntries(terna domain.Terna) ([]domain.Entry, error) {
+	res := make([]domain.Entry, 0)
+	//Select entries given a degree, course and group
+	results, err := repo.db.Query(consultas.SelectEntries, terna.Grupo, terna.Curso, terna.Titulacion)
+	if err != nil {
+		return []domain.Entry{}, apperrors.ErrSql
+	}
+
+	for results.Next() { //SQL iteration loop
+		var auxv domain.Entry
+		var trash int
+		// for each row, scan the result into our tag composite object
+		err = results.Scan(&auxv.Init.Hour,&auxv.End.Hour,&trash,&auxv.Weekday,&auxv.Room.Name,&auxv.Subject.Kind,&auxv.Group,&auxv.Week,&trash,&auxv.Subject.Name)
+		auxv.Init = domain.IntToHour(auxv.Init.Hour)
+		auxv.End = domain.IntToHour(auxv.End.Hour)
+		if err != nil {
+			return []domain.Entry{}, apperrors.ErrSql
+		}
+		res = append(res, auxv) //We introduce the result to the slice
+	}
 	return res, nil
 }

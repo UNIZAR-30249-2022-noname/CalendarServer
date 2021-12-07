@@ -73,7 +73,7 @@ func TestGetAvailableHours(t *testing.T) {
 			},
 		},
 		{
-			name: "Should return error when [curso] is empty",
+			name: "Should return error when [Grupo] is empty",
 			args: args{terna: domain.Terna{Titulacion: "A", Curso: 1}},
 			want: want{result: []domain.AvailableHours{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {
@@ -321,4 +321,96 @@ func simpleListDegreeDescriptions() []domain.DegreeDescription {
 			},
 		},
 	}
+}
+
+////////////////////////
+// TEST GET  ENTRIES ///
+///////////////////////
+
+//Checks all the cases for the function GetAvailableHours of the service [horariosrv]
+func TestGetEntries(t *testing.T) {
+	// · Mocks · //
+	entries := simpleEntries()
+	ternaAsked := domain.Terna{
+		Titulacion: "Ing.Informática",
+		Curso:      2,
+		Grupo:      "1",
+	}
+
+	// · Test · //
+	type args struct {
+		terna domain.Terna
+	}
+	type want struct {
+		result []domain.Entry
+		err    error
+	}
+	tests := []struct {
+		name  string
+		args  args
+		want  want
+		mocks func(m mocks)
+	}{
+		{
+			name: "Should return entries correctly",
+			args: args{terna: ternaAsked},
+			want: want{result: entries},
+			mocks: func(m mocks) {
+				m.horarioRepository.EXPECT().GetEntries(ternaAsked).Return(entries, nil)
+			},
+		},
+		{
+			name: "Should return error when not found",
+			args: args{terna: ternaAsked},
+			want: want{result: []domain.Entry{}, err: apperrors.ErrNotFound},
+			mocks: func(m mocks) {
+				m.horarioRepository.EXPECT().GetEntries(ternaAsked).Return([]domain.Entry{}, apperrors.ErrNotFound)
+			},
+		},
+		{
+			name:  "Should return error when [titulación] is empty",
+			args:  args{terna: domain.Terna{Curso: 1, Grupo: "1"}},
+			want:  want{result: []domain.Entry{}, err: apperrors.ErrInvalidInput},
+			mocks: func(m mocks) {},
+		},
+		{
+			name:  "Should return error when [Grupo] is empty",
+			args:  args{terna: domain.Terna{Titulacion: "A", Curso: 1}},
+			want:  want{result: []domain.Entry{}, err: apperrors.ErrInvalidInput},
+			mocks: func(m mocks) {},
+		},
+		{
+			name:  "Should return error when [Curso] is empty",
+			args:  args{terna: domain.Terna{Titulacion: "A", Grupo: "1"}},
+			want:  want{result: []domain.Entry{}, err: apperrors.ErrInvalidInput},
+			mocks: func(m mocks) {},
+		},
+	}
+
+	// · Runner · //
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			//Prepare
+
+			m := mocks{
+				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+			}
+
+			tt.mocks(m)
+			service := horariosrv.New(m.horarioRepository)
+
+			//Execute
+			result, err := service.GetEntries(tt.args.terna)
+
+			//Verify
+			if tt.want.err != nil && err != nil {
+				assert.Equal(t, tt.want.err.Error(), err.Error())
+			}
+
+			assert.Equal(t, tt.want.result, result)
+
+		})
+
+	}
+
 }
