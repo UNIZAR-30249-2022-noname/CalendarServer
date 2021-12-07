@@ -65,16 +65,16 @@ func (mr *MockHorarioServiceMockRecorder) ListAllDegrees() *gomock.Call {
 }
 
 // UpdateScheduler mocks base method.
-func (m *MockHorarioService) UpdateScheduler(entries []domain.Entry) (string, error) {
+func (m *MockHorarioService) UpdateScheduler(entries []domain.Entry, terna domain.Terna) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateScheduler", entries)
+	ret := m.ctrl.Call(m, "UpdateScheduler", entries, terna)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // UpdateScheduler indicates an expected call of UpdateScheduler.
-func (mr *MockHorarioServiceMockRecorder) UpdateScheduler(entries interface{}) *gomock.Call {
+func (mr *MockHorarioServiceMockRecorder) UpdateScheduler(entries, terna interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateScheduler", reflect.TypeOf((*MockHorarioService)(nil).UpdateScheduler), entries)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateScheduler", reflect.TypeOf((*MockHorarioService)(nil).UpdateScheduler), entries, terna)
 }
