@@ -11,7 +11,7 @@ INSERT INTO `asignatura` (`id`, `codigo`, `nombre`, `idT`) VALUES ('3', '3', 'As
 
 INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('1', '1', '1');
 INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('2', '2', '1');
-INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('3', '2', '2');
+INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('3', '1', '2');
 
 INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('1', '2900', '3000', '1', '', '', '1', '1');
 INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('3', '1800', '2000', '2', 'mananas', 'a', '1', '1');
