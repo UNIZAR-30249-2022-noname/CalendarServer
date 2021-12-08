@@ -56,9 +56,9 @@ type YearDescription struct {
 //Set is a struct which represent the relation among
 // degrees, year and group
 type Terna struct {
-	Titulacion string
-	Curso      int
-	Grupo      string
+	Degree string
+	Year   int
+	Group  string
 }
 
 type Hour struct {

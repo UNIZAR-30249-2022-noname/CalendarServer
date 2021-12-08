@@ -59,73 +59,73 @@ func TestGetAvailableHours(t *testing.T) {
 		{
 			name: "Should return available hours succesfully",
 			args: args{terna: handlers.TernaDto{
-				Titulacion: "Ing.Informática",
-				Curso:      2,
-				Grupo:      "1",
+				Degree: "Ing.Informática",
+				Year:   2,
+				Group:  "1",
 			}},
 			want: want{result: availableHours.AvailableHours, code: http.StatusOK},
 			mocks: func(m mocks) {
 				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
-					Titulacion: "Ing.Informática",
-					Curso:      2,
-					Grupo:      "1"}).Return(simpleAvailableHours(), nil)
+					Degree: "Ing.Informática",
+					Year:   2,
+					Group:  "1"}).Return(simpleAvailableHours(), nil)
 			},
 		},
 		{
-			name: "Error when [Titulacion] is empty",
+			name: "Error when [Degree] is empty",
 			args: args{terna: handlers.TernaDto{
 
-				Curso: 2,
-				Grupo: "1",
+				Year:  2,
+				Group: "1",
 			}},
 			want: want{result: errorParam, code: http.StatusBadRequest},
 			mocks: func(m mocks) {
 				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
-					Curso: 2,
-					Grupo: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+					Year:  2,
+					Group: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 		{
 			name: "Error when [curso] is empty",
 			args: args{terna: handlers.TernaDto{
 
-				Titulacion: "Ing.Informática",
-				Grupo:      "1",
+				Degree: "Ing.Informática",
+				Group:  "1",
 			}},
 			want: want{result: errorParam, code: http.StatusBadRequest},
 			mocks: func(m mocks) {
 				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
-					Titulacion: "Ing.Informática",
-					Grupo:      "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+					Degree: "Ing.Informática",
+					Group:  "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 		{
-			name: "Error when [Grupo] is empty",
+			name: "Error when [Group] is empty",
 			args: args{terna: handlers.TernaDto{
 
-				Titulacion: "Ing.Informática",
-				Curso:      1,
+				Degree: "Ing.Informática",
+				Year:   1,
 			}},
 			want: want{result: errorParam, code: http.StatusBadRequest},
 			mocks: func(m mocks) {
 				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
-					Titulacion: "Ing.Informática",
-					Curso:      1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+					Degree: "Ing.Informática",
+					Year:   1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 		{
 			name: "Error [terna] has not resources attached",
 			args: args{terna: handlers.TernaDto{
-				Titulacion: "Ing.Informática",
-				Curso:      2,
-				Grupo:      "1",
+				Degree: "Ing.Informática",
+				Year:   2,
+				Group:  "1",
 			}},
 			want: want{result: handlers.ErrorHttp{Message: "La terna no existe"}, code: http.StatusNotFound},
 			mocks: func(m mocks) {
 				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
-					Titulacion: "Ing.Informática",
-					Curso:      2,
-					Grupo:      "1"}).Return([]domain.AvailableHours{}, apperrors.ErrNotFound)
+					Degree: "Ing.Informática",
+					Year:   2,
+					Group:  "1"}).Return([]domain.AvailableHours{}, apperrors.ErrNotFound)
 			},
 		},
 	}
@@ -147,8 +147,8 @@ func TestGetAvailableHours(t *testing.T) {
 			}
 			r := setUpRouter()
 			w := httptest.NewRecorder()
-			uri := "/availableHours?titulacion=" + tt.args.terna.Titulacion +
-				"&year=" + strconv.Itoa(tt.args.terna.Curso) + "&group=" + tt.args.terna.Grupo
+			uri := "/availableHours?degree=" + tt.args.terna.Degree +
+				"&year=" + strconv.Itoa(tt.args.terna.Year) + "&group=" + tt.args.terna.Group
 			req, _ := http.NewRequest("GET", uri, nil)
 			r.ServeHTTP(w, req)
 			assert.Equal(t, tt.want.code, w.Code)
@@ -258,8 +258,8 @@ func TestPostSchedulerEntry(t *testing.T) {
 
 			r := setUpRouter()
 			w := httptest.NewRecorder()
-			uri := path + "?degree=" + tt.args.terna.Titulacion +
-				"&year=" + strconv.Itoa(tt.args.terna.Curso) + "&group=" + tt.args.terna.Grupo
+			uri := path + "?degree=" + tt.args.terna.Degree +
+				"&year=" + strconv.Itoa(tt.args.terna.Year) + "&group=" + tt.args.terna.Group
 			body, _ := json.Marshal(tt.args.newEntry)
 			bytes.NewBuffer(body)
 			req, _ := http.NewRequest("POST", uri, bytes.NewBuffer(body))
@@ -314,9 +314,9 @@ func simpleExercisesEntry() handlers.EntryDTO {
 
 func simpleTerna() domain.Terna {
 	return domain.Terna{
-		Grupo:      "1",
-		Curso:      1,
-		Titulacion: "Ing Informática",
+		Group:  "1",
+		Year:   1,
+		Degree: "Ing Informática",
 	}
 }
 
@@ -460,8 +460,8 @@ func TestGetEntries(t *testing.T) {
 			}
 			r := setUpRouter()
 			w := httptest.NewRecorder()
-			uri := path + "?titulacion=" + tt.args.terna.Titulacion +
-				"&year=" + strconv.Itoa(tt.args.terna.Curso) + "&group=" + tt.args.terna.Grupo
+			uri := path + "?degree=" + tt.args.terna.Degree +
+				"&year=" + strconv.Itoa(tt.args.terna.Year) + "&group=" + tt.args.terna.Group
 			req, _ := http.NewRequest("GET", uri, nil)
 			r.ServeHTTP(w, req)
 			assert.Equal(t, tt.want.code, w.Code)
@@ -481,9 +481,9 @@ func simpleTernaDTO() handlers.TernaDto {
 /*
 func simpleTerna() domain.Terna {
 	return domain.Terna{
-		Titulacion: "Ing.Informática",
-		Curso:      2,
-		Grupo:      "1",
+		Degree: "Ing.Informática",
+		Year:      2,
+		Group:      "1",
 	}
 }*/
 

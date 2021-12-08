@@ -11,7 +11,7 @@ const SelectAvaiableHours = "SELECT a.disponibles, a.totales, a.tipo, a.nombre F
 	"INNER JOIN curso ON grupodocente.idcurso=curso.id WHERE curso.numero=? AND grupodocente.numero=?)) b " +
 	"ON a.id=b.id"
 
-const SelectIdHoraGrupo = "SELECT id, idgrupo " +
+const SelectIdHoraGroup = "SELECT id, idgrupo " +
 	"FROM app_db.hora " +
 	"WHERE hora.tipo=? AND hora.grupo = ? AND hora.semana = ? AND hora.idasignatura " +
 	"IN (SELECT id FROM app_db.asignatura WHERE asignatura.nombre=?)"

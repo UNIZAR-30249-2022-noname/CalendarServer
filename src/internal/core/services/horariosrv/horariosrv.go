@@ -77,7 +77,7 @@ func (srv *HorarioServiceImp) UpdateScheduler(entries []domain.Entry, terna doma
 
 func (srv *HorarioServiceImp) GetEntries(terna domain.Terna) ([]domain.Entry, error) {
 
-	if terna.Titulacion == "" || terna.Curso == 0 || terna.Grupo == "" {
+	if terna.Degree == "" || terna.Year == 0 || terna.Group == "" {
 		return []domain.Entry{}, apperrors.ErrInvalidInput
 	}
 	entries, err := srv.horarioRepositorio.GetEntries(terna)

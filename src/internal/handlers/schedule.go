@@ -39,9 +39,9 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 	curso, _ := strconv.Atoi(c.Query("year"))
 	grupo := c.Query("group")
 	terna := domain.Terna{
-		Curso:      curso,
-		Titulacion: titulacion,
-		Grupo:      grupo,
+		Year:   curso,
+		Degree: titulacion,
+		Group:  grupo,
 	}
 	availableHours, err := hdl.horarioService.GetAvailableHours(terna)
 
@@ -86,9 +86,9 @@ func (hdl *HTTPHandler) PostUpdateScheduler(c *gin.Context) {
 	curso, _ := strconv.Atoi(c.Query("year"))
 	grupo := c.Query("group")
 	terna := domain.Terna{
-		Curso:      curso,
-		Titulacion: titulacion,
-		Grupo:      grupo,
+		Year:   curso,
+		Degree: titulacion,
+		Group:  grupo,
 	}
 	//Read the body request
 	body := []EntryDTO{}
@@ -139,9 +139,9 @@ func (hdl *HTTPHandler) GetEntries(c *gin.Context) {
 	curso, _ := strconv.Atoi(c.Query("year"))
 	grupo := c.Query("group")
 	terna := domain.Terna{
-		Curso:      curso,
-		Titulacion: titulacion,
-		Grupo:      grupo,
+		Year:   curso,
+		Degree: titulacion,
+		Group:  grupo,
 	}
 	entries, err := hdl.horarioService.GetEntries(terna)
 
