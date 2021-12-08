@@ -548,6 +548,6 @@ func TestGetEntries(t *testing.T) {
 	//Delete
 	repos.RawExec(consultas.TruncHora); 		repos.RawExec(consultas.TruncGrupo)
 	repos.RawExec(consultas.TruncAsignatura); 	repos.RawExec(consultas.TruncCurso)
-	repos.RawExec(consultas.TruncTitulacion)
+	repos.RawExec(consultas.TruncTitulacion); 	repos.RawExec(consultas.TruncEntry)
 	repos.CloseConn()
 }
