@@ -13,10 +13,10 @@ import (
 
 func TestDeleteAllBeforeTest(t *testing.T) {
 	repos := horarioRepositorio.New()
-	repos.RawExec(consultas.TruncHora); 		repos.RawExec(consultas.TruncGrupo)
-	repos.RawExec(consultas.TruncAsignatura); 	repos.RawExec(consultas.TruncCurso)
+	repos.RawExec(consultas.TruncEntry);		repos.RawExec(consultas.TruncHora); 
+	repos.RawExec(consultas.TruncAsignatura); 	repos.RawExec(consultas.TruncGrupo)
+	repos.RawExec(consultas.TruncCurso)
 	repos.RawExec(consultas.TruncTitulacion);	repos.RawExec(consultas.TruncAula)
-	repos.RawExec(consultas.TruncEntry)
 }
 
 func TestGetAvaiableHours(t *testing.T) {
