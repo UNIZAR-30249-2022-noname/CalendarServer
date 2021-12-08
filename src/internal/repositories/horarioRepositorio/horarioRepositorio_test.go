@@ -26,7 +26,7 @@ func TestGetAvaiableHours(t *testing.T) {
 	hoursexpected := []domain.AvailableHours{
 		{
 			Subject:   domain.Subject{Kind: 1,Name: "Proyecto Software"},
-			RemainingHours: 30,
+			RemainingHours: 29,
 			MaxHours:       30,
 			RemainingMin: 0,
 			MaxMin: 0,
