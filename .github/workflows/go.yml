@@ -2,27 +2,23 @@ name: Go_tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main]
+    branches: [main]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Set up Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: 1.17
-        
-    - name: Prepare
-      run: docker compose up -d
-      
-    - name: Create tables
-      run: cd src/pkg/sql/ ; sleep 10; ./create.sh ; cd -
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
 
-    - name: Test
-      run: go test -v ./...
+      - name: Prepare
+        run: docker compose up -d
+
+      - name: Test
+        run: go test -v ./...
