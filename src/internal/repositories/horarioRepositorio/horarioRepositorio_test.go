@@ -13,10 +13,10 @@ import (
 
 func TestDeleteAllBeforeTest(t *testing.T) {
 	repos := horarioRepositorio.New()
-	repos.RawExec(consultas.TruncHora); 		repos.RawExec(consultas.TruncGrupo)
-	repos.RawExec(consultas.TruncAsignatura); 	repos.RawExec(consultas.TruncCurso)
+	repos.RawExec(consultas.TruncEntry);		repos.RawExec(consultas.TruncHora); 
+	repos.RawExec(consultas.TruncAsignatura); 	repos.RawExec(consultas.TruncGrupo)
+	repos.RawExec(consultas.TruncCurso)
 	repos.RawExec(consultas.TruncTitulacion);	repos.RawExec(consultas.TruncAula)
-	repos.RawExec(consultas.TruncEntry)
 }
 
 func TestGetAvaiableHours(t *testing.T) {
@@ -26,7 +26,7 @@ func TestGetAvaiableHours(t *testing.T) {
 	hoursexpected := []domain.AvailableHours{
 		{
 			Subject:   domain.Subject{Kind: 1,Name: "Proyecto Software"},
-			RemainingHours: 30,
+			RemainingHours: 29,
 			MaxHours:       30,
 			RemainingMin: 0,
 			MaxMin: 0,
@@ -548,6 +548,6 @@ func TestGetEntries(t *testing.T) {
 	//Delete
 	repos.RawExec(consultas.TruncHora); 		repos.RawExec(consultas.TruncGrupo)
 	repos.RawExec(consultas.TruncAsignatura); 	repos.RawExec(consultas.TruncCurso)
-	repos.RawExec(consultas.TruncTitulacion)
+	repos.RawExec(consultas.TruncTitulacion); 	repos.RawExec(consultas.TruncEntry)
 	repos.CloseConn()
 }
