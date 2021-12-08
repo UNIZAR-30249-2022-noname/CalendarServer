@@ -35,7 +35,7 @@ func NewHTTPHandler(horarioService ports.HorarioService) *HTTPHandler {
 //@Router /availableHours/ [get]
 func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 
-	titulacion := c.Query("titulacion")
+	titulacion := c.Query("degree")
 	curso, _ := strconv.Atoi(c.Query("year"))
 	grupo := c.Query("group")
 	terna := domain.Terna{
@@ -135,7 +135,7 @@ func (hdl *HTTPHandler) ListDegrees(c *gin.Context) {
 //@Router /availableHours/ [get]
 func (hdl *HTTPHandler) GetEntries(c *gin.Context) {
 
-	titulacion := c.Query("titulacion")
+	titulacion := c.Query("degree")
 	curso, _ := strconv.Atoi(c.Query("year"))
 	grupo := c.Query("group")
 	terna := domain.Terna{
