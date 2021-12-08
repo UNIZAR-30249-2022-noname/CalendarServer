@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -34,13 +35,13 @@ func NewHTTPHandler(horarioService ports.HorarioService) *HTTPHandler {
 //@Router /availableHours/ [get]
 func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 
-	titulacion := c.Query("titulacion")
+	titulacion := c.Query("degree")
 	curso, _ := strconv.Atoi(c.Query("year"))
 	grupo := c.Query("group")
 	terna := domain.Terna{
-		Curso:      curso,
-		Titulacion: titulacion,
-		Grupo:      grupo,
+		Year:   curso,
+		Degree: titulacion,
+		Group:  grupo,
 	}
 	availableHours, err := hdl.horarioService.GetAvailableHours(terna)
 
@@ -55,6 +56,7 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
 	} else {
+		fmt.Println(availableHours)
 		c.JSON(http.StatusOK, availableHours)
 
 	}
@@ -84,9 +86,9 @@ func (hdl *HTTPHandler) PostUpdateScheduler(c *gin.Context) {
 	curso, _ := strconv.Atoi(c.Query("year"))
 	grupo := c.Query("group")
 	terna := domain.Terna{
-		Curso:      curso,
-		Titulacion: titulacion,
-		Grupo:      grupo,
+		Year:   curso,
+		Degree: titulacion,
+		Group:  grupo,
 	}
 	//Read the body request
 	body := []EntryDTO{}
@@ -113,7 +115,7 @@ func (hdl *HTTPHandler) PostUpdateScheduler(c *gin.Context) {
 func (hdl *HTTPHandler) ListDegrees(c *gin.Context) {
 	list, err := hdl.horarioService.ListAllDegrees()
 	if err == nil {
-
+		fmt.Println(list)
 		c.JSON(http.StatusOK, list)
 	} else {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
@@ -133,13 +135,13 @@ func (hdl *HTTPHandler) ListDegrees(c *gin.Context) {
 //@Router /availableHours/ [get]
 func (hdl *HTTPHandler) GetEntries(c *gin.Context) {
 
-	titulacion := c.Query("titulacion")
+	titulacion := c.Query("degree")
 	curso, _ := strconv.Atoi(c.Query("year"))
 	grupo := c.Query("group")
 	terna := domain.Terna{
-		Curso:      curso,
-		Titulacion: titulacion,
-		Grupo:      grupo,
+		Year:   curso,
+		Degree: titulacion,
+		Group:  grupo,
 	}
 	entries, err := hdl.horarioService.GetEntries(terna)
 
@@ -155,6 +157,7 @@ func (hdl *HTTPHandler) GetEntries(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
 	} else {
 		entriesDto := EntriesDomaintoDTO(entries)
+		fmt.Println(entriesDto)
 		c.JSON(http.StatusOK, entriesDto)
 
 	}

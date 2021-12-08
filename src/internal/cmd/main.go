@@ -1,7 +1,10 @@
 package main
 
 import (
+	"time"
+
 	"github.com/D-D-EINA-Calendar/CalendarServer/docs"
+	"github.com/gin-contrib/cors"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/horariosrv"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
@@ -15,6 +18,18 @@ import (
 func SetupRouter() *gin.Engine {
 
 	r := gin.Default()
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000", "http://192.168.0.16:3000/%22%7D"},
+		AllowMethods:     []string{"GET", "PUT", "PATCH"},
+		AllowHeaders:     []string{"Origin"},
+		AllowCredentials: true,
+		AllowOriginFunc: func(origin string) bool {
+			return origin == "https://github.com/"
+		},
+		MaxAge: 12 * time.Hour,
+	}))
+
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	horariorepo := horarioRepositorio.New()
 	horariosrv := horariosrv.New(horariorepo)
@@ -23,6 +38,7 @@ func SetupRouter() *gin.Engine {
 	r.GET("/availableHours", horarioHandler.GetAvailableHours)
 	r.POST("/updateScheduler", horarioHandler.PostUpdateScheduler)
 	r.GET("/listDegrees", horarioHandler.ListDegrees)
+	r.GET("/getEntries", horarioHandler.GetEntries)
 
 	return r
 }

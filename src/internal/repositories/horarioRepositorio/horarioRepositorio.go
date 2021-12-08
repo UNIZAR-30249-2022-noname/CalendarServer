@@ -31,7 +31,7 @@ func (repo *repo) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours
 	res := make([]domain.AvailableHours, 0)
 	//Select hours given a degree, course and group
 	//(returns remaining hours, max hours, kind and the subject's name)
-	results, err := repo.db.Query(consultas.SelectAvaiableHours, terna.Titulacion, terna.Curso, terna.Grupo)
+	results, err := repo.db.Query(consultas.SelectAvaiableHours, terna.Degree, terna.Year, terna.Group)
 	if err != nil {
 		return []domain.AvailableHours{}, apperrors.ErrSql
 	}
@@ -66,7 +66,7 @@ func (repo *repo) CreateNewEntry(entry domain.Entry) error {
 		}
 	}
 	//We get idhoras & idgrupo for the entry
-	err := repo.db.QueryRow(consultas.SelectIdHoraGrupo,
+	err := repo.db.QueryRow(consultas.SelectIdHoraGroup,
 		entry.Subject.Kind, entry.Group, entry.Week, entry.Subject.Name).Scan(&idhoras, &idgrupo)
 	if err != nil {
 		return apperrors.ErrSql
@@ -97,7 +97,7 @@ func (repo *repo) CreateNewEntry(entry domain.Entry) error {
 func (repo *repo) DeleteEntry(entry domain.Entry) error {
 	var idhoras, idgrupo, idaula int
 	//We get idhoras & idgrupo for the entry
-	err := repo.db.QueryRow(consultas.SelectIdHoraGrupo,
+	err := repo.db.QueryRow(consultas.SelectIdHoraGroup,
 		entry.Subject.Kind, entry.Group, entry.Week, entry.Subject.Name).Scan(&idhoras, &idgrupo)
 	if err != nil {
 		return apperrors.ErrSql
@@ -160,7 +160,7 @@ func (repo *repo) updateHours(ini, fin domain.Hour, idhora int, create bool) err
 }
 
 func (repo *repo) DeleteAllEntries(terna domain.Terna) error {
-	res, err := repo.db.Exec(consultas.DeleteEntradas, terna.Titulacion, terna.Grupo, terna.Curso)
+	res, err := repo.db.Exec(consultas.DeleteEntradas, terna.Degree, terna.Group, terna.Year)
 	rows, _ := res.RowsAffected()
 	if rows < 1 {
 		return apperrors.ErrNoRowsAffected
@@ -242,7 +242,7 @@ func (repo *repo) ListAllDegrees() ([]domain.DegreeDescription, error) {
 func (repo *repo) GetEntries(terna domain.Terna) ([]domain.Entry, error) {
 	res := make([]domain.Entry, 0)
 	//Select entries given a degree, course and group
-	results, err := repo.db.Query(consultas.SelectEntries, terna.Grupo, terna.Curso, terna.Titulacion)
+	results, err := repo.db.Query(consultas.SelectEntries, terna.Group, terna.Year, terna.Degree)
 	if err != nil {
 		return []domain.Entry{}, apperrors.ErrSql
 	}
@@ -251,7 +251,7 @@ func (repo *repo) GetEntries(terna domain.Terna) ([]domain.Entry, error) {
 		var auxv domain.Entry
 		var trash int
 		// for each row, scan the result into our tag composite object
-		err = results.Scan(&auxv.Init.Hour,&auxv.End.Hour,&trash,&auxv.Weekday,&auxv.Room.Name,&auxv.Subject.Kind,&auxv.Group,&auxv.Week,&trash,&auxv.Subject.Name)
+		err = results.Scan(&auxv.Init.Hour, &auxv.End.Hour, &trash, &auxv.Weekday, &auxv.Room.Name, &auxv.Subject.Kind, &auxv.Group, &auxv.Week, &trash, &auxv.Subject.Name)
 		auxv.Init = domain.IntToHour(auxv.Init.Hour)
 		auxv.End = domain.IntToHour(auxv.End.Hour)
 		if err != nil {

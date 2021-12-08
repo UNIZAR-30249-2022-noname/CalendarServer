@@ -22,9 +22,9 @@ func TestGetAvailableHours(t *testing.T) {
 	// · Mocks · //
 	AvailableHours := simpleAvailableHours()
 	ternaAsked := domain.Terna{
-		Titulacion: "Ing.Informática",
-		Curso:      2,
-		Grupo:      "1",
+		Degree: "Ing.Informática",
+		Year:   2,
+		Group:  "1",
 	}
 
 	// · Test · //
@@ -58,26 +58,26 @@ func TestGetAvailableHours(t *testing.T) {
 		},
 		{
 			name: "Should return error when [titulación] is empty",
-			args: args{terna: domain.Terna{Curso: 1, Grupo: "1"}},
+			args: args{terna: domain.Terna{Year: 1, Group: "1"}},
 			want: want{result: []domain.AvailableHours{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Curso: 1, Grupo: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Year: 1, Group: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 		{
 			name: "Should return error when [curso] is empty",
-			args: args{terna: domain.Terna{Titulacion: "A", Grupo: "1"}},
+			args: args{terna: domain.Terna{Degree: "A", Group: "1"}},
 			want: want{result: []domain.AvailableHours{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Titulacion: "A", Grupo: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Degree: "A", Group: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 		{
-			name: "Should return error when [Grupo] is empty",
-			args: args{terna: domain.Terna{Titulacion: "A", Curso: 1}},
+			name: "Should return error when [Group] is empty",
+			args: args{terna: domain.Terna{Degree: "A", Year: 1}},
 			want: want{result: []domain.AvailableHours{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Titulacion: "A", Curso: 1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Degree: "A", Year: 1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 	}
@@ -236,9 +236,9 @@ func currentDate() string {
 
 func simpleTerna() domain.Terna {
 	return domain.Terna{
-		Grupo:      "1",
-		Curso:      1,
-		Titulacion: "Ing Informática",
+		Group:  "1",
+		Year:   1,
+		Degree: "Ing Informática",
 	}
 }
 
@@ -332,9 +332,9 @@ func TestGetEntries(t *testing.T) {
 	// · Mocks · //
 	entries := simpleEntries()
 	ternaAsked := domain.Terna{
-		Titulacion: "Ing.Informática",
-		Curso:      2,
-		Grupo:      "1",
+		Degree: "Ing.Informática",
+		Year:   2,
+		Group:  "1",
 	}
 
 	// · Test · //
@@ -369,19 +369,19 @@ func TestGetEntries(t *testing.T) {
 		},
 		{
 			name:  "Should return error when [titulación] is empty",
-			args:  args{terna: domain.Terna{Curso: 1, Grupo: "1"}},
+			args:  args{terna: domain.Terna{Year: 1, Group: "1"}},
 			want:  want{result: []domain.Entry{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {},
 		},
 		{
-			name:  "Should return error when [Grupo] is empty",
-			args:  args{terna: domain.Terna{Titulacion: "A", Curso: 1}},
+			name:  "Should return error when [Group] is empty",
+			args:  args{terna: domain.Terna{Degree: "A", Year: 1}},
 			want:  want{result: []domain.Entry{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {},
 		},
 		{
-			name:  "Should return error when [Curso] is empty",
-			args:  args{terna: domain.Terna{Titulacion: "A", Grupo: "1"}},
+			name:  "Should return error when [Year] is empty",
+			args:  args{terna: domain.Terna{Degree: "A", Group: "1"}},
 			want:  want{result: []domain.Entry{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {},
 		},
