@@ -2,12 +2,14 @@ package horarioRepositorio
 
 import (
 	"database/sql"
+	"fmt"
 	"time"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/models"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	consultas "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/sql"
+	ics "github.com/arran4/golang-ical"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -260,4 +262,21 @@ func (repo *repo) GetEntries(terna domain.Terna) ([]domain.Entry, error) {
 		res = append(res, auxv) //We introduce the result to the slice
 	}
 	return res, nil
+}
+
+
+func (repo *repo) GetICS(terna domain.Terna) (string, error) {
+	entries, err := repo.GetEntries(terna)
+	if err != nil {
+		return "", apperrors.ErrSql
+	}
+	cal := ics.NewCalendar()
+	for i, entry := range entries {
+		event := cal.AddEvent(fmt.Sprintf("id@domain", i))
+		event.SetSummary(entry.Subject.Name)
+		event.SetStartAt(time.Now())
+		event.SetEndAt(time.Now())
+		i++
+	}
+	return cal.Serialize(), nil
 }
