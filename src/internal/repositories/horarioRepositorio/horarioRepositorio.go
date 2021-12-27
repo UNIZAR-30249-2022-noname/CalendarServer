@@ -272,7 +272,7 @@ func (repo *repo) GetICS(terna domain.Terna) (string, error) {
 	}
 	cal := ics.NewCalendar()
 	for i, entry := range entries {
-		event := cal.AddEvent(fmt.Sprintf("id@domain", i))
+		event := cal.AddEvent(fmt.Sprintf("%d@unizar.es", i))
 		event.SetSummary(entry.Subject.Name)
 		event.SetStartAt(time.Now())
 		event.SetEndAt(time.Now())

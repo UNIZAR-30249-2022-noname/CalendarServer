@@ -623,3 +623,68 @@ func TestGetEntries(t *testing.T) {
 	repos.RawExec(consultas.TruncDegree);	repos.RawExec(consultas.TruncAula)
 	repos.CloseConn()
 }
+
+func TestGetICS(t *testing.T) {
+
+	//Prepare
+	assert := assert.New(t)
+	entriesexpected := []domain.Entry{
+		{
+			Init:    domain.NewHour(1, 30),
+			End:     domain.NewHour(2, 40),
+			Subject: domain.Subject{Kind: 1, Name: "Proyecto Software"},
+			Room:    domain.Room{Name: "1"},
+			Week:    "",
+			Group:   "",
+			Weekday: 1,
+		},
+		{
+			Init:    domain.NewHour(2, 50),
+			End:     domain.NewHour(4, 40),
+			Subject: domain.Subject{Kind: 2, Name: "Sistemas Operativos"},
+			Room:    domain.Room{Name: "2"},
+			Week:    "",
+			Group:   "",
+			Weekday: 2,
+		},
+	}
+	ternaAsked := domain.Terna{
+		Degree: "Ing. Informatica",
+		Year:   1,
+		Group:  "1",
+	}
+
+	repos := horarioRepositorio.New()
+	repos.RawExec(consultas.Degree1)
+	repos.RawExec(consultas.Degree2)
+	repos.RawExec(consultas.Year1)
+	repos.RawExec(consultas.Year2)
+	repos.RawExec(consultas.Asignatura1)
+	repos.RawExec(consultas.Asignatura2)
+	repos.RawExec(consultas.Asignatura3)
+	repos.RawExec(consultas.Groupdocente1)
+	repos.RawExec(consultas.Groupdocente2)
+	repos.RawExec(consultas.Hora1)
+	repos.RawExec(consultas.Hora2)
+	repos.RawExec(consultas.Aula1)
+	repos.RawExec(consultas.Aula2)
+	repos.RawExec(consultas.Entry1)
+	repos.RawExec(consultas.Entry2)
+	repos.RawExec(consultas.Entry3)
+	//Start
+	ics, _ := repos.GetICS(ternaAsked)
+	_ = ics
+	entriesgot, _ := repos.GetEntries(ternaAsked)
+
+	assert.Equal(len(entriesgot), len(entriesexpected), "Should be the same length")
+	for i, h := range entriesgot {
+		assert.Equal(h, entriesexpected[i], "Should be the same Entries")
+	}
+
+	//Delete
+	repos.RawExec(consultas.TruncEntry);		repos.RawExec(consultas.TruncHora); 
+	repos.RawExec(consultas.TruncAsignatura); 	repos.RawExec(consultas.TruncGroup)
+	repos.RawExec(consultas.TruncYear)
+	repos.RawExec(consultas.TruncDegree);	repos.RawExec(consultas.TruncAula)
+	repos.CloseConn()
+}
