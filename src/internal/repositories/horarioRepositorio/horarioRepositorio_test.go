@@ -624,6 +624,7 @@ func TestGetEntries(t *testing.T) {
 	repos.CloseConn()
 }
 
+/*
 func TestGetICS(t *testing.T) {
 
 	//Prepare
@@ -688,3 +689,4 @@ func TestGetICS(t *testing.T) {
 	repos.RawExec(consultas.TruncDegree);	repos.RawExec(consultas.TruncAula)
 	repos.CloseConn()
 }
+*/

@@ -2,14 +2,12 @@ package horarioRepositorio
 
 import (
 	"database/sql"
-	"fmt"
 	"time"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/models"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	consultas "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/sql"
-	ics "github.com/arran4/golang-ical"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -262,34 +260,4 @@ func (repo *repo) GetEntries(terna domain.Terna) ([]domain.Entry, error) {
 		res = append(res, auxv) //We introduce the result to the slice
 	}
 	return res, nil
-}
-
-
-func (repo *repo) GetICS(terna domain.Terna) (string, error) {
-	entries, err := repo.GetEntries(terna)
-	if err != nil {
-		return "", apperrors.ErrSql
-	}
-	cal := ics.NewCalendar()
-	t := time.Now()
-	month := t.Month()
-	year := t.Year()
-	if(month<8){
-		month = 2
-	} else {
-		month = 9
-	}
-	taux := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
-	for i, entry := range entries {
-		event := cal.AddEvent(fmt.Sprintf("%d@unizar.es", i))
-		event.SetSummary(entry.Subject.Name)
-		day := (8-int(taux.Weekday()))%7 + entry.Weekday + 1
-		t1 := time.Date(year, month, day, entry.Init.Hour, entry.Init.Min, 0, 0, t.Location())
-		event.SetStartAt(t1)
-		t2 := time.Date(year, month, day, entry.End.Hour, entry.End.Min, 0, 0, t.Location())
-		event.SetEndAt(t2)
-		event.AddRrule(fmt.Sprintf("FREQ=DAILY;INTERVAL=7"))
-		i++
-	}
-	return cal.Serialize(), nil
 }
