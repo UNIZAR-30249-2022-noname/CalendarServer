@@ -113,7 +113,7 @@ func (srv *HorarioServiceImp) GetICS(terna domain.Terna) (string, error) {
 		event.SetStartAt(t1)
 		t2 := time.Date(year, month, day, entry.End.Hour, entry.End.Min, 0, 0, t.Location())
 		event.SetEndAt(t2)
-		event.AddRrule(fmt.Sprintf("FREQ=DAILY;INTERVAL=7"))
+		event.AddRrule("FREQ=DAILY;INTERVAL=7")
 		i++
 	}
 	return cal.Serialize(), nil
