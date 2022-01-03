@@ -39,6 +39,7 @@ func SetupRouter() *gin.Engine {
 	r.POST("/updateScheduler", horarioHandler.PostUpdateScheduler)
 	r.GET("/listDegrees", horarioHandler.ListDegrees)
 	r.GET("/getEntries", horarioHandler.GetEntries)
+	r.GET("/getICS", horarioHandler.GetICS)
 
 	return r
 }

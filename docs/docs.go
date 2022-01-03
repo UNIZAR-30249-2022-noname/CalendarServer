@@ -25,7 +25,7 @@ var doc = `{
     "paths": {
         "/availableHours/": {
             "get": {
-                "description": "List all the hours remaining for creaiting an entrie on the schedule",
+                "description": "List all the entries of the  schedule",
                 "produces": [
                     "application/json"
                 ],
@@ -45,7 +45,7 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "grupo de las horas a obtener",
                         "name": "grupo",
                         "in": "query",
@@ -60,6 +60,57 @@ var doc = `{
                             "items": {
                                 "$ref": "#/definitions/domain.AvailableHours"
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            }
+        },
+        "/getICS/": {
+            "get": {
+                "description": "Get the schedule in ics format",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "titulacion de las horas a obtener",
+                        "name": "titulacion",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "curso de las horas a obtener",
+                        "name": "curso",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "grupo de las horas a obtener",
+                        "name": "grupo",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
                         }
                     },
                     "400": {
@@ -332,5 +383,5 @@ func (s *s) ReadDoc() string {
 }
 
 func init() {
-	swag.Register(swag.Name, &s{})
+	swag.Register("swagger", &s{})
 }
