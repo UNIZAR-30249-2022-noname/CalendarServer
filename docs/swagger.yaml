@@ -81,17 +81,17 @@ paths:
       parameters:
       - description: titulacion de las horas a obtener
         in: query
-        name: titulacion
+        name: degree
         required: true
         type: string
       - description: curso de las horas a obtener
         in: query
-        name: curso
+        name: year
         required: true
         type: integer
       - description: grupo de las horas a obtener
         in: query
-        name: grupo
+        name: group
         required: true
         type: integer
       produces:
@@ -117,17 +117,17 @@ paths:
       parameters:
       - description: titulacion de las horas a obtener
         in: query
-        name: titulacion
+        name: degree
         required: true
         type: string
       - description: curso de las horas a obtener
         in: query
-        name: curso
+        name: year
         required: true
         type: integer
       - description: grupo de las horas a obtener
         in: query
-        name: grupo
+        name: group
         required: true
         type: integer
       produces:

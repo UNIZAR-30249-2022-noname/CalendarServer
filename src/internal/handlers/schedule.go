@@ -127,9 +127,9 @@ func (hdl *HTTPHandler) ListDegrees(c *gin.Context) {
 //@Description List all the entries of the  schedule
 //@Tag Scheduler
 //@Produce json
-//@Param titulacion query string true "titulacion de las horas a obtener"
-//@Param curso query int true "curso de las horas a obtener"
-//@Param grupo query int true "grupo de las horas a obtener"
+//@Param degree query string true "titulacion de las horas a obtener"
+//@Param year query int true "curso de las horas a obtener"
+//@Param group query int true "grupo de las horas a obtener"
 //@Success 200 {array} domain.AvailableHours
 // @Failure 400,404 {object} ErrorHttp
 //@Router /availableHours/ [get]
@@ -169,9 +169,9 @@ func (hdl *HTTPHandler) GetEntries(c *gin.Context) {
 //@Description Get the schedule in ics format
 //@Tag Scheduler
 //@Produce json
-//@Param titulacion query string true "titulacion de las horas a obtener"
-//@Param curso query int true "curso de las horas a obtener"
-//@Param grupo query int true "grupo de las horas a obtener"
+//@Param degree query string true "titulacion de las horas a obtener"
+//@Param year query int true "curso de las horas a obtener"
+//@Param group query int true "grupo de las horas a obtener"
 //@Success 200 {object} string
 // @Failure 400,404 {object} ErrorHttp
 //@Router /getICS/ [get]

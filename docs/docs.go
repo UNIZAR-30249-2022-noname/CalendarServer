@@ -33,21 +33,21 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "titulacion de las horas a obtener",
-                        "name": "titulacion",
+                        "name": "degree",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "integer",
                         "description": "curso de las horas a obtener",
-                        "name": "curso",
+                        "name": "year",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "integer",
                         "description": "grupo de las horas a obtener",
-                        "name": "grupo",
+                        "name": "group",
                         "in": "query",
                         "required": true
                     }
@@ -87,21 +87,21 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "titulacion de las horas a obtener",
-                        "name": "titulacion",
+                        "name": "degree",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "integer",
                         "description": "curso de las horas a obtener",
-                        "name": "curso",
+                        "name": "year",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "integer",
                         "description": "grupo de las horas a obtener",
-                        "name": "grupo",
+                        "name": "group",
                         "in": "query",
                         "required": true
                     }
