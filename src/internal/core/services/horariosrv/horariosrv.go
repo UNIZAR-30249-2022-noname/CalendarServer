@@ -91,6 +91,9 @@ func (srv *HorarioServiceImp) GetEntries(terna domain.Terna) ([]domain.Entry, er
 }
 
 func (srv *HorarioServiceImp) GetICS(terna domain.Terna) (string, error) {
+	if terna.Degree == "" || terna.Year == 0 || terna.Group == "" {
+		return "", apperrors.ErrInvalidInput
+	}
 	entries, err := srv.horarioRepositorio.GetEntries(terna)
 	if err != nil {
 		return "", apperrors.ErrSql

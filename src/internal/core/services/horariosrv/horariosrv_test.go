@@ -417,6 +417,7 @@ func TestGetEntries(t *testing.T) {
 
 func TestGetICS(t *testing.T) {
 	// · Mocks · //
+	entries := simpleEntries()
 	ternaAsked := domain.Terna{
 		Degree: "Ing.Informática",
 		Year:   2,
@@ -442,15 +443,15 @@ func TestGetICS(t *testing.T) {
 			args: args{terna: ternaAsked},
 			want: want{result: ""},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().GetEntries(ternaAsked).Return("", nil)
+				m.horarioRepository.EXPECT().GetEntries(ternaAsked).Return(entries, nil)
 			},
 		},
 		{
 			name: "Should return error when not found",
 			args: args{terna: ternaAsked},
-			want: want{result: "", err: apperrors.ErrNotFound},
+			want: want{result: "", err: apperrors.ErrSql},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().GetEntries(ternaAsked).Return("", apperrors.ErrNotFound)
+				m.horarioRepository.EXPECT().GetEntries(ternaAsked).Return([]domain.Entry{}, apperrors.ErrNotFound)
 			},
 		},
 		{
@@ -474,7 +475,7 @@ func TestGetICS(t *testing.T) {
 	}
 
 	// · Runner · //
-	for _, tt := range tests {
+	for i , tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			//Prepare
 
@@ -493,7 +494,11 @@ func TestGetICS(t *testing.T) {
 				assert.Equal(t, tt.want.err.Error(), err.Error())
 			}
 
-			assert.Equal(t, tt.want.result, result)
+			if i != 0 {
+				assert.Equal(t, tt.want.result, result)
+			} else {
+				assert.NotEqual(t, "", result)
+			}
 
 		})
 
