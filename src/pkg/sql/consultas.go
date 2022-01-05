@@ -57,3 +57,8 @@ const SelectEntries = "SELECT b.*, asignatura.nombre FROM ( " +
 	"				WHERE nombre = ?)))) a " +
 	"INNER JOIN app_db.hora ON a.idhoras = hora.id ) b " +
 	"INNER JOIN app_db.asignatura ON b.idasignatura = asignatura.id"
+
+const CreateDegree = "INSERT INTO `titulacion` (`id`, `nombre`) VALUES (?, ?);"
+const CreateSubject = "INSERT INTO `asignatura` (`id`, `codigo`, `nombre`, `idT`) VALUES (?, ?, ?, ?);"
+const CreateYear = "INSERT INTO `curso` (`id`, `numero`, `idT`) VALUES (?, ?, ?);"
+const CreateGroup = "INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES (?, ?, ?);"

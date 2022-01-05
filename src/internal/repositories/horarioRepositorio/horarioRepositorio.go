@@ -261,3 +261,52 @@ func (repo *repo) GetEntries(terna domain.Terna) ([]domain.Entry, error) {
 	}
 	return res, nil
 }
+
+func (repo *repo) CreateNewDegree(id int, name string) (bool, error) {
+	//Create degree given an id and a name
+	_, err := repo.db.Query(consultas.CreateDegree, id, name)
+	if err != nil {
+		return false, apperrors.ErrSql
+	}
+	return true, nil
+}
+
+func (repo *repo) CreateNewSubject(id int, name string, degreeCode int) (bool, error) {
+	//Create a subject given an id and a name and the degreeCode
+	_, err := repo.db.Query(consultas.CreateSubject, id, id, name, degreeCode)
+	if err != nil {
+		return false, apperrors.ErrSql
+	}
+	return true, nil
+}
+
+func (repo *repo) CreateNewYear(year int, degreeCode int) (bool, error) {
+	//Create a subject given an id and a name and the degreeCode
+	id := degreeCode * 10 + year
+	_, err := repo.db.Query(consultas.CreateYear, id, year, degreeCode)
+	if err != nil {
+		return false, apperrors.ErrSql
+	}
+	return true, nil
+}
+
+func (repo *repo) CreateNewGroup(group int, yearCode int) (bool, error) {
+	//Create a subject given an id and a name and the degreeCode
+	id := yearCode * 10 + group
+	_, err := repo.db.Query(consultas.CreateGroup, id, group, yearCode)
+	if err != nil {
+		return false, apperrors.ErrSql
+	}
+	return true, nil
+}
+
+func (repo *repo) CreateNewHour(group int, yearCode int) (bool, error) {
+	//Cuidado que las horas tipo 2 son clases de problemas y las tipo 3 prácticas
+	//Create a subject given an id and a name and the degreeCode
+	id := yearCode * 10 + group
+	_, err := repo.db.Query(consultas.CreateGroup, id, group, yearCode)
+	if err != nil {
+		return false, apperrors.ErrSql
+	}
+	return true, nil
+}

@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS app_db.titulacion (
     id int PRIMARY KEY AUTO_INCREMENT,
-    nombre varchar(50)
+    nombre varchar(100)
 );
 
 CREATE TABLE IF NOT EXISTS app_db.asignatura (
