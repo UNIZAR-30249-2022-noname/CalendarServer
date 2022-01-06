@@ -300,11 +300,10 @@ func (repo *repo) CreateNewGroup(group int, yearCode int) (bool, error) {
 	return true, nil
 }
 
-func (repo *repo) CreateNewHour(group int, yearCode int) (bool, error) {
+func (repo *repo) CreateNewHour(available, total, subjectCode, groupCode, kind int, group, week string) (bool, error) {
 	//Cuidado que las horas tipo 2 son clases de problemas y las tipo 3 prácticas
 	//Create a subject given an id and a name and the degreeCode
-	id := yearCode * 10 + group
-	_, err := repo.db.Query(consultas.CreateGroup, id, group, yearCode)
+	_, err := repo.db.Query(consultas.CreateHour, available, total, kind, group, week, subjectCode, groupCode)
 	if err != nil {
 		return false, apperrors.ErrSql
 	}
