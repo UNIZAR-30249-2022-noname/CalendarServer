@@ -303,6 +303,20 @@ func (repo *repo) CreateNewGroup(group int, yearCode int) (bool, error) {
 func (repo *repo) CreateNewHour(available, total, subjectCode, groupCode, kind int, group, week string) (bool, error) {
 	//Cuidado que las horas tipo 2 son clases de problemas y las tipo 3 prácticas
 	//Create a subject given an id and a name and the degreeCode
+	if kind == domain.PRACTICES {
+		if week == "" || &week == nil {
+			return false, apperrors.ErrInvalidKind
+		}
+		if group == "" || &group == nil {
+			return false, apperrors.ErrInvalidKind
+		}
+	} else if kind == domain.EXERCISES {
+		if group == "" || &group == nil {
+			return false, apperrors.ErrInvalidKind
+		}
+	} else if kind < 1 || kind > 3 {
+		return false, apperrors.ErrInvalidKind
+	}
 	_, err := repo.db.Query(consultas.CreateHour, available, total, kind, group, week, subjectCode, groupCode)
 	if err != nil {
 		return false, apperrors.ErrSql

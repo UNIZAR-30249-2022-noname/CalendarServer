@@ -659,8 +659,8 @@ func TestCreateSubject(t *testing.T) {
 	assert.Equal(err, apperrors.ErrSql, "There should be an error")
 	assert.Equal(res, false, "Should be false")
 	//Delete
-	repos.RawExec(consultas.TruncDegree);	
 	repos.RawExec(consultas.TruncAsignatura);
+	repos.RawExec(consultas.TruncDegree);	
 }
 
 //Creates a year (OK) and then creates the same year (FAIL)
@@ -708,4 +708,49 @@ func TestCreateGroup(t *testing.T) {
 	repos.RawExec(consultas.TruncDegree);	
 	repos.RawExec(consultas.TruncYear);
 	repos.RawExec(consultas.TruncGroup);
+}
+
+//Creates hour (See the comments)
+func TestCreateHour(t *testing.T) {
+	//Prepare
+	assert := assert.New(t)
+	repos := horarioRepositorio.New()
+	repos.CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto")
+	repos.CreateNewYear(1,558) //Id will be 5581
+	repos.CreateNewGroup(1,5581)
+	repos.CreateNewSubject(25802,"Informática",558)
+	//Test
+	//OK Test
+	res, err := repos.CreateNewHour(3500,3500,25802,55811,domain.THEORICAL,"","")
+	assert.Equal(err, nil, "There shouldn't be an error")
+	assert.Equal(res, true, "Should be true")
+	//Hour kind=PRACTICES without week (FAIL)
+	res, err = repos.CreateNewHour(3500,3500,25802,55811,domain.PRACTICES,"","")
+	assert.Equal(err, apperrors.ErrInvalidKind, "There should be an invalid kind error")
+	assert.Equal(res, false, "Should be false")
+	//Hour kind=PRACTICES without group (FAIL)
+	res, err = repos.CreateNewHour(3500,3500,25802,55811,domain.PRACTICES,"","a")
+	assert.Equal(err, apperrors.ErrInvalidKind, "There should be an invalid kind error")
+	assert.Equal(res, false, "Should be false")
+	//Hour kind=EXERCISES without group (FAIL)
+	res, err = repos.CreateNewHour(3500,3500,25802,55811,domain.EXERCISES,"","")
+	assert.Equal(err, apperrors.ErrInvalidKind, "There should be an invalid kind error")
+	assert.Equal(res, false, "Should be false")
+	//Hour kind that not exists (FAIL)
+	res, err = repos.CreateNewHour(3500,3500,25802,55811,4,"","")
+	assert.Equal(err, apperrors.ErrInvalidKind, "There should be an invalid kind error")
+	assert.Equal(res, false, "Should be false")
+	//Hour invalid subjectCode (FAIL)
+	res, err = repos.CreateNewHour(3500,3500,25803,55811,domain.THEORICAL,"","")
+	assert.Equal(err, apperrors.ErrSql, "There should be an sql error")
+	assert.Equal(res, false, "Should be false")
+	//Hour invalid groupCode (FAIL)
+	res, err = repos.CreateNewHour(3500,3500,25802,55812,domain.THEORICAL,"","")
+	assert.Equal(err, apperrors.ErrSql, "There should be an sql error")
+	assert.Equal(res, false, "Should be false")
+	//Delete
+	repos.RawExec(consultas.TruncHora)
+	repos.RawExec(consultas.TruncGroup)
+	repos.RawExec(consultas.TruncYear)
+	repos.RawExec(consultas.TruncDegree)
 }
