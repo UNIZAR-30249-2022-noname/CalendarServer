@@ -14,9 +14,9 @@ INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('2', '2', '1');
 INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('3', '2', '2');
 
 INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('1', '2900', '3000', '1', '', '', '1', '1');
-INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('3', '1800', '2000', '2', 'mananas', 'a', '1', '1');
-INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('4', '800', '1000', '3', 'niapar', '', '1', '1');
-INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('2', '2500', '2500', '2', '', '', '2', '1');
+INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('3', '1800', '2000', '3', 'mananas', 'a', '1', '1');
+INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('4', '800', '1000', '2', 'niapar', '', '1', '1');
+INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('2', '2500', '2500', '3', '', '', '2', '1');
 INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES ('5', '2500', '2500', '1', '', '', '3', '2');
 
 INSERT INTO `aula` (`id`, `numero`, `nombre`) VALUES ('1', '1', '1');

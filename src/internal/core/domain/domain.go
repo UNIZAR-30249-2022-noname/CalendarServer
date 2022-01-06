@@ -4,8 +4,8 @@ import "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 
 const (
 	THEORICAL = 1
-	PRACTICES = 2
-	EXERCISES = 3
+	EXERCISES = 2
+	PRACTICES = 3
 )
 
 const (

@@ -31,7 +31,7 @@ func TestGetAvaiableHours(t *testing.T) {
 			MaxMin:         0,
 		},
 		{
-			Subject:        domain.Subject{Kind: 2, Name: "Sistemas Operativos"},
+			Subject:        domain.Subject{Kind: domain.PRACTICES, Name: "Sistemas Operativos"},
 			RemainingHours: 25,
 			MaxHours:       25,
 			RemainingMin:   0,
@@ -156,7 +156,7 @@ func TestCreateEntryPract(t *testing.T) {
 
 		Init:    domain.NewHour(2, 50),
 		End:     domain.NewHour(4, 50),
-		Subject: domain.Subject{Kind: 2, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: domain.PRACTICES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "2"},
 		Week:    "a",
 		Group:   "mananas",
@@ -187,7 +187,7 @@ func TestCreateEntryPract(t *testing.T) {
 
 		Init:    domain.NewHour(5, 30),
 		End:     domain.NewHour(6, 20),
-		Subject: domain.Subject{Kind: 2, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: domain.PRACTICES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "3"},
 		Week:    "a",
 		Group:   "",
@@ -203,7 +203,7 @@ func TestCreateEntryPract(t *testing.T) {
 
 		Init:    domain.NewHour(5, 30),
 		End:     domain.NewHour(6, 20),
-		Subject: domain.Subject{Kind: 2, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: domain.PRACTICES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "3"},
 		Week:    "",
 		Group:   "mananas",
@@ -232,7 +232,7 @@ func TestCreateEntryProb(t *testing.T) {
 
 		Init:    domain.NewHour(5, 30),
 		End:     domain.NewHour(6, 20),
-		Subject: domain.Subject{Kind: 3, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: domain.EXERCISES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "3"},
 		Week:    "",
 		Group:   "niapar",
@@ -265,7 +265,7 @@ func TestCreateEntryProb(t *testing.T) {
 
 		Init:    domain.NewHour(5, 30),
 		End:     domain.NewHour(6, 20),
-		Subject: domain.Subject{Kind: 3, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: domain.EXERCISES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "3"},
 		Week:    "",
 		Group:   "",
@@ -398,7 +398,7 @@ func TestDeleteAllEntries(t *testing.T) {
 	entryAsked2 := domain.Entry{
 		Init:    domain.NewHour(5, 30),
 		End:     domain.NewHour(6, 20),
-		Subject: domain.Subject{Kind: 2, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: domain.PRACTICES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "1"},
 		Week:    "a",
 		Group:   "mananas",
@@ -578,7 +578,7 @@ func TestGetEntries(t *testing.T) {
 		{
 			Init:    domain.NewHour(2, 50),
 			End:     domain.NewHour(4, 40),
-			Subject: domain.Subject{Kind: 2, Name: "Sistemas Operativos"},
+			Subject: domain.Subject{Kind: domain.PRACTICES, Name: "Sistemas Operativos"},
 			Room:    domain.Room{Name: "2"},
 			Week:    "",
 			Group:   "",
