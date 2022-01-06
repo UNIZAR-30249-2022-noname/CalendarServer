@@ -623,3 +623,89 @@ func TestGetEntries(t *testing.T) {
 	repos.RawExec(consultas.TruncDegree);	repos.RawExec(consultas.TruncAula)
 	repos.CloseConn()
 }
+
+//Creates a degree (OK) and then creates the same degree (FAIL)
+func TestCreateDegree(t *testing.T) {
+	//Prepare
+	assert := assert.New(t)
+	repos := horarioRepositorio.New()
+	//Test
+	res, err := repos.CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto")
+	assert.Equal(err, nil, "There shouldn't be an error")
+	assert.Equal(res, true, "Should be true")
+	res, err = repos.CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto")
+	assert.Equal(err, apperrors.ErrSql, "There should be an error")
+	assert.Equal(res, false, "Should be false")
+	//Delete
+	repos.RawExec(consultas.TruncDegree);	
+}
+
+//Creates a subject (OK) and then creates the same subject (FAIL)
+//Creates a subject but the degree isn't in the database (FAIL)
+func TestCreateSubject(t *testing.T) {
+	//Prepare
+	assert := assert.New(t)
+	repos := horarioRepositorio.New()
+	repos.CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto")
+	
+	//Test
+	res, err := repos.CreateNewSubject(25802,"Informática",558)
+	assert.Equal(err, nil, "There shouldn't be an error")
+	assert.Equal(res, true, "Should be true")
+	res, err = repos.CreateNewSubject(25802,"Informática",558)
+	assert.Equal(err, apperrors.ErrSql, "There should be an error")
+	assert.Equal(res, false, "Should be false")
+	res, err = repos.CreateNewSubject(25803,"NoExisteSuTitulaciónAsíQueFalla",560)
+	assert.Equal(err, apperrors.ErrSql, "There should be an error")
+	assert.Equal(res, false, "Should be false")
+	//Delete
+	repos.RawExec(consultas.TruncDegree);	
+	repos.RawExec(consultas.TruncAsignatura);
+}
+
+//Creates a year (OK) and then creates the same year (FAIL)
+//Creates a year but the degree isn't in the database (FAIL)
+func TestCreateYear(t *testing.T) {
+	//Prepare
+	assert := assert.New(t)
+	repos := horarioRepositorio.New()
+	repos.CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto")
+	
+	//Test
+	res, err := repos.CreateNewYear(1,558)
+	assert.Equal(err, nil, "There shouldn't be an error")
+	assert.Equal(res, true, "Should be true")
+	res, err = repos.CreateNewYear(1,558)
+	assert.Equal(err, apperrors.ErrSql, "There should be an error")
+	assert.Equal(res, false, "Should be false")
+	res, err = repos.CreateNewYear(2,560)
+	assert.Equal(err, apperrors.ErrSql, "There should be an error")
+	assert.Equal(res, false, "Should be false")
+	//Delete
+	repos.RawExec(consultas.TruncDegree);	
+	repos.RawExec(consultas.TruncYear);
+}
+
+//Creates a group (OK) and then creates the same group (FAIL)
+//Creates a group but the year isn't in the database (FAIL)
+func TestCreateGroup(t *testing.T) {
+	//Prepare
+	assert := assert.New(t)
+	repos := horarioRepositorio.New()
+	repos.CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto")
+	repos.CreateNewYear(1,558) //Id will be 5581
+	//Test
+	res, err := repos.CreateNewGroup(1,5581)
+	assert.Equal(err, nil, "There shouldn't be an error")
+	assert.Equal(res, true, "Should be true")
+	res, err = repos.CreateNewGroup(1,5581)
+	assert.Equal(err, apperrors.ErrSql, "There should be an error")
+	assert.Equal(res, false, "Should be false")
+	res, err = repos.CreateNewGroup(1,5582)
+	assert.Equal(err, apperrors.ErrSql, "There should be an error")
+	assert.Equal(res, false, "Should be false")
+	//Delete
+	repos.RawExec(consultas.TruncDegree);	
+	repos.RawExec(consultas.TruncYear);
+	repos.RawExec(consultas.TruncGroup);
+}
