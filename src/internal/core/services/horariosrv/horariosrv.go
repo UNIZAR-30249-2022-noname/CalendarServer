@@ -131,7 +131,7 @@ func (srv *HorarioServiceImp) UpdateByCSV(csv string) (bool, error){
 	lines := strings.Split(csv, "\n")
 	prevDegree := 0
 	for i, actLine := range lines {
-		if(i<4){
+		if(i<3){
 			continue
 		}
 		cells := strings.Split(actLine, ";")
@@ -145,9 +145,12 @@ func (srv *HorarioServiceImp) UpdateByCSV(csv string) (bool, error){
 		nGroupsT2 /= 2
 		nGroupsT3, _ := strconv.Atoi(cells[72])
 		nGroupsT3 /= 2
-		hoursT1, _ := strconv.Atoi(cells[30])
-		hoursT2, _ := strconv.Atoi(cells[32])
-		hoursT3, _ := strconv.Atoi(cells[34])
+		aux :=  strings.Split(cells[30], ",")
+		hoursT1, _ := strconv.Atoi(aux[0])
+		aux = strings.Split(cells[32], ",")
+		hoursT2, _ := strconv.Atoi(aux[0])
+		aux = strings.Split(cells[34], ",")
+		hoursT3, _ := strconv.Atoi(aux[0])
 		if prevDegree != degreeId {
 			srv.horarioRepositorio.CreateNewDegree(degreeId, degreeName)
 			prevDegree = degreeId

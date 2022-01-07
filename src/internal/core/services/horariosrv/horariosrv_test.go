@@ -505,3 +505,67 @@ func TestGetICS(t *testing.T) {
 	}
 
 }
+
+/*
+func TestUpdateByCSV(t *testing.T) {
+	// · Mocks · //
+
+	// · Test · //
+	type args struct {
+		terna domain.Terna
+	}
+	type want struct {
+		result bool
+		err    error
+	}
+	tests := []struct {
+		name  string
+		args  args
+		want  want
+		mocks func(m mocks)
+	}{
+		{
+			name: "Should Update correctly",
+			args: args{},
+			want: want{result: true},
+			mocks: func(m mocks) {
+				//m.horarioRepository.EXPECT().CreateNewDegree().Return(true, nil)
+			},
+		},
+	}
+
+	// · Runner · //
+	for i , tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			//Prepare
+
+			m := mocks{
+				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+			}
+
+			tt.mocks(m)
+			service := horariosrv.New(m.horarioRepository)
+			content, err := ioutil.ReadFile("./csv/Listado207 2021-2022_sin TFE_sin_practicas_sin PC.csv")
+			contentString := string(content)
+			//Execute
+			result, err := service.UpdateByCSV(contentString)
+
+			//Verify
+			if tt.want.err != nil && err != nil {
+				assert.Equal(t, tt.want.err.Error(), err.Error())
+			}
+
+			if i != 0 {
+				assert.Equal(t, tt.want.result, result)
+			} else {
+				assert.NotEqual(t, "", result)
+			}
+
+		})
+
+	}
+
+}
+
+*/
+
