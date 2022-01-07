@@ -11,4 +11,9 @@ type HorarioRepositorio interface {
 	ListAllDegrees() ([]domain.DegreeDescription, error)
 	DeleteAllEntries(terna domain.Terna) error
 	GetEntries(domain.Terna) ([]domain.Entry, error)
+	CreateNewDegree(id int, name string) (bool, error)
+	CreateNewSubject(id int, name string, degreeCode int) (bool, error)
+	CreateNewYear(year int, degreeCode int) (bool, error)
+	CreateNewGroup(group int, yearCode int) (bool, error)
+	CreateNewHour(available, total, subjectCode, groupCode, kind int, group, week string) (bool, error)
 }

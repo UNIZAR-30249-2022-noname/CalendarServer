@@ -2,6 +2,8 @@ package horariosrv
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
@@ -120,4 +122,61 @@ func (srv *HorarioServiceImp) GetICS(terna domain.Terna) (string, error) {
 		i++
 	}
 	return cal.Serialize(), nil
+}
+
+//3->Code subject, 4->Name subject, 11->Code Degree, 12->Name degree
+//17->Year (1,2...), 23->nº groups, 30->Hours t1, 32->Hours t2, 34->Hours t3
+//71->nº subgroups t1, 72->nº subgroups t1
+func (srv *HorarioServiceImp) UpdateByCSV(csv string) (bool, error){
+	lines := strings.Split(csv, "\n")
+	prevDegree := 0
+	for i, actLine := range lines {
+		if(i<4){
+			continue
+		}
+		cells := strings.Split(actLine, ";")
+		subjectId, _ := strconv.Atoi(cells[3])
+		subjectName := cells[4]
+		degreeId, _ := strconv.Atoi(cells[11])
+		degreeName := cells[12]
+		year, _ := strconv.Atoi(cells[17])
+		nGroups, _ := strconv.Atoi(cells[23])
+		nGroupsT2, _ := strconv.Atoi(cells[71])
+		nGroupsT2 /= 2
+		nGroupsT3, _ := strconv.Atoi(cells[72])
+		nGroupsT3 /= 2
+		hoursT1, _ := strconv.Atoi(cells[30])
+		hoursT2, _ := strconv.Atoi(cells[32])
+		hoursT3, _ := strconv.Atoi(cells[34])
+		if prevDegree != degreeId {
+			srv.horarioRepositorio.CreateNewDegree(degreeId, degreeName)
+			prevDegree = degreeId
+		}
+		srv.horarioRepositorio.CreateNewYear(year, degreeId)
+		actYearId := degreeId * 10 + year
+		ok, err := srv.horarioRepositorio.CreateNewSubject(subjectId, subjectName, degreeId)
+		if !ok {
+			return false, err
+		}
+		for j:=1;j<=nGroups;j++{
+			srv.horarioRepositorio.CreateNewGroup(j, actYearId)
+			ok, err = srv.horarioRepositorio.CreateNewHour(hoursT1*100,hoursT1*100,subjectId,actYearId*10+j,domain.THEORICAL,"","")
+			if !ok {
+				return false, err
+			}
+			for k:=1;k<=nGroupsT2;k++{
+				ok, err = srv.horarioRepositorio.CreateNewHour(hoursT2*100,hoursT2*100,subjectId,actYearId*10+j,domain.EXERCISES,strconv.Itoa(k),"")
+				if !ok {
+					return false, err
+				}
+			}
+			for k:=1;k<=nGroupsT3;k++{
+				ok, err = srv.horarioRepositorio.CreateNewHour(hoursT3*100,hoursT3*100,subjectId,actYearId*10+j,domain.PRACTICES,strconv.Itoa(k),"a")
+				if !ok {
+					return false, err
+				}
+			}
+		}
+	}
+	return true, nil
 }
