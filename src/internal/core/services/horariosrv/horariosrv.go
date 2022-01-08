@@ -131,7 +131,7 @@ func (srv *HorarioServiceImp) UpdateByCSV(csv string) (bool, error){
 	lines := strings.Split(csv, "\n")
 	prevDegree := 0
 	for i, actLine := range lines {
-		if(i<3){
+		if(i<3 || lines[i] == ""){
 			continue
 		}
 		cells := strings.Split(actLine, ";")

@@ -1,6 +1,7 @@
 package horariosrv_test
 
 import (
+	"io/ioutil"
 	"testing"
 	"time"
 
@@ -506,7 +507,6 @@ func TestGetICS(t *testing.T) {
 
 }
 
-/*
 func TestUpdateByCSV(t *testing.T) {
 	// · Mocks · //
 
@@ -529,7 +529,73 @@ func TestUpdateByCSV(t *testing.T) {
 			args: args{},
 			want: want{result: true},
 			mocks: func(m mocks) {
-				//m.horarioRepository.EXPECT().CreateNewDegree().Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewYear(1,558).Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewSubject(25802,"Informática",558).Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewGroup(1,5581).Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewGroup(2,5581).Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(3500,3500,25802,55811,domain.THEORICAL,"","").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(3500,3500,25802,55812,domain.THEORICAL,"","").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(1000,1000,25802,55811,domain.EXERCISES,"1","").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(1000,1000,25802,55811,domain.EXERCISES,"2","").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(1000,1000,25802,55812,domain.EXERCISES,"1","").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(1000,1000,25802,55812,domain.EXERCISES,"2","").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(1500,1500,25802,55811,domain.PRACTICES,"1","a").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(1500,1500,25802,55811,domain.PRACTICES,"2","a").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(1500,1500,25802,55811,domain.PRACTICES,"3","a").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(1500,1500,25802,55812,domain.PRACTICES,"1","a").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(1500,1500,25802,55812,domain.PRACTICES,"2","a").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(1500,1500,25802,55812,domain.PRACTICES,"3","a").Return(true, nil)
+			},
+		},
+		{
+			name: "Subject creation fails",
+			args: args{},
+			want: want{result: false, err: apperrors.ErrSql},
+			mocks: func(m mocks) {
+				m.horarioRepository.EXPECT().CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewYear(1,558).Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewSubject(25802,"Informática",558).Return(false, apperrors.ErrSql)
+			},
+		},
+		{
+			name: "Hour T1 creation fails",
+			args: args{},
+			want: want{result: false, err: apperrors.ErrSql},
+			mocks: func(m mocks) {
+				m.horarioRepository.EXPECT().CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewYear(1,558).Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewSubject(25802,"Informática",558).Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewGroup(1,5581).Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(3500,3500,25802,55811,domain.THEORICAL,"","").Return(false, apperrors.ErrSql)
+			},
+		},
+		{
+			name: "Hour T2 creation fails",
+			args: args{},
+			want: want{result: false, err: apperrors.ErrSql},
+			mocks: func(m mocks) {
+				m.horarioRepository.EXPECT().CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewYear(1,558).Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewSubject(25802,"Informática",558).Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewGroup(1,5581).Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(3500,3500,25802,55811,domain.THEORICAL,"","").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(1000,1000,25802,55811,domain.EXERCISES,"1","").Return(false, apperrors.ErrSql)
+			},
+		},
+		{
+			name: "Hour T3 creation fails",
+			args: args{},
+			want: want{result: false, err: apperrors.ErrSql},
+			mocks: func(m mocks) {
+				m.horarioRepository.EXPECT().CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewYear(1,558).Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewSubject(25802,"Informática",558).Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewGroup(1,5581).Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(3500,3500,25802,55811,domain.THEORICAL,"","").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(1000,1000,25802,55811,domain.EXERCISES,"1","").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(1000,1000,25802,55811,domain.EXERCISES,"2","").Return(true, nil)
+				m.horarioRepository.EXPECT().CreateNewHour(1500,1500,25802,55811,domain.PRACTICES,"1","a").Return(false, apperrors.ErrSql)
 			},
 		},
 	}
@@ -545,7 +611,7 @@ func TestUpdateByCSV(t *testing.T) {
 
 			tt.mocks(m)
 			service := horariosrv.New(m.horarioRepository)
-			content, err := ioutil.ReadFile("./csv/Listado207 2021-2022_sin TFE_sin_practicas_sin PC.csv")
+			content, err := ioutil.ReadFile("./csv/Listado207_1Asig.csv")
 			contentString := string(content)
 			//Execute
 			result, err := service.UpdateByCSV(contentString)
@@ -566,6 +632,3 @@ func TestUpdateByCSV(t *testing.T) {
 	}
 
 }
-
-*/
-
