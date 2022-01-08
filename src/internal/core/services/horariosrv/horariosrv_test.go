@@ -611,7 +611,7 @@ func TestUpdateByCSV(t *testing.T) {
 
 			tt.mocks(m)
 			service := horariosrv.New(m.horarioRepository)
-			content, err := ioutil.ReadFile("./csv/Listado207_1Asig.csv")
+			content, err := ioutil.ReadFile("../../../../pkg/csv/Listado207_1Asig.csv")
 			contentString := string(content)
 			//Execute
 			result, err := service.UpdateByCSV(contentString)
