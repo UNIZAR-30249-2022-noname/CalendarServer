@@ -40,6 +40,7 @@ func SetupRouter() *gin.Engine {
 	r.GET("/listDegrees", horarioHandler.ListDegrees)
 	r.GET("/getEntries", horarioHandler.GetEntries)
 	r.GET("/getICS", horarioHandler.GetICS)
+	r.POST("/updateByCSV", horarioHandler.UpdateByCSV)
 
 	return r
 }

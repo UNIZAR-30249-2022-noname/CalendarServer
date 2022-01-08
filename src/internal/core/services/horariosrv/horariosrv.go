@@ -129,16 +129,20 @@ func (srv *HorarioServiceImp) GetICS(terna domain.Terna) (string, error) {
 //71->nº subgroups t1, 72->nº subgroups t1
 func (srv *HorarioServiceImp) UpdateByCSV(csv string) (bool, error){
 	lines := strings.Split(csv, "\n")
+	fmt.Println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 	prevDegree := 0
 	for i, actLine := range lines {
+		fmt.Println(lines[i])
 		if(i<3 || lines[i] == ""){
 			continue
 		}
 		cells := strings.Split(actLine, ";")
 		subjectId, _ := strconv.Atoi(cells[3])
 		subjectName := cells[4]
+		fmt.Println("Asignatura " + strconv.Itoa(subjectId) + ": " + subjectName)
 		degreeId, _ := strconv.Atoi(cells[11])
 		degreeName := cells[12]
+		fmt.Println("Grado " + strconv.Itoa(degreeId) + ": " + degreeName)
 		year, _ := strconv.Atoi(cells[17])
 		nGroups, _ := strconv.Atoi(cells[23])
 		nGroupsT2, _ := strconv.Atoi(cells[71])

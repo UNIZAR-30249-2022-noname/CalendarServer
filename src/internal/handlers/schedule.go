@@ -192,3 +192,26 @@ func (hdl *HTTPHandler) GetICS(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
 	}
 }
+
+//UpdateByCSV is the handler for updating the database via CSV
+//@Sumary Post update by CSV
+//@Description The request will update the database creating degrees, subjects, years, groups and hours
+//@Tag Scheduler
+//@Param csv query string true "contenido del csv a introducir"
+//@Produce json
+//@Success 200 {object} bool
+//@Failure 400,404 {object} ErrorHttp
+//@Router /updateByCSV/ [post]
+func (hdl *HTTPHandler) UpdateByCSV(c *gin.Context) {
+
+	csv := c.Query("csv")
+
+	//Execute service
+	success, err := hdl.horarioService.UpdateByCSV(csv)
+	if err == nil {
+		c.JSON(http.StatusOK, success)
+	} else {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
+	}
+
+}

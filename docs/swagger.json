@@ -147,6 +147,43 @@
                 }
             }
         },
+        "/updateByCSV/": {
+            "post": {
+                "description": "The request will update the database creating degrees, subjects, years, groups and hours",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "contenido del csv a introducir",
+                        "name": "csv",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            }
+        },
         "/updateScheduler/": {
             "post": {
                 "description": "The request will erase the current scheduler an create one new with\nthe requested entries for the scheduler. The entry will be definied by the initial hour\nand the ending hour, adintional info must be indicated depending of the kind of hours\nthe kinds of subject hours are:\n- Theorical = 1\n- Practices = 2\n- Exercises = 3",

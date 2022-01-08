@@ -170,6 +170,31 @@ paths:
       responses:
         "200":
           description: 'Returns "pong" '
+  /updateByCSV/:
+    post:
+      description: The request will update the database creating degrees, subjects,
+        years, groups and hours
+      parameters:
+      - description: contenido del csv a introducir
+        in: query
+        name: csv
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
   /updateScheduler/:
     post:
       description: |-
