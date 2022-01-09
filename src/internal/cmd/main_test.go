@@ -492,7 +492,7 @@ func TestGetICS(t *testing.T) {
 		mocks func(m mocks)
 	}{
 		{
-			name: "Should return entries succesfully",
+			name: "Should return ICS succesfully",
 			args: args{terna: simpleTernaDTO()},
 			want: want{result: simpleICSFormat(), code: http.StatusOK},
 			mocks: func(m mocks) {
@@ -533,6 +533,66 @@ func TestGetICS(t *testing.T) {
 	}
 }
 
+//Csv is "" cause too much characters cause overflow in this test
+func TestUpdateByCSV(t *testing.T) {
+	// · Mocks · //
+	//content, _ := ioutil.ReadFile("../../pkg/csv/Listado207_1Asig.csv") //no cabe
+	// · Test · //
+	path := "/updateByCSV"
+	type args struct {
+		csv string
+	}
+	type want struct {
+		result interface{}
+		code   int
+	}
+	tests := []struct {
+		args  args
+		name  string
+		want  want
+		mocks func(m mocks)
+	}{
+		{
+			name: "Should return ICS succesfully",
+			args: args{csv: ""},
+			want: want{result: true, code: http.StatusOK},
+			mocks: func(m mocks) {
+				m.horarioService.EXPECT().UpdateByCSV("").Return(true, nil)
+			},
+		},
+	}
+
+	// · Runner · //
+	for _, tt := range tests {
+
+		t.Run(tt.name, func(t *testing.T) {
+			//Prepare
+			m := mocks{
+				horarioService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
+			}
+			tt.mocks(m)
+			setUpRouter := func() *gin.Engine {
+				horarioHandler := handlers.NewHTTPHandler(m.horarioService)
+				r := gin.Default()
+				r.POST(path, horarioHandler.UpdateByCSV)
+				return r
+
+			}
+			r := setUpRouter()
+			w := httptest.NewRecorder()
+			uri := path + "?csv=" + tt.args.csv 
+			req, _ := http.NewRequest("POST", uri, nil)
+			r.ServeHTTP(w, req)
+			assert.Equal(t, tt.want.code, w.Code)
+
+			wantedJson, _ := json.Marshal(tt.want.result)
+			assert.Equal(t, bytes.NewBuffer(wantedJson), w.Body)
+
+		})
+
+	}
+}
+
 func simpleTernaDTO() handlers.TernaDto {
 	return handlers.TernaDto(simpleTerna())
 }
@@ -549,6 +609,7 @@ func simpleTerna() domain.Terna {
 func simpleICSFormat() string {
 	return "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//arran4//Golang ICS Library\r\nBEGIN:VEVENT\r\nUID:0@unizar.es\r\nSUMMARY:Proyecto Software\r\nDTSTART:20220208T110000Z\r\nDTEND:20220208T120000Z\r\nRRULE:FREQ=DAILY;INTERVAL=7\r\nEND:VEVENT\r\nBEGIN:VEVENT\r\nUID:1@unizar.es\r\nSUMMARY:Sistemas Operativos\r\nDTSTART:20220209T090000Z\r\nDTEND:20220209T110000Z\r\nRRULE:FREQ=DAILY;INTERVAL=7\r\nEND:VEVENT\r\nBEGIN:VEVENT\r\nUID:2@unizar.es\r\nSUMMARY:Proyecto Software\r\nDTSTART:20220210T140000Z\r\nDTEND:20220210T160000Z\r\nRRULE:FREQ=DAILY;INTERVAL=7\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n"
 }
+
 func simpleListEntriesDTO() []handlers.EntryDTO {
 
 	return []handlers.EntryDTO{simpleExercisesEntry(), simpleTheoricalEntry()}

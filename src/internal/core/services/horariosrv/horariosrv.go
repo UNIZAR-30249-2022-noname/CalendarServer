@@ -129,10 +129,9 @@ func (srv *HorarioServiceImp) GetICS(terna domain.Terna) (string, error) {
 //71->nº subgroups t1, 72->nº subgroups t1
 func (srv *HorarioServiceImp) UpdateByCSV(csv string) (bool, error){
 	lines := strings.Split(csv, "\n")
-	fmt.Println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 	prevDegree := 0
+	hoursIn := 0
 	for i, actLine := range lines {
-		fmt.Println(lines[i])
 		if(i<3 || lines[i] == ""){
 			continue
 		}
@@ -165,25 +164,29 @@ func (srv *HorarioServiceImp) UpdateByCSV(csv string) (bool, error){
 		if !ok {
 			return false, err
 		}
+		hoursIn++
 		for j:=1;j<=nGroups;j++{
 			srv.horarioRepositorio.CreateNewGroup(j, actYearId)
 			ok, err = srv.horarioRepositorio.CreateNewHour(hoursT1*100,hoursT1*100,subjectId,actYearId*10+j,domain.THEORICAL,"","")
 			if !ok {
 				return false, err
 			}
+			hoursIn++
 			for k:=1;k<=nGroupsT2;k++{
 				ok, err = srv.horarioRepositorio.CreateNewHour(hoursT2*100,hoursT2*100,subjectId,actYearId*10+j,domain.EXERCISES,strconv.Itoa(k),"")
 				if !ok {
 					return false, err
 				}
+				hoursIn++
 			}
 			for k:=1;k<=nGroupsT3;k++{
 				ok, err = srv.horarioRepositorio.CreateNewHour(hoursT3*100,hoursT3*100,subjectId,actYearId*10+j,domain.PRACTICES,strconv.Itoa(k),"a")
 				if !ok {
 					return false, err
 				}
+				hoursIn++
 			}
 		}
 	}
-	return true, nil
+	return hoursIn > 0, nil
 }
