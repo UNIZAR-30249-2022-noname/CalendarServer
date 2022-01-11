@@ -9,7 +9,7 @@ const SelectAvaiableHours = "SELECT a.disponibles, a.totales, a.tipo, a.nombre F
 	"(SELECT * FROM hora WHERE idgrupo " +
 	"IN (SELECT grupodocente.id FROM `grupodocente` " +
 	"INNER JOIN curso ON grupodocente.idcurso=curso.id WHERE curso.numero=? AND grupodocente.numero=?)) b " +
-	"ON a.id=b.id"
+	"ON a.id=b.id ORDER BY a.nombre"
 
 const SelectIdHoraGroup = "SELECT id, idgrupo " +
 	"FROM app_db.hora " +
