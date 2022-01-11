@@ -414,3 +414,94 @@ func TestGetEntries(t *testing.T) {
 	}
 
 }
+
+func TestGetICS(t *testing.T) {
+	// · Mocks · //
+	entries := simpleEntries()
+	ternaAsked := domain.Terna{
+		Degree: "Ing.Informática",
+		Year:   2,
+		Group:  "1",
+	}
+
+	// · Test · //
+	type args struct {
+		terna domain.Terna
+	}
+	type want struct {
+		result string
+		err    error
+	}
+	tests := []struct {
+		name  string
+		args  args
+		want  want
+		mocks func(m mocks)
+	}{
+		{
+			name: "Should return ICS correctly",
+			args: args{terna: ternaAsked},
+			want: want{result: ""},
+			mocks: func(m mocks) {
+				m.horarioRepository.EXPECT().GetEntries(ternaAsked).Return(entries, nil)
+			},
+		},
+		{
+			name: "Should return error when not found",
+			args: args{terna: ternaAsked},
+			want: want{result: "", err: apperrors.ErrSql},
+			mocks: func(m mocks) {
+				m.horarioRepository.EXPECT().GetEntries(ternaAsked).Return([]domain.Entry{}, apperrors.ErrNotFound)
+			},
+		},
+		{
+			name:  "Should return error when [titulación] is empty",
+			args:  args{terna: domain.Terna{Year: 1, Group: "1"}},
+			want:  want{result: "", err: apperrors.ErrInvalidInput},
+			mocks: func(m mocks) {},
+		},
+		{
+			name:  "Should return error when [Group] is empty",
+			args:  args{terna: domain.Terna{Degree: "A", Year: 1}},
+			want:  want{result: "", err: apperrors.ErrInvalidInput},
+			mocks: func(m mocks) {},
+		},
+		{
+			name:  "Should return error when [Year] is empty",
+			args:  args{terna: domain.Terna{Degree: "A", Group: "1"}},
+			want:  want{result: "", err: apperrors.ErrInvalidInput},
+			mocks: func(m mocks) {},
+		},
+	}
+
+	// · Runner · //
+	for i , tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			//Prepare
+
+			m := mocks{
+				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+			}
+
+			tt.mocks(m)
+			service := horariosrv.New(m.horarioRepository)
+
+			//Execute
+			result, err := service.GetICS(tt.args.terna)
+
+			//Verify
+			if tt.want.err != nil && err != nil {
+				assert.Equal(t, tt.want.err.Error(), err.Error())
+			}
+
+			if i != 0 {
+				assert.Equal(t, tt.want.result, result)
+			} else {
+				assert.NotEqual(t, "", result)
+			}
+
+		})
+
+	}
+
+}

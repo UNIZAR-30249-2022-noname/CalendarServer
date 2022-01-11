@@ -64,6 +64,21 @@ func (mr *MockHorarioServiceMockRecorder) GetEntries(terna interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetEntries", reflect.TypeOf((*MockHorarioService)(nil).GetEntries), terna)
 }
 
+// GetICS mocks base method.
+func (m *MockHorarioService) GetICS(terna domain.Terna) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetICS", terna)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetICS indicates an expected call of GetICS.
+func (mr *MockHorarioServiceMockRecorder) GetICS(terna interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetICS", reflect.TypeOf((*MockHorarioService)(nil).GetICS), terna)
+}
+
 // ListAllDegrees mocks base method.
 func (m *MockHorarioService) ListAllDegrees() ([]domain.DegreeDescription, error) {
 	m.ctrl.T.Helper()
