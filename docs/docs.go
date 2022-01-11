@@ -174,10 +174,10 @@ var doc = `{
                 ],
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "contenido del csv a introducir",
+                        "type": "file",
+                        "description": "csv file",
                         "name": "csv",
-                        "in": "query",
+                        "in": "formData",
                         "required": true
                     }
                 ],
