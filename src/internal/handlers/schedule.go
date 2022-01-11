@@ -206,6 +206,7 @@ func (hdl *HTTPHandler) GetICS(c *gin.Context) {
 //@Failure 400,404 {object} ErrorHttp
 //@Router /updateByCSV/ [post]
 func (hdl *HTTPHandler) UpdateByCSV(c *gin.Context) {
+	//Thank you! https://github.com/Cyantosh0/go-csv
 	type csvUploadInput struct {
 		CsvFile *multipart.FileHeader `form:"csv" binding:"required"`
 	}
