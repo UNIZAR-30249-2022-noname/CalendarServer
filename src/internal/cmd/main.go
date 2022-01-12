@@ -1,8 +1,6 @@
 package main
 
 import (
-	"time"
-
 	"github.com/D-D-EINA-Calendar/CalendarServer/docs"
 	"github.com/gin-contrib/cors"
 
@@ -19,16 +17,7 @@ func SetupRouter() *gin.Engine {
 
 	r := gin.Default()
 
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000", "http://192.168.0.16:3000/%22%7D"},
-		AllowMethods:     []string{"GET", "PUT", "PATCH"},
-		AllowHeaders:     []string{"Origin"},
-		AllowCredentials: true,
-		AllowOriginFunc: func(origin string) bool {
-			return origin == "https://github.com/"
-		},
-		MaxAge: 12 * time.Hour,
-	}))
+	r.Use(cors.Default())
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	horariorepo := horarioRepositorio.New()

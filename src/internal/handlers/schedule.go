@@ -103,6 +103,8 @@ func (hdl *HTTPHandler) PostUpdateScheduler(c *gin.Context) {
 	if err == nil {
 		c.String(http.StatusOK, lastMod)
 
+	} else {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
 	}
 
 }
