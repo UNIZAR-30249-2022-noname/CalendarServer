@@ -67,7 +67,7 @@ func (repo *repo) CreateNewEntry(entry domain.Entry) error {
 	}
 	//We get idhoras & idgrupo for the entry
 	err := repo.db.QueryRow(consultas.SelectIdHoraGroup,
-		entry.Subject.Kind, entry.Group, entry.Week, entry.Subject.Name).Scan(&idhoras, &idgrupo)
+		entry.Subject.Kind, entry.Group, entry.Week, entry.Subject.Name, entry.Group).Scan(&idhoras, &idgrupo)
 	if err != nil {
 		return apperrors.ErrSql
 	}

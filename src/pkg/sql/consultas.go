@@ -14,7 +14,7 @@ const SelectAvaiableHours = "SELECT a.disponibles, a.totales, a.tipo, a.nombre F
 const SelectIdHoraGroup = "SELECT id, idgrupo " +
 	"FROM app_db.hora " +
 	"WHERE hora.tipo=? AND hora.grupo = ? AND hora.semana = ? AND hora.idasignatura " +
-	"IN (SELECT id FROM app_db.asignatura WHERE asignatura.nombre=?)"
+	"IN (SELECT id FROM app_db.asignatura WHERE asignatura.nombre=?) AND hora.idgrupo IN (SELECT id FROM app_db.grupodocente WHERE grupodocente.numero=?)"
 
 const SelectIdAula = "SELECT id FROM app_db.aula WHERE aula.nombre=?"
 
