@@ -200,7 +200,6 @@ func (srv *HorarioServiceImp) UpdateByCSV(csv string) (bool, error){
 					if groupsIn > 0 {
 						longstringGroup = longstringGroup + ", "
 					}
-					//Esta mal el orden tolai
 					longstringGroup = longstringGroup + "('" + strconv.Itoa(actGroupId) + "','" + strconv.Itoa(j) + "','" + strconv.Itoa(actYearId) + "')"
 					groupsIn++
 					groups = append(groups, actGroupId)
