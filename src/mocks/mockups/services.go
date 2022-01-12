@@ -94,6 +94,21 @@ func (mr *MockHorarioServiceMockRecorder) ListAllDegrees() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAllDegrees", reflect.TypeOf((*MockHorarioService)(nil).ListAllDegrees))
 }
 
+// UpdateByCSV mocks base method.
+func (m *MockHorarioService) UpdateByCSV(csv string) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateByCSV", csv)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateByCSV indicates an expected call of UpdateByCSV.
+func (mr *MockHorarioServiceMockRecorder) UpdateByCSV(csv interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateByCSV", reflect.TypeOf((*MockHorarioService)(nil).UpdateByCSV), csv)
+}
+
 // UpdateScheduler mocks base method.
 func (m *MockHorarioService) UpdateScheduler(entries []domain.Entry, terna domain.Terna) (string, error) {
 	m.ctrl.T.Helper()

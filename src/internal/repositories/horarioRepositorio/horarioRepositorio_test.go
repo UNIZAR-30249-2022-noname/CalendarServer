@@ -31,7 +31,7 @@ func TestGetAvaiableHours(t *testing.T) {
 			MaxMin:         0,
 		},
 		{
-			Subject:        domain.Subject{Kind: 2, Name: "Sistemas Operativos"},
+			Subject:        domain.Subject{Kind: domain.PRACTICES, Name: "Sistemas Operativos"},
 			RemainingHours: 25,
 			MaxHours:       25,
 			RemainingMin:   0,
@@ -156,7 +156,7 @@ func TestCreateEntryPract(t *testing.T) {
 
 		Init:    domain.NewHour(2, 50),
 		End:     domain.NewHour(4, 50),
-		Subject: domain.Subject{Kind: 2, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: domain.PRACTICES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "2"},
 		Week:    "a",
 		Group:   "mananas",
@@ -187,7 +187,7 @@ func TestCreateEntryPract(t *testing.T) {
 
 		Init:    domain.NewHour(5, 30),
 		End:     domain.NewHour(6, 20),
-		Subject: domain.Subject{Kind: 2, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: domain.PRACTICES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "3"},
 		Week:    "a",
 		Group:   "",
@@ -203,7 +203,7 @@ func TestCreateEntryPract(t *testing.T) {
 
 		Init:    domain.NewHour(5, 30),
 		End:     domain.NewHour(6, 20),
-		Subject: domain.Subject{Kind: 2, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: domain.PRACTICES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "3"},
 		Week:    "",
 		Group:   "mananas",
@@ -232,7 +232,7 @@ func TestCreateEntryProb(t *testing.T) {
 
 		Init:    domain.NewHour(5, 30),
 		End:     domain.NewHour(6, 20),
-		Subject: domain.Subject{Kind: 3, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: domain.EXERCISES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "3"},
 		Week:    "",
 		Group:   "niapar",
@@ -265,7 +265,7 @@ func TestCreateEntryProb(t *testing.T) {
 
 		Init:    domain.NewHour(5, 30),
 		End:     domain.NewHour(6, 20),
-		Subject: domain.Subject{Kind: 3, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: domain.EXERCISES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "3"},
 		Week:    "",
 		Group:   "",
@@ -398,7 +398,7 @@ func TestDeleteAllEntries(t *testing.T) {
 	entryAsked2 := domain.Entry{
 		Init:    domain.NewHour(5, 30),
 		End:     domain.NewHour(6, 20),
-		Subject: domain.Subject{Kind: 2, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: domain.PRACTICES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "1"},
 		Week:    "a",
 		Group:   "mananas",
@@ -578,7 +578,7 @@ func TestGetEntries(t *testing.T) {
 		{
 			Init:    domain.NewHour(2, 50),
 			End:     domain.NewHour(4, 40),
-			Subject: domain.Subject{Kind: 2, Name: "Sistemas Operativos"},
+			Subject: domain.Subject{Kind: domain.PRACTICES, Name: "Sistemas Operativos"},
 			Room:    domain.Room{Name: "2"},
 			Week:    "",
 			Group:   "",
@@ -622,4 +622,135 @@ func TestGetEntries(t *testing.T) {
 	repos.RawExec(consultas.TruncYear)
 	repos.RawExec(consultas.TruncDegree);	repos.RawExec(consultas.TruncAula)
 	repos.CloseConn()
+}
+
+//Creates a degree (OK) and then creates the same degree (FAIL)
+func TestCreateDegree(t *testing.T) {
+	//Prepare
+	assert := assert.New(t)
+	repos := horarioRepositorio.New()
+	//Test
+	res, err := repos.CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto")
+	assert.Equal(err, nil, "There shouldn't be an error")
+	assert.Equal(res, true, "Should be true")
+	res, err = repos.CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto")
+	assert.Equal(err, apperrors.ErrSql, "There should be an error")
+	assert.Equal(res, false, "Should be false")
+	//Delete
+	repos.RawExec(consultas.TruncDegree);	
+}
+
+//Creates a subject (OK) and then creates the same subject (FAIL)
+//Creates a subject but the degree isn't in the database (FAIL)
+func TestCreateSubject(t *testing.T) {
+	//Prepare
+	assert := assert.New(t)
+	repos := horarioRepositorio.New()
+	repos.CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto")
+	
+	//Test
+	res, err := repos.CreateNewSubject(25802,"Informática",558)
+	assert.Equal(err, nil, "There shouldn't be an error")
+	assert.Equal(res, true, "Should be true")
+	res, err = repos.CreateNewSubject(25802,"Informática",558)
+	assert.Equal(err, apperrors.ErrSql, "There should be an error")
+	assert.Equal(res, false, "Should be false")
+	res, err = repos.CreateNewSubject(25803,"NoExisteSuTitulaciónAsíQueFalla",560)
+	assert.Equal(err, apperrors.ErrSql, "There should be an error")
+	assert.Equal(res, false, "Should be false")
+	//Delete
+	repos.RawExec(consultas.TruncAsignatura);
+	repos.RawExec(consultas.TruncDegree);	
+}
+
+//Creates a year (OK) and then creates the same year (FAIL)
+//Creates a year but the degree isn't in the database (FAIL)
+func TestCreateYear(t *testing.T) {
+	//Prepare
+	assert := assert.New(t)
+	repos := horarioRepositorio.New()
+	repos.CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto")
+	
+	//Test
+	res, err := repos.CreateNewYear(1,558)
+	assert.Equal(err, nil, "There shouldn't be an error")
+	assert.Equal(res, true, "Should be true")
+	res, err = repos.CreateNewYear(1,558)
+	assert.Equal(err, apperrors.ErrSql, "There should be an error")
+	assert.Equal(res, false, "Should be false")
+	res, err = repos.CreateNewYear(2,560)
+	assert.Equal(err, apperrors.ErrSql, "There should be an error")
+	assert.Equal(res, false, "Should be false")
+	//Delete
+	repos.RawExec(consultas.TruncDegree);	
+	repos.RawExec(consultas.TruncYear);
+}
+
+//Creates a group (OK) and then creates the same group (FAIL)
+//Creates a group but the year isn't in the database (FAIL)
+func TestCreateGroup(t *testing.T) {
+	//Prepare
+	assert := assert.New(t)
+	repos := horarioRepositorio.New()
+	repos.CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto")
+	repos.CreateNewYear(1,558) //Id will be 5581
+	//Test
+	res, err := repos.CreateNewGroup(1,5581)
+	assert.Equal(err, nil, "There shouldn't be an error")
+	assert.Equal(res, true, "Should be true")
+	res, err = repos.CreateNewGroup(1,5581)
+	assert.Equal(err, apperrors.ErrSql, "There should be an error")
+	assert.Equal(res, false, "Should be false")
+	res, err = repos.CreateNewGroup(1,5582)
+	assert.Equal(err, apperrors.ErrSql, "There should be an error")
+	assert.Equal(res, false, "Should be false")
+	//Delete
+	repos.RawExec(consultas.TruncDegree);	
+	repos.RawExec(consultas.TruncYear);
+	repos.RawExec(consultas.TruncGroup);
+}
+
+//Creates hour (See the comments)
+func TestCreateHour(t *testing.T) {
+	//Prepare
+	assert := assert.New(t)
+	repos := horarioRepositorio.New()
+	repos.CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto")
+	repos.CreateNewYear(1,558) //Id will be 5581
+	repos.CreateNewGroup(1,5581)
+	repos.CreateNewSubject(25802,"Informática",558)
+	//Test
+	//OK Test
+	res, err := repos.CreateNewHour(3500,3500,25802,55811,domain.THEORICAL,"","")
+	assert.Equal(err, nil, "There shouldn't be an error")
+	assert.Equal(res, true, "Should be true")
+	//Hour kind=PRACTICES without week (FAIL)
+	res, err = repos.CreateNewHour(3500,3500,25802,55811,domain.PRACTICES,"","")
+	assert.Equal(err, apperrors.ErrInvalidKind, "There should be an invalid kind error")
+	assert.Equal(res, false, "Should be false")
+	//Hour kind=PRACTICES without group (FAIL)
+	res, err = repos.CreateNewHour(3500,3500,25802,55811,domain.PRACTICES,"","a")
+	assert.Equal(err, apperrors.ErrInvalidKind, "There should be an invalid kind error")
+	assert.Equal(res, false, "Should be false")
+	//Hour kind=EXERCISES without group (FAIL)
+	res, err = repos.CreateNewHour(3500,3500,25802,55811,domain.EXERCISES,"","")
+	assert.Equal(err, apperrors.ErrInvalidKind, "There should be an invalid kind error")
+	assert.Equal(res, false, "Should be false")
+	//Hour kind that not exists (FAIL)
+	res, err = repos.CreateNewHour(3500,3500,25802,55811,4,"","")
+	assert.Equal(err, apperrors.ErrInvalidKind, "There should be an invalid kind error")
+	assert.Equal(res, false, "Should be false")
+	//Hour invalid subjectCode (FAIL)
+	res, err = repos.CreateNewHour(3500,3500,25803,55811,domain.THEORICAL,"","")
+	assert.Equal(err, apperrors.ErrSql, "There should be an sql error")
+	assert.Equal(res, false, "Should be false")
+	//Hour invalid groupCode (FAIL)
+	res, err = repos.CreateNewHour(3500,3500,25802,55812,domain.THEORICAL,"","")
+	assert.Equal(err, apperrors.ErrSql, "There should be an sql error")
+	assert.Equal(res, false, "Should be false")
+	//Delete
+	repos.RawExec(consultas.TruncHora)
+	repos.RawExec(consultas.TruncGroup)
+	repos.RawExec(consultas.TruncYear)
+	repos.RawExec(consultas.TruncDegree)
 }

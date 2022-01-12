@@ -12,4 +12,5 @@ type HorarioService interface {
 	GetEntries(terna domain.Terna) ([]domain.Entry, error)
 	UpdateScheduler(entries []domain.Entry, terna domain.Terna) (string, error)
 	GetICS(terna domain.Terna) (string, error) 
+	UpdateByCSV(csv string) (bool, error)
 }

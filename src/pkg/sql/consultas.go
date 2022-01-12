@@ -9,7 +9,7 @@ const SelectAvaiableHours = "SELECT a.disponibles, a.totales, a.tipo, a.nombre F
 	"(SELECT * FROM hora WHERE idgrupo " +
 	"IN (SELECT grupodocente.id FROM `grupodocente` " +
 	"INNER JOIN curso ON grupodocente.idcurso=curso.id WHERE curso.numero=? AND grupodocente.numero=?)) b " +
-	"ON a.id=b.id"
+	"ON a.id=b.id ORDER BY a.nombre"
 
 const SelectIdHoraGroup = "SELECT id, idgrupo " +
 	"FROM app_db.hora " +
@@ -57,3 +57,9 @@ const SelectEntries = "SELECT b.*, asignatura.nombre FROM ( " +
 	"				WHERE nombre = ?)))) a " +
 	"INNER JOIN app_db.hora ON a.idhoras = hora.id ) b " +
 	"INNER JOIN app_db.asignatura ON b.idasignatura = asignatura.id"
+
+const CreateDegree = "INSERT INTO `titulacion` (`id`, `nombre`) VALUES (?, ?)"
+const CreateSubject = "INSERT INTO `asignatura` (`id`, `codigo`, `nombre`, `idT`) VALUES (?, ?, ?, ?)"
+const CreateYear = "INSERT INTO `curso` (`id`, `numero`, `idT`) VALUES (?, ?, ?)"
+const CreateGroup = "INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES (?, ?, ?)"
+const CreateHour = "INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `grupo`, `semana`, `idasignatura`, `idgrupo`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)"
