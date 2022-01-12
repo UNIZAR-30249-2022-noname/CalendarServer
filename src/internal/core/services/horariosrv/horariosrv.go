@@ -124,15 +124,32 @@ func (srv *HorarioServiceImp) GetICS(terna domain.Terna) (string, error) {
 	return cal.Serialize(), nil
 }
 
+func contains(s []int, e int) bool {
+    for _, a := range s {
+        if a == e {
+            return true
+        }
+    }
+    return false
+}
+
 //3->Code subject, 4->Name subject, 11->Code Degree, 12->Name degree
 //17->Year (1,2...), 23->nº groups, 30->Hours t1, 32->Hours t2, 34->Hours t3
 //71->nº subgroups t1, 72->nº subgroups t1
 func (srv *HorarioServiceImp) UpdateByCSV(csv string) (bool, error){
 	lines := strings.Split(csv, "\n")
+	groups := make([]int,500,500)
+	subjects := make([]int,1000,1000)
 	prevDegree := 0
+	prevYear := 0
+	subjectsIn := 0
+	groupsIn := 0
 	hoursIn := 0
+	longstring := "INSERT INTO `asignatura` (`id`, `codigo`, `nombre`, `idT`) VALUES "
+	longstringGroup := "INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES "
+	longstringHours := "INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `idasignatura`, `idgrupo`, `grupo`, `semana`) VALUES "
 	for i, actLine := range lines {
-		if(i<3 || lines[i] == ""){
+		if(i<3 || lines[i] == "" || len(lines[i]) < 72){
 			continue
 		}
 		cells := strings.Split(actLine, ";")
@@ -148,45 +165,90 @@ func (srv *HorarioServiceImp) UpdateByCSV(csv string) (bool, error){
 		nGroupsT2 /= 2
 		nGroupsT3, _ := strconv.Atoi(cells[72])
 		nGroupsT3 /= 2
+		
 		aux :=  strings.Split(cells[30], ",")
 		hoursT1, _ := strconv.Atoi(aux[0])
 		aux = strings.Split(cells[32], ",")
 		hoursT2, _ := strconv.Atoi(aux[0])
 		aux = strings.Split(cells[34], ",")
 		hoursT3, _ := strconv.Atoi(aux[0])
+		
 		if prevDegree != degreeId {
 			srv.horarioRepositorio.CreateNewDegree(degreeId, degreeName)
+			fmt.Println("Nuevo grado")
 			prevDegree = degreeId
 		}
-		srv.horarioRepositorio.CreateNewYear(year, degreeId)
+
 		actYearId := degreeId * 10 + year
-		ok, err := srv.horarioRepositorio.CreateNewSubject(subjectId, subjectName, degreeId)
-		if !ok {
-			return false, err
+		if prevYear != actYearId {
+			srv.horarioRepositorio.CreateNewYear(year, degreeId)
+			fmt.Println("Nuevo año")
+			prevYear = actYearId
 		}
-		hoursIn++
-		for j:=1;j<=nGroups;j++{
-			srv.horarioRepositorio.CreateNewGroup(j, actYearId)
-			ok, err = srv.horarioRepositorio.CreateNewHour(hoursT1*100,hoursT1*100,subjectId,actYearId*10+j,domain.THEORICAL,"","")
-			if !ok {
-				return false, err
+
+		if !contains(subjects, subjectId){
+			if subjectsIn > 0 {
+				longstring = longstring + ", "
 			}
-			hoursIn++
-			for k:=1;k<=nGroupsT2;k++{
-				ok, err = srv.horarioRepositorio.CreateNewHour(hoursT2*100,hoursT2*100,subjectId,actYearId*10+j,domain.EXERCISES,strconv.Itoa(k),"")
-				if !ok {
-					return false, err
+			longstring = longstring + "('" + strconv.Itoa(subjectId) + "','" + strconv.Itoa(subjectId) + "','" + subjectName + "','" + strconv.Itoa(degreeId) + "')"
+			subjectsIn++
+			subjects = append(subjects, subjectId)
+
+			for j:=1;j<=nGroups;j++{
+				actGroupId := actYearId*10 + j
+				if !contains(groups, actGroupId){
+					if groupsIn > 0 {
+						longstringGroup = longstringGroup + ", "
+					}
+					//Esta mal el orden tolai
+					longstringGroup = longstringGroup + "('" + strconv.Itoa(actGroupId) + "','" + strconv.Itoa(j) + "','" + strconv.Itoa(actYearId) + "')"
+					groupsIn++
+					groups = append(groups, actGroupId)
 				}
-				hoursIn++
-			}
-			for k:=1;k<=nGroupsT3;k++{
-				ok, err = srv.horarioRepositorio.CreateNewHour(hoursT3*100,hoursT3*100,subjectId,actYearId*10+j,domain.PRACTICES,strconv.Itoa(k),"a")
-				if !ok {
-					return false, err
+				
+				if hoursIn > 0 {
+					longstringHours += ", "
 				}
+				longstringHours = longstringHours + "(NULL,'" + strconv.Itoa(hoursT1*100) + "','" + strconv.Itoa(hoursT1*100) + "','" + strconv.Itoa(domain.THEORICAL) + "','" + strconv.Itoa(subjectId) + "','" + strconv.Itoa(actGroupId) +  "','','')"
 				hoursIn++
+				for k:=1;k<=nGroupsT2;k++{
+					if hoursIn > 0 {
+						longstringHours += ", "
+					}
+					longstringHours = longstringHours + "(NULL,'" + strconv.Itoa(hoursT2*100) + "','" + strconv.Itoa(hoursT2*100) + "','" + strconv.Itoa(domain.EXERCISES) + "','" + strconv.Itoa(subjectId) + "','" + strconv.Itoa(actGroupId) + "','" + strconv.Itoa(k) + "','')"
+					hoursIn++
+				}
+				for k:=1;k<=nGroupsT3;k++{
+					if hoursIn > 0 {
+						longstringHours += ", "
+					}
+					longstringHours = longstringHours + "(NULL,'" + strconv.Itoa(hoursT3*100) + "','" + strconv.Itoa(hoursT3*100) + "','" + strconv.Itoa(domain.PRACTICES) + "','" + strconv.Itoa(subjectId) + "','" + strconv.Itoa(actGroupId) + "','" + strconv.Itoa(k) + "','a')"
+					hoursIn++
+				}
 			}
 		}
 	}
-	return hoursIn > 0, nil
+	fmt.Println(longstringGroup)
+	err := srv.horarioRepositorio.RawExec(longstringGroup)
+	if err != nil {
+		fmt.Println("Fallo de longstring group"+ err.Error())
+		return false, err
+	}
+	if subjectsIn > 0 {
+		fmt.Println(longstring)
+		err := srv.horarioRepositorio.RawExec(longstring)
+		if err != nil {
+			fmt.Println("Fallo de longstring "+ err.Error())
+			return false, err
+		}
+	}
+	if hoursIn > 0 {
+		fmt.Println(longstringHours)
+		err := srv.horarioRepositorio.RawExec(longstringHours)
+		if err != nil {
+			fmt.Println("Fallo de longstring "+ err.Error())
+			return false, err
+		}
+	}
+	return true, nil
 }

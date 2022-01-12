@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS app_db.titulacion (
 CREATE TABLE IF NOT EXISTS app_db.asignatura (
     id int PRIMARY KEY AUTO_INCREMENT,
     codigo int NOT NULL,
-    nombre varchar(50),
+    nombre varchar(100),
     idT int not null,
     FOREIGN KEY (idT) REFERENCES app_db.titulacion (id)
 );

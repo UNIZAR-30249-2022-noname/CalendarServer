@@ -195,3 +195,17 @@ func (mr *MockHorarioRepositorioMockRecorder) ListAllDegrees() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAllDegrees", reflect.TypeOf((*MockHorarioRepositorio)(nil).ListAllDegrees))
 }
+
+// RawExec mocks base method.
+func (m *MockHorarioRepositorio) RawExec(exec string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RawExec", exec)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// RawExec indicates an expected call of RawExec.
+func (mr *MockHorarioRepositorioMockRecorder) RawExec(exec interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RawExec", reflect.TypeOf((*MockHorarioRepositorio)(nil).RawExec), exec)
+}

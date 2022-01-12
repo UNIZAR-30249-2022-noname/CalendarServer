@@ -16,4 +16,5 @@ type HorarioRepositorio interface {
 	CreateNewYear(year int, degreeCode int) (bool, error)
 	CreateNewGroup(group int, yearCode int) (bool, error)
 	CreateNewHour(available, total, subjectCode, groupCode, kind int, group, week string) (bool, error)
+	RawExec(exec string) error
 }
