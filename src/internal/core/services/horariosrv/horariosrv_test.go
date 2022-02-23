@@ -8,6 +8,7 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/horariosrv"
 	mock_ports "github.com/D-D-EINA-Calendar/CalendarServer/src/mocks/mockups"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/golang/mock/gomock"
@@ -114,14 +115,14 @@ func simpleAvailableHours() []domain.AvailableHours {
 	return []domain.AvailableHours{
 		{
 
-			Subject:        domain.Subject{Kind: domain.THEORICAL, Name: "IC"},
+			Subject:        domain.Subject{Kind: constants.THEORICAL, Name: "IC"},
 			RemainingHours: 5,
 			MaxHours:       5,
 			RemainingMin:   0,
 			MaxMin:         0,
 		},
 		{
-			Subject:        domain.Subject{Name: "Prog 1", Kind: domain.PRACTICES},
+			Subject:        domain.Subject{Name: "Prog 1", Kind: constants.PRACTICES},
 			RemainingHours: 2,
 			MaxHours:       3,
 			RemainingMin:   0,
@@ -209,21 +210,21 @@ func simpleEntries() []domain.Entry {
 			Init: domain.NewHour(1, 1),
 			End:  domain.NewHour(2, 2),
 			Subject: domain.Subject{
-				Kind: domain.THEORICAL,
+				Kind: constants.THEORICAL,
 				Name: "Prog 1",
 			},
 			Room:    domain.Room{Name: "1"},
-			Weekday: domain.MOONDAY,
+			Weekday: constants.MOONDAY,
 		},
 		{
 			Init: domain.NewHour(5, 0),
 			End:  domain.NewHour(9, 0),
 			Subject: domain.Subject{
-				Kind: domain.THEORICAL,
+				Kind: constants.THEORICAL,
 				Name: "Prog 2",
 			},
 			Room:    domain.Room{Name: "2"},
-			Weekday: domain.THUERSDAY,
+			Weekday: constants.THUERSDAY,
 		},
 	}
 }

@@ -1,21 +1,8 @@
 package domain
 
-import "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
-
-const (
-	THEORICAL = 1
-	EXERCISES = 2
-	PRACTICES = 3
-)
-
-const (
-	MOONDAY   = 0
-	TUESDAY   = 1
-	WEDNESDAY = 2
-	THUERSDAY = 3
-	FRIDAY    = 4
-	SATURDAY  = 5
-	SUNDAY    = 6
+import (
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 )
 
 //AvaialableHours is a struct which represents the available hours
@@ -144,15 +131,15 @@ func (e Entry) IsValid() error {
 	}
 
 	switch e.Subject.Kind {
-	case THEORICAL:
+	case constants.THEORICAL:
 		//currently doesn'have a specific field
 		break
-	case PRACTICES:
+	case constants.PRACTICES:
 		if e.Week == "" || e.Group == "" {
 			return apperrors.ErrInvalidInput
 		}
 
-	case EXERCISES:
+	case constants.EXERCISES:
 		if e.Group == "" {
 			return apperrors.ErrInvalidInput
 		}

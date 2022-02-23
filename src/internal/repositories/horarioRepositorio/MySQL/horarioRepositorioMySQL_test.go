@@ -6,6 +6,7 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	horarioRepositorio "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/MySQL"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	consultas "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/sql"
 	"github.com/stretchr/testify/assert"
 )
@@ -35,7 +36,7 @@ func TestGetAvaiableHours(t *testing.T) {
 			MaxMin:         0,
 		},
 		{
-			Subject:        domain.Subject{Kind: domain.PRACTICES, Name: "Sistemas Operativos"},
+			Subject:        domain.Subject{Kind: constants.PRACTICES, Name: "Sistemas Operativos"},
 			RemainingHours: 25,
 			MaxHours:       25,
 			RemainingMin:   0,
@@ -160,7 +161,7 @@ func TestCreateEntryPract(t *testing.T) {
 
 		Init:    domain.NewHour(2, 50),
 		End:     domain.NewHour(4, 50),
-		Subject: domain.Subject{Kind: domain.PRACTICES, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: constants.PRACTICES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "2"},
 		Week:    "a",
 		Group:   "mananas",
@@ -191,7 +192,7 @@ func TestCreateEntryPract(t *testing.T) {
 
 		Init:    domain.NewHour(5, 30),
 		End:     domain.NewHour(6, 20),
-		Subject: domain.Subject{Kind: domain.PRACTICES, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: constants.PRACTICES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "3"},
 		Week:    "a",
 		Group:   "",
@@ -207,7 +208,7 @@ func TestCreateEntryPract(t *testing.T) {
 
 		Init:    domain.NewHour(5, 30),
 		End:     domain.NewHour(6, 20),
-		Subject: domain.Subject{Kind: domain.PRACTICES, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: constants.PRACTICES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "3"},
 		Week:    "",
 		Group:   "mananas",
@@ -237,7 +238,7 @@ func TestCreateEntryProb(t *testing.T) {
 
 		Init:    domain.NewHour(5, 30),
 		End:     domain.NewHour(6, 20),
-		Subject: domain.Subject{Kind: domain.EXERCISES, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: constants.EXERCISES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "3"},
 		Week:    "",
 		Group:   "niapar",
@@ -270,7 +271,7 @@ func TestCreateEntryProb(t *testing.T) {
 
 		Init:    domain.NewHour(5, 30),
 		End:     domain.NewHour(6, 20),
-		Subject: domain.Subject{Kind: domain.EXERCISES, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: constants.EXERCISES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "3"},
 		Week:    "",
 		Group:   "",
@@ -405,7 +406,7 @@ func TestDeleteAllEntries(t *testing.T) {
 	entryAsked2 := domain.Entry{
 		Init:    domain.NewHour(5, 30),
 		End:     domain.NewHour(6, 20),
-		Subject: domain.Subject{Kind: domain.PRACTICES, Name: "Proyecto Software"},
+		Subject: domain.Subject{Kind: constants.PRACTICES, Name: "Proyecto Software"},
 		Room:    domain.Room{Name: "1"},
 		Week:    "a",
 		Group:   "mananas",
@@ -586,7 +587,7 @@ func TestGetEntries(t *testing.T) {
 		{
 			Init:    domain.NewHour(2, 50),
 			End:     domain.NewHour(4, 40),
-			Subject: domain.Subject{Kind: domain.PRACTICES, Name: "Sistemas Operativos"},
+			Subject: domain.Subject{Kind: constants.PRACTICES, Name: "Sistemas Operativos"},
 			Room:    domain.Room{Name: "2"},
 			Week:    "",
 			Group:   "",
@@ -737,19 +738,19 @@ func TestCreateHour(t *testing.T) {
 	repos.CreateNewSubject(25802, "Informática", 558)
 	//Test
 	//OK Test
-	res, err := repos.CreateNewHour(3500, 3500, 25802, 55811, domain.THEORICAL, "", "")
+	res, err := repos.CreateNewHour(3500, 3500, 25802, 55811, constants.THEORICAL, "", "")
 	assert.Equal(err, nil, "There shouldn't be an error")
 	assert.Equal(res, true, "Should be true")
 	//Hour kind=PRACTICES without week (FAIL)
-	res, err = repos.CreateNewHour(3500, 3500, 25802, 55811, domain.PRACTICES, "", "")
+	res, err = repos.CreateNewHour(3500, 3500, 25802, 55811, constants.PRACTICES, "", "")
 	assert.Equal(err, apperrors.ErrInvalidKind, "There should be an invalid kind error")
 	assert.Equal(res, false, "Should be false")
 	//Hour kind=PRACTICES without group (FAIL)
-	res, err = repos.CreateNewHour(3500, 3500, 25802, 55811, domain.PRACTICES, "", "a")
+	res, err = repos.CreateNewHour(3500, 3500, 25802, 55811, constants.PRACTICES, "", "a")
 	assert.Equal(err, apperrors.ErrInvalidKind, "There should be an invalid kind error")
 	assert.Equal(res, false, "Should be false")
 	//Hour kind=EXERCISES without group (FAIL)
-	res, err = repos.CreateNewHour(3500, 3500, 25802, 55811, domain.EXERCISES, "", "")
+	res, err = repos.CreateNewHour(3500, 3500, 25802, 55811, constants.EXERCISES, "", "")
 	assert.Equal(err, apperrors.ErrInvalidKind, "There should be an invalid kind error")
 	assert.Equal(res, false, "Should be false")
 	//Hour kind that not exists (FAIL)
@@ -757,11 +758,11 @@ func TestCreateHour(t *testing.T) {
 	assert.Equal(err, apperrors.ErrInvalidKind, "There should be an invalid kind error")
 	assert.Equal(res, false, "Should be false")
 	//Hour invalid subjectCode (FAIL)
-	res, err = repos.CreateNewHour(3500, 3500, 25803, 55811, domain.THEORICAL, "", "")
+	res, err = repos.CreateNewHour(3500, 3500, 25803, 55811, constants.THEORICAL, "", "")
 	assert.Equal(err, apperrors.ErrSql, "There should be an sql error")
 	assert.Equal(res, false, "Should be false")
 	//Hour invalid groupCode (FAIL)
-	res, err = repos.CreateNewHour(3500, 3500, 25802, 55812, domain.THEORICAL, "", "")
+	res, err = repos.CreateNewHour(3500, 3500, 25802, 55812, constants.THEORICAL, "", "")
 	assert.Equal(err, apperrors.ErrSql, "There should be an sql error")
 	assert.Equal(res, false, "Should be false")
 	//Delete

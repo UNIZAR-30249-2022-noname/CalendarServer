@@ -13,6 +13,7 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
 	mock_ports "github.com/D-D-EINA-Calendar/CalendarServer/src/mocks/mockups"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -280,7 +281,7 @@ func simpleTheoricalEntry() handlers.EntryDTO {
 		EndHour:  1,
 		EndMin:   1,
 		Subject:  "a",
-		Kind:     domain.THEORICAL,
+		Kind:     constants.THEORICAL,
 		Room:     "a",
 	}
 }
@@ -292,7 +293,7 @@ func simplePracticeEntry() handlers.EntryDTO {
 		EndHour:  1,
 		EndMin:   1,
 		Subject:  "a",
-		Kind:     domain.PRACTICES,
+		Kind:     constants.PRACTICES,
 		Room:     "a",
 		Week:     "A",
 		Group:    "1",
@@ -306,7 +307,7 @@ func simpleExercisesEntry() handlers.EntryDTO {
 		EndHour:  1,
 		EndMin:   1,
 		Subject:  "a",
-		Kind:     domain.EXERCISES,
+		Kind:     constants.EXERCISES,
 		Room:     "a",
 		Group:    "1",
 	}

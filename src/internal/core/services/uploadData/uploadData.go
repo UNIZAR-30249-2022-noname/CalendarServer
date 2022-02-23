@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/ports"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 )
 
 type UploadDataserviceImp struct {
@@ -92,20 +92,20 @@ func (srv *UploadDataserviceImp) UpdateByCSV(csv string) (bool, error) {
 				if hoursIn > 0 {
 					longstringHours += ", "
 				}
-				longstringHours = longstringHours + "(NULL,'" + strconv.Itoa(hoursT1*100) + "','" + strconv.Itoa(hoursT1*100) + "','" + strconv.Itoa(domain.THEORICAL) + "','" + strconv.Itoa(subjectId) + "','" + strconv.Itoa(actGroupId) + "','','')"
+				longstringHours = longstringHours + "(NULL,'" + strconv.Itoa(hoursT1*100) + "','" + strconv.Itoa(hoursT1*100) + "','" + strconv.Itoa(constants.THEORICAL) + "','" + strconv.Itoa(subjectId) + "','" + strconv.Itoa(actGroupId) + "','','')"
 				hoursIn++
 				for k := 1; k <= nGroupsT2; k++ {
 					if hoursIn > 0 {
 						longstringHours += ", "
 					}
-					longstringHours = longstringHours + "(NULL,'" + strconv.Itoa(hoursT2*100) + "','" + strconv.Itoa(hoursT2*100) + "','" + strconv.Itoa(domain.EXERCISES) + "','" + strconv.Itoa(subjectId) + "','" + strconv.Itoa(actGroupId) + "','" + strconv.Itoa(k) + "','')"
+					longstringHours = longstringHours + "(NULL,'" + strconv.Itoa(hoursT2*100) + "','" + strconv.Itoa(hoursT2*100) + "','" + strconv.Itoa(constants.EXERCISES) + "','" + strconv.Itoa(subjectId) + "','" + strconv.Itoa(actGroupId) + "','" + strconv.Itoa(k) + "','')"
 					hoursIn++
 				}
 				for k := 1; k <= nGroupsT3; k++ {
 					if hoursIn > 0 {
 						longstringHours += ", "
 					}
-					longstringHours = longstringHours + "(NULL,'" + strconv.Itoa(hoursT3*100) + "','" + strconv.Itoa(hoursT3*100) + "','" + strconv.Itoa(domain.PRACTICES) + "','" + strconv.Itoa(subjectId) + "','" + strconv.Itoa(actGroupId) + "','" + strconv.Itoa(k) + "','a')"
+					longstringHours = longstringHours + "(NULL,'" + strconv.Itoa(hoursT3*100) + "','" + strconv.Itoa(hoursT3*100) + "','" + strconv.Itoa(constants.PRACTICES) + "','" + strconv.Itoa(subjectId) + "','" + strconv.Itoa(actGroupId) + "','" + strconv.Itoa(k) + "','a')"
 					hoursIn++
 				}
 			}

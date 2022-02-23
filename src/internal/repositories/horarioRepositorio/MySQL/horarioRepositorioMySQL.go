@@ -7,6 +7,7 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/models"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	consultas "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/sql"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -53,14 +54,14 @@ func (repo *HorarioRepositorioMySQL) GetAvailableHours(terna domain.Terna) ([]do
 //given a completed [Entry]
 func (repo *HorarioRepositorioMySQL) CreateNewEntry(entry domain.Entry) error {
 	var idhoras, idgrupo, idaula int
-	if entry.Subject.Kind == domain.PRACTICES {
+	if entry.Subject.Kind == constants.PRACTICES {
 		if entry.Week == "" || &entry.Week == nil {
 			return apperrors.ErrInvalidKind
 		}
 		if entry.Group == "" || &entry.Group == nil {
 			return apperrors.ErrInvalidKind
 		}
-	} else if entry.Subject.Kind == domain.EXERCISES {
+	} else if entry.Subject.Kind == constants.EXERCISES {
 		if entry.Group == "" || &entry.Group == nil {
 			return apperrors.ErrInvalidKind
 		}
@@ -303,14 +304,14 @@ func (repo *HorarioRepositorioMySQL) CreateNewGroup(group int, yearCode int) (bo
 func (repo *HorarioRepositorioMySQL) CreateNewHour(available, total, subjectCode, groupCode, kind int, group, week string) (bool, error) {
 	//Cuidado que las horas tipo 2 son clases de problemas y las tipo 3 prácticas
 	//Create a subject given an id and a name and the degreeCode
-	if kind == domain.PRACTICES {
+	if kind == constants.PRACTICES {
 		if week == "" || &week == nil {
 			return false, apperrors.ErrInvalidKind
 		}
 		if group == "" || &group == nil {
 			return false, apperrors.ErrInvalidKind
 		}
-	} else if kind == domain.EXERCISES {
+	} else if kind == constants.EXERCISES {
 		if group == "" || &group == nil {
 			return false, apperrors.ErrInvalidKind
 		}
