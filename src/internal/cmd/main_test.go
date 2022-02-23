@@ -139,7 +139,7 @@ func TestGetAvailableHours(t *testing.T) {
 			}
 			tt.mocks(m)
 			setUpRouter := func() *gin.Engine {
-				horarioHandler := handlers.NewHTTPHandler(m.horarioService)
+				horarioHandler := handlers.NewHTTPHandler(m.horarioService, nil)
 				r := gin.Default()
 				r.GET("/availableHours", horarioHandler.GetAvailableHours)
 				return r
@@ -248,7 +248,7 @@ func TestPostSchedulerEntry(t *testing.T) {
 				horarioService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
 			}
 			setUpRouter := func() *gin.Engine {
-				horarioHandler := handlers.NewHTTPHandler(m.horarioService)
+				horarioHandler := handlers.NewHTTPHandler(m.horarioService, nil)
 				r := gin.Default()
 				r.POST(path, horarioHandler.PostUpdateScheduler)
 				return r
@@ -365,7 +365,7 @@ func TestListDegrees(t *testing.T) {
 				horarioService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
 			}
 			setUpRouter := func() *gin.Engine {
-				horarioHandler := handlers.NewHTTPHandler(m.horarioService)
+				horarioHandler := handlers.NewHTTPHandler(m.horarioService, nil)
 				r := gin.Default()
 				r.GET(path, horarioHandler.ListDegrees)
 				return r
@@ -452,7 +452,7 @@ func TestGetEntries(t *testing.T) {
 			}
 			tt.mocks(m)
 			setUpRouter := func() *gin.Engine {
-				horarioHandler := handlers.NewHTTPHandler(m.horarioService)
+				horarioHandler := handlers.NewHTTPHandler(m.horarioService, nil)
 				r := gin.Default()
 				r.GET(path, horarioHandler.GetEntries)
 				return r
@@ -511,7 +511,7 @@ func TestGetICS(t *testing.T) {
 			}
 			tt.mocks(m)
 			setUpRouter := func() *gin.Engine {
-				horarioHandler := handlers.NewHTTPHandler(m.horarioService)
+				horarioHandler := handlers.NewHTTPHandler(m.horarioService, nil)
 				r := gin.Default()
 				r.GET(path, horarioHandler.GetICS)
 				return r
@@ -533,6 +533,7 @@ func TestGetICS(t *testing.T) {
 	}
 }
 
+/*
 //The argument isn't a string anymore
 func TestUpdateByCSV(t *testing.T) {
 	t.Skip("This isn't a csv anymore but we will do it properly")
@@ -569,11 +570,11 @@ func TestUpdateByCSV(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			//Prepare
 			m := mocks{
-				horarioService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
+				uploadDataService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
 			}
 			tt.mocks(m)
 			setUpRouter := func() *gin.Engine {
-				horarioHandler := handlers.NewHTTPHandler(m.horarioService)
+				horarioHandler := handlers.NewHTTPHandler(nil, m.uploadDataService)
 				r := gin.Default()
 				r.POST(path, horarioHandler.UpdateByCSV)
 				return r
@@ -581,7 +582,7 @@ func TestUpdateByCSV(t *testing.T) {
 			}
 			r := setUpRouter()
 			w := httptest.NewRecorder()
-			uri := path + "?csv=" + tt.args.csv 
+			uri := path + "?csv=" + tt.args.csv
 			req, _ := http.NewRequest("POST", uri, nil)
 			r.ServeHTTP(w, req)
 			assert.Equal(t, tt.want.code, w.Code)
@@ -593,7 +594,7 @@ func TestUpdateByCSV(t *testing.T) {
 
 	}
 }
-
+*/
 func simpleTernaDTO() handlers.TernaDto {
 	return handlers.TernaDto(simpleTerna())
 }
