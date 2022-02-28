@@ -89,7 +89,7 @@ func TestUpdateByCSV(t *testing.T) {
 
 			tt.mocks(m)
 			service := uploaddata.New(m.uploadDataRepositorio)
-			content, err := ioutil.ReadFile("../../../../pkg/csv/Listado207_1Asig.csv")
+			content, err := ioutil.ReadFile("../../../../../test/resources/listado207/Listado207_1Asig.csv")
 			if err != nil {
 				t.Error("Error al abrir el fichero de prueba")
 			}
