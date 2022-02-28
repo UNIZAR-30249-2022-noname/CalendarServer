@@ -10,11 +10,11 @@ import (
 )
 
 type UploadDataserviceImp struct {
-	horarioRepositorio ports.HorarioRepositorio
+	uploadDataRepositorio ports.UploadDataRepositorio
 }
 
-func New() *UploadDataserviceImp {
-	return &UploadDataserviceImp{}
+func New(uploadDataRepositorio ports.UploadDataRepositorio) *UploadDataserviceImp {
+	return &UploadDataserviceImp{uploadDataRepositorio: uploadDataRepositorio}
 }
 
 //3->Code subject, 4->Name subject, 11->Code Degree, 12->Name degree
@@ -58,14 +58,14 @@ func (srv *UploadDataserviceImp) UpdateByCSV(csv string) (bool, error) {
 		hoursT3, _ := strconv.Atoi(aux[0])
 
 		if prevDegree != degreeId {
-			srv.horarioRepositorio.CreateNewDegree(degreeId, degreeName)
+			srv.uploadDataRepositorio.CreateNewDegree(degreeId, degreeName)
 			fmt.Println("Nuevo grado")
 			prevDegree = degreeId
 		}
 
 		actYearId := degreeId*10 + year
 		if prevYear != actYearId {
-			srv.horarioRepositorio.CreateNewYear(year, degreeId)
+			srv.uploadDataRepositorio.CreateNewYear(year, degreeId)
 			fmt.Println("Nuevo año")
 			prevYear = actYearId
 		}
@@ -112,14 +112,14 @@ func (srv *UploadDataserviceImp) UpdateByCSV(csv string) (bool, error) {
 		}
 	}
 	fmt.Println(longstringGroup)
-	err := srv.horarioRepositorio.RawExec(longstringGroup)
+	err := srv.uploadDataRepositorio.RawExec(longstringGroup)
 	if err != nil {
 		fmt.Println("Fallo de longstring group" + err.Error())
 		return false, err
 	}
 	if subjectsIn > 0 {
 		fmt.Println(longstring)
-		err := srv.horarioRepositorio.RawExec(longstring)
+		err := srv.uploadDataRepositorio.RawExec(longstring)
 		if err != nil {
 			fmt.Println("Fallo de longstring " + err.Error())
 			return false, err
@@ -127,7 +127,7 @@ func (srv *UploadDataserviceImp) UpdateByCSV(csv string) (bool, error) {
 	}
 	if hoursIn > 0 {
 		fmt.Println(longstringHours)
-		err := srv.horarioRepositorio.RawExec(longstringHours)
+		err := srv.uploadDataRepositorio.RawExec(longstringHours)
 		if err != nil {
 			fmt.Println("Fallo de longstring " + err.Error())
 			return false, err

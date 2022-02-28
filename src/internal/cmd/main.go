@@ -24,7 +24,7 @@ func SetupRouter() *gin.Engine {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	horariorepo := horariorepositoriomysql.New()
 	horariosrv := horariosrv.New(horariorepo)
-	uploaddata := uploaddata.New()
+	uploaddata := uploaddata.New(nil) //TODO nt nil
 	horarioHandler := handlers.NewHTTPHandler(horariosrv, uploaddata)
 	r.GET(constants.PING_URL, handlers.Ping)
 	r.GET(constants.GET_AVAILABLE_HOURS_URL, horarioHandler.GetAvailableHours)

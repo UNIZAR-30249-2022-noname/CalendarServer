@@ -4,19 +4,22 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
-	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/horariosrv"
+	uploaddata "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/uploadData"
+	mock_ports "github.com/D-D-EINA-Calendar/CalendarServer/src/mocks/mockups"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	"github.com/go-playground/assert/v2"
 	"github.com/golang/mock/gomock"
 )
+
+type mocks struct {
+	uploadDataRepositorio *mock_ports.MockUploadDataRepositorio
+}
 
 func TestUpdateByCSV(t *testing.T) {
 	// · Mocks · //
 
 	// · Test · //
 	type args struct {
-		terna domain.Terna
 	}
 	type want struct {
 		result bool
@@ -33,11 +36,11 @@ func TestUpdateByCSV(t *testing.T) {
 			args: args{},
 			want: want{result: true},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().CreateNewDegree(558, "Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto").Return(true, nil)
-				m.horarioRepository.EXPECT().CreateNewYear(1, 558).Return(true, nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('55811','1','5581'), ('55812','2','5581')").Return(nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `asignatura` (`id`, `codigo`, `nombre`, `idT`) VALUES ('25802','25802','Informática','558')").Return(nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `idasignatura`, `idgrupo`, `grupo`, `semana`) VALUES (NULL,'3500','3500','1','25802','55811','',''), (NULL,'1000','1000','2','25802','55811','1',''), (NULL,'1000','1000','2','25802','55811','2',''), (NULL,'1500','1500','3','25802','55811','1','a'), (NULL,'1500','1500','3','25802','55811','2','a'), (NULL,'1500','1500','3','25802','55811','3','a'), (NULL,'3500','3500','1','25802','55812','',''), (NULL,'1000','1000','2','25802','55812','1',''), (NULL,'1000','1000','2','25802','55812','2',''), (NULL,'1500','1500','3','25802','55812','1','a'), (NULL,'1500','1500','3','25802','55812','2','a'), (NULL,'1500','1500','3','25802','55812','3','a')").Return(nil)
+				m.uploadDataRepositorio.EXPECT().CreateNewDegree(558, "Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto").Return(true, nil)
+				m.uploadDataRepositorio.EXPECT().CreateNewYear(1, 558).Return(true, nil)
+				m.uploadDataRepositorio.EXPECT().RawExec("INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('55811','1','5581'), ('55812','2','5581')").Return(nil)
+				m.uploadDataRepositorio.EXPECT().RawExec("INSERT INTO `asignatura` (`id`, `codigo`, `nombre`, `idT`) VALUES ('25802','25802','Informática','558')").Return(nil)
+				m.uploadDataRepositorio.EXPECT().RawExec("INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `idasignatura`, `idgrupo`, `grupo`, `semana`) VALUES (NULL,'3500','3500','1','25802','55811','',''), (NULL,'1000','1000','2','25802','55811','1',''), (NULL,'1000','1000','2','25802','55811','2',''), (NULL,'1500','1500','3','25802','55811','1','a'), (NULL,'1500','1500','3','25802','55811','2','a'), (NULL,'1500','1500','3','25802','55811','3','a'), (NULL,'3500','3500','1','25802','55812','',''), (NULL,'1000','1000','2','25802','55812','1',''), (NULL,'1000','1000','2','25802','55812','2',''), (NULL,'1500','1500','3','25802','55812','1','a'), (NULL,'1500','1500','3','25802','55812','2','a'), (NULL,'1500','1500','3','25802','55812','3','a')").Return(nil)
 			},
 		},
 		{
@@ -45,10 +48,10 @@ func TestUpdateByCSV(t *testing.T) {
 			args: args{},
 			want: want{result: false, err: apperrors.ErrSql},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().CreateNewDegree(558, "Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto").Return(true, nil)
-				m.horarioRepository.EXPECT().CreateNewYear(1, 558).Return(true, nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('55811','1','5581'), ('55812','2','5581')").Return(nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `asignatura` (`id`, `codigo`, `nombre`, `idT`) VALUES ('25802','25802','Informática','558')").Return(apperrors.ErrSql)
+				m.uploadDataRepositorio.EXPECT().CreateNewDegree(558, "Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto").Return(true, nil)
+				m.uploadDataRepositorio.EXPECT().CreateNewYear(1, 558).Return(true, nil)
+				m.uploadDataRepositorio.EXPECT().RawExec("INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('55811','1','5581'), ('55812','2','5581')").Return(nil)
+				m.uploadDataRepositorio.EXPECT().RawExec("INSERT INTO `asignatura` (`id`, `codigo`, `nombre`, `idT`) VALUES ('25802','25802','Informática','558')").Return(apperrors.ErrSql)
 			},
 		},
 		{
@@ -56,11 +59,11 @@ func TestUpdateByCSV(t *testing.T) {
 			args: args{},
 			want: want{result: false, err: apperrors.ErrSql},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().CreateNewDegree(558, "Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto").Return(true, nil)
-				m.horarioRepository.EXPECT().CreateNewYear(1, 558).Return(true, nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('55811','1','5581'), ('55812','2','5581')").Return(nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `asignatura` (`id`, `codigo`, `nombre`, `idT`) VALUES ('25802','25802','Informática','558')").Return(nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `idasignatura`, `idgrupo`, `grupo`, `semana`) VALUES (NULL,'3500','3500','1','25802','55811','',''), (NULL,'1000','1000','2','25802','55811','1',''), (NULL,'1000','1000','2','25802','55811','2',''), (NULL,'1500','1500','3','25802','55811','1','a'), (NULL,'1500','1500','3','25802','55811','2','a'), (NULL,'1500','1500','3','25802','55811','3','a'), (NULL,'3500','3500','1','25802','55812','',''), (NULL,'1000','1000','2','25802','55812','1',''), (NULL,'1000','1000','2','25802','55812','2',''), (NULL,'1500','1500','3','25802','55812','1','a'), (NULL,'1500','1500','3','25802','55812','2','a'), (NULL,'1500','1500','3','25802','55812','3','a')").Return(apperrors.ErrSql)
+				m.uploadDataRepositorio.EXPECT().CreateNewDegree(558, "Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto").Return(true, nil)
+				m.uploadDataRepositorio.EXPECT().CreateNewYear(1, 558).Return(true, nil)
+				m.uploadDataRepositorio.EXPECT().RawExec("INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('55811','1','5581'), ('55812','2','5581')").Return(nil)
+				m.uploadDataRepositorio.EXPECT().RawExec("INSERT INTO `asignatura` (`id`, `codigo`, `nombre`, `idT`) VALUES ('25802','25802','Informática','558')").Return(nil)
+				m.uploadDataRepositorio.EXPECT().RawExec("INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `idasignatura`, `idgrupo`, `grupo`, `semana`) VALUES (NULL,'3500','3500','1','25802','55811','',''), (NULL,'1000','1000','2','25802','55811','1',''), (NULL,'1000','1000','2','25802','55811','2',''), (NULL,'1500','1500','3','25802','55811','1','a'), (NULL,'1500','1500','3','25802','55811','2','a'), (NULL,'1500','1500','3','25802','55811','3','a'), (NULL,'3500','3500','1','25802','55812','',''), (NULL,'1000','1000','2','25802','55812','1',''), (NULL,'1000','1000','2','25802','55812','2',''), (NULL,'1500','1500','3','25802','55812','1','a'), (NULL,'1500','1500','3','25802','55812','2','a'), (NULL,'1500','1500','3','25802','55812','3','a')").Return(apperrors.ErrSql)
 			},
 		},
 		{
@@ -68,9 +71,9 @@ func TestUpdateByCSV(t *testing.T) {
 			args: args{},
 			want: want{result: false, err: apperrors.ErrSql},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().CreateNewDegree(558, "Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto").Return(true, nil)
-				m.horarioRepository.EXPECT().CreateNewYear(1, 558).Return(true, nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('55811','1','5581'), ('55812','2','5581')").Return(apperrors.ErrSql)
+				m.uploadDataRepositorio.EXPECT().CreateNewDegree(558, "Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto").Return(true, nil)
+				m.uploadDataRepositorio.EXPECT().CreateNewYear(1, 558).Return(true, nil)
+				m.uploadDataRepositorio.EXPECT().RawExec("INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('55811','1','5581'), ('55812','2','5581')").Return(apperrors.ErrSql)
 			},
 		},
 	}
@@ -81,12 +84,15 @@ func TestUpdateByCSV(t *testing.T) {
 			//Prepare
 
 			m := mocks{
-				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+				uploadDataRepositorio: mock_ports.NewMockUploadDataRepositorio(gomock.NewController(t)),
 			}
 
 			tt.mocks(m)
-			service := horariosrv.New(m.horarioRepository)
+			service := uploaddata.New(m.uploadDataRepositorio)
 			content, err := ioutil.ReadFile("../../../../pkg/csv/Listado207_1Asig.csv")
+			if err != nil {
+				t.Error("Error al abrir el fichero de prueba")
+			}
 			contentString := string(content)
 			//Execute
 			result, err := service.UpdateByCSV(contentString)
