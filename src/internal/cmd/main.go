@@ -7,7 +7,8 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/horariosrv"
 	uploaddata "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/uploadData"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
-	horariorepositoriomysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/MySQL"
+	uploaddatarepositorymysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/MySQL/UploadDataRepository"
+	horariorepositoriomysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/MySQL/horarioRepositorio"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -24,7 +25,8 @@ func SetupRouter() *gin.Engine {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	horariorepo := horariorepositoriomysql.New()
 	horariosrv := horariosrv.New(horariorepo)
-	uploaddata := uploaddata.New(nil) //TODO nt nil
+	uploadrepo := uploaddatarepositorymysql.New()
+	uploaddata := uploaddata.New(uploadrepo)
 	horarioHandler := handlers.NewHTTPHandler(horariosrv, uploaddata)
 	r.GET(constants.PING_URL, handlers.Ping)
 	r.GET(constants.GET_AVAILABLE_HOURS_URL, horarioHandler.GetAvailableHours)
