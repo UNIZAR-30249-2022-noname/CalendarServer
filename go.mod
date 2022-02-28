@@ -52,4 +52,5 @@ require (
 require (
 	github.com/arran4/golang-ical v0.0.0-20211212012649-32b67e209c4f
 	github.com/gin-contrib/cors v1.3.1
+	github.com/streadway/amqp v1.0.0
 )
