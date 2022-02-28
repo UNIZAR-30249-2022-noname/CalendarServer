@@ -123,7 +123,7 @@ func (hdl *HTTPHandler) ListDegrees(c *gin.Context) {
 //@Param group query int true "grupo de las horas a obtener"
 //@Success 200 {array} domain.AvailableHours
 // @Failure 400,404 {object} ErrorHttp
-//@Router /availableHours/ [get]
+//@Router /getEntries/ [get]
 func (hdl *HTTPHandler) GetEntries(c *gin.Context) {
 
 	titulacion := c.Query("degree")
