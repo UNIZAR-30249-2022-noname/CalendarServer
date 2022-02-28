@@ -1,4 +1,4 @@
-package horarioRepositorio
+package horariorepositoriomysql
 
 import (
 	"database/sql"
@@ -7,26 +7,27 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/models"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	consultas "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/sql"
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type repo struct {
+type HorarioRepositorioMySQL struct {
 	db *sql.DB
 }
 
-func New() *repo {
+func New() *HorarioRepositorioMySQL {
 	db, _ := sql.Open("mysql", "user:user@tcp(127.0.0.1:6033)/app_db")
-	return &repo{db}
+	return &HorarioRepositorioMySQL{db}
 }
 
-func (repo *repo) CloseConn() error {
+func (repo *HorarioRepositorioMySQL) CloseConn() error {
 	return repo.db.Close()
 }
 
 //GetAvaiabledHours is a function which returns a set of [AvailableHours]
 //given a completed [Terna]
-func (repo *repo) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours, error) {
+func (repo *HorarioRepositorioMySQL) GetAvailableHours(terna domain.DegreeSet) ([]domain.AvailableHours, error) {
 
 	res := make([]domain.AvailableHours, 0)
 	//Select hours given a degree, course and group
@@ -51,16 +52,16 @@ func (repo *repo) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours
 
 //CreateNewEntry is a function which creates an entry in the database
 //given a completed [Entry]
-func (repo *repo) CreateNewEntry(entry domain.Entry) error {
+func (repo *HorarioRepositorioMySQL) CreateNewEntry(entry domain.Entry) error {
 	var idhoras, idgrupo, idaula int
-	if entry.Subject.Kind == domain.PRACTICES {
+	if entry.Subject.Kind == constants.PRACTICES {
 		if entry.Week == "" || &entry.Week == nil {
 			return apperrors.ErrInvalidKind
 		}
 		if entry.Group == "" || &entry.Group == nil {
 			return apperrors.ErrInvalidKind
 		}
-	} else if entry.Subject.Kind == domain.EXERCISES {
+	} else if entry.Subject.Kind == constants.EXERCISES {
 		if entry.Group == "" || &entry.Group == nil {
 			return apperrors.ErrInvalidKind
 		}
@@ -94,7 +95,7 @@ func (repo *repo) CreateNewEntry(entry domain.Entry) error {
 
 //CreateNewEntry is a function which deletes an entry in the database
 //given a completed [Entry]
-func (repo *repo) DeleteEntry(entry domain.Entry) error {
+func (repo *HorarioRepositorioMySQL) DeleteEntry(entry domain.Entry) error {
 	var idhoras, idgrupo, idaula int
 	//We get idhoras & idgrupo for the entry
 	err := repo.db.QueryRow(consultas.SelectIdHoraGroup,
@@ -125,7 +126,7 @@ func (repo *repo) DeleteEntry(entry domain.Entry) error {
 //in the database given an initial and final [Hour], an id of the hora row to update
 //and a boolean (true if it was a create -> substracts the hour
 //				and false if it was a delete -> adds the hour)
-func (repo *repo) updateHours(ini, fin domain.Hour, idhora int, create bool) error {
+func (repo *HorarioRepositorioMySQL) updateHours(ini, fin domain.Hour, idhora int, create bool) error {
 	//Create is to remove the available hours if true and add them if false
 	var horastotales, horasdisponibles, newhDisponibles int
 	//We get the total and available hours from 'hora'
@@ -159,7 +160,7 @@ func (repo *repo) updateHours(ini, fin domain.Hour, idhora int, create bool) err
 	return nil
 }
 
-func (repo *repo) DeleteAllEntries(terna domain.Terna) error {
+func (repo *HorarioRepositorioMySQL) DeleteAllEntries(terna domain.DegreeSet) error {
 	res, err := repo.db.Exec(consultas.DeleteEntradas, terna.Degree, terna.Group, terna.Year)
 	rows, _ := res.RowsAffected()
 	if rows < 1 {
@@ -168,14 +169,14 @@ func (repo *repo) DeleteAllEntries(terna domain.Terna) error {
 	return err
 }
 
-func (repo *repo) RawExec(exec string) error {
+func (repo *HorarioRepositorioMySQL) RawExec(exec string) error {
 	_, err := repo.db.Exec(exec)
 	return err
 }
 
 //EntryFound is a function which returns true if the given
 //entry [Entry] is in the database
-func (repo *repo) EntryFound(entry domain.Entry) bool {
+func (repo *HorarioRepositorioMySQL) EntryFound(entry domain.Entry) bool {
 
 	res, err := repo.db.Query(consultas.SearchEntry,
 		domain.HourToInt(entry.Init), domain.HourToInt(entry.End),
@@ -186,7 +187,7 @@ func (repo *repo) EntryFound(entry domain.Entry) bool {
 }
 
 //ListAllDegrees is a function which returns a set of [DegreeDescription]
-func (repo *repo) ListAllDegrees() ([]domain.DegreeDescription, error) {
+func (repo *HorarioRepositorioMySQL) ListAllDegrees() ([]domain.DegreeDescription, error) {
 	res := make([]domain.DegreeDescription, 0)
 
 	//This query returns all the rows in titulacion
@@ -239,7 +240,7 @@ func (repo *repo) ListAllDegrees() ([]domain.DegreeDescription, error) {
 	return res, nil
 }
 
-func (repo *repo) GetEntries(terna domain.Terna) ([]domain.Entry, error) {
+func (repo *HorarioRepositorioMySQL) GetEntries(terna domain.DegreeSet) ([]domain.Entry, error) {
 	res := make([]domain.Entry, 0)
 	//Select entries given a degree, course and group
 	results, err := repo.db.Query(consultas.SelectEntries, terna.Group, terna.Year, terna.Degree)
@@ -262,7 +263,7 @@ func (repo *repo) GetEntries(terna domain.Terna) ([]domain.Entry, error) {
 	return res, nil
 }
 
-func (repo *repo) CreateNewDegree(id int, name string) (bool, error) {
+func (repo *HorarioRepositorioMySQL) CreateNewDegree(id int, name string) (bool, error) {
 	//Create degree given an id and a name
 	_, err := repo.db.Query(consultas.CreateDegree, id, name)
 	if err != nil {
@@ -271,7 +272,7 @@ func (repo *repo) CreateNewDegree(id int, name string) (bool, error) {
 	return true, nil
 }
 
-func (repo *repo) CreateNewSubject(id int, name string, degreeCode int) (bool, error) {
+func (repo *HorarioRepositorioMySQL) CreateNewSubject(id int, name string, degreeCode int) (bool, error) {
 	//Create a subject given an id and a name and the degreeCode
 	_, err := repo.db.Query(consultas.CreateSubject, id, id, name, degreeCode)
 	if err != nil {
@@ -280,9 +281,9 @@ func (repo *repo) CreateNewSubject(id int, name string, degreeCode int) (bool, e
 	return true, nil
 }
 
-func (repo *repo) CreateNewYear(year int, degreeCode int) (bool, error) {
+func (repo *HorarioRepositorioMySQL) CreateNewYear(year int, degreeCode int) (bool, error) {
 	//Create a subject given an id and a name and the degreeCode
-	id := degreeCode * 10 + year
+	id := degreeCode*10 + year
 	_, err := repo.db.Query(consultas.CreateYear, id, year, degreeCode)
 	if err != nil {
 		return false, apperrors.ErrSql
@@ -290,9 +291,9 @@ func (repo *repo) CreateNewYear(year int, degreeCode int) (bool, error) {
 	return true, nil
 }
 
-func (repo *repo) CreateNewGroup(group int, yearCode int) (bool, error) {
+func (repo *HorarioRepositorioMySQL) CreateNewGroup(group int, yearCode int) (bool, error) {
 	//Create a subject given an id and a name and the degreeCode
-	id := yearCode * 10 + group
+	id := yearCode*10 + group
 	_, err := repo.db.Query(consultas.CreateGroup, id, group, yearCode)
 	if err != nil {
 		return false, apperrors.ErrSql
@@ -300,17 +301,17 @@ func (repo *repo) CreateNewGroup(group int, yearCode int) (bool, error) {
 	return true, nil
 }
 
-func (repo *repo) CreateNewHour(available, total, subjectCode, groupCode, kind int, group, week string) (bool, error) {
+func (repo *HorarioRepositorioMySQL) CreateNewHour(available, total, subjectCode, groupCode, kind int, group, week string) (bool, error) {
 	//Cuidado que las horas tipo 2 son clases de problemas y las tipo 3 prácticas
 	//Create a subject given an id and a name and the degreeCode
-	if kind == domain.PRACTICES {
+	if kind == constants.PRACTICES {
 		if week == "" || &week == nil {
 			return false, apperrors.ErrInvalidKind
 		}
 		if group == "" || &group == nil {
 			return false, apperrors.ErrInvalidKind
 		}
-	} else if kind == domain.EXERCISES {
+	} else if kind == constants.EXERCISES {
 		if group == "" || &group == nil {
 			return false, apperrors.ErrInvalidKind
 		}

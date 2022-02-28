@@ -5,8 +5,11 @@ import (
 	"github.com/gin-contrib/cors"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/horariosrv"
+	uploaddata "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/uploadData"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
-	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio"
+	uploaddatarepositorymysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/MySQL/UploadDataRepository"
+	horariorepositoriomysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/MySQL/horarioRepositorio"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -20,16 +23,18 @@ func SetupRouter() *gin.Engine {
 	r.Use(cors.Default())
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	horariorepo := horarioRepositorio.New()
+	horariorepo := horariorepositoriomysql.New()
 	horariosrv := horariosrv.New(horariorepo)
-	horarioHandler := handlers.NewHTTPHandler(horariosrv)
-	r.GET("/ping", handlers.Ping)
-	r.GET("/availableHours", horarioHandler.GetAvailableHours)
-	r.POST("/updateScheduler", horarioHandler.PostUpdateScheduler)
-	r.GET("/listDegrees", horarioHandler.ListDegrees)
-	r.GET("/getEntries", horarioHandler.GetEntries)
-	r.GET("/getICS", horarioHandler.GetICS)
-	r.POST("/updateByCSV", horarioHandler.UpdateByCSV)
+	uploadrepo := uploaddatarepositorymysql.New()
+	uploaddata := uploaddata.New(uploadrepo)
+	horarioHandler := handlers.NewHTTPHandler(horariosrv, uploaddata)
+	r.GET(constants.PING_URL, handlers.Ping)
+	r.GET(constants.GET_AVAILABLE_HOURS_URL, horarioHandler.GetAvailableHours)
+	r.POST(constants.UPDATE_SCHEDULER_URL, horarioHandler.PostUpdateScheduler)
+	r.GET(constants.LIST_DEGREES_URL, horarioHandler.ListDegrees)
+	r.GET(constants.LIST_SCHEDULER_ENTRIES_URL, horarioHandler.GetEntries)
+	r.GET(constants.GENERATE_ICAL_URL, horarioHandler.GetICS)
+	r.POST(constants.UPLOAD_DATA_DEGREES_URL, horarioHandler.UpdateByCSV)
 
 	return r
 }

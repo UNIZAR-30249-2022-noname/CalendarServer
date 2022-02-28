@@ -5,6 +5,7 @@ import (
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -76,12 +77,12 @@ func TestSubjectValid(t *testing.T) {
 	}{
 		{
 			name: "valid",
-			args: domain.Subject{Name: "a", Kind: domain.THEORICAL},
+			args: domain.Subject{Name: "a", Kind: constants.THEORICAL},
 			want: nil,
 		},
 		{
 			name: "no empty name",
-			args: domain.Subject{Kind: domain.THEORICAL},
+			args: domain.Subject{Kind: constants.THEORICAL},
 			want: apperrors.ErrInvalidInput,
 		},
 		{
@@ -112,7 +113,7 @@ func TestEntryValid(t *testing.T) {
 			args: domain.Entry{
 				End: domain.NewHour(2, 0),
 				Subject: domain.Subject{
-					Kind: domain.THEORICAL,
+					Kind: constants.THEORICAL,
 					Name: "Prog 1",
 				},
 				Room: domain.Room{Name: "1"},
@@ -124,7 +125,7 @@ func TestEntryValid(t *testing.T) {
 			args: domain.Entry{
 				Init: domain.NewHour(2, 0),
 				Subject: domain.Subject{
-					Kind: domain.THEORICAL,
+					Kind: constants.THEORICAL,
 					Name: "Prog 1",
 				},
 				Room: domain.Room{Name: "1"},
@@ -146,7 +147,7 @@ func TestEntryValid(t *testing.T) {
 				Init: domain.NewHour(1, 0),
 				End:  domain.NewHour(2, 0),
 				Subject: domain.Subject{
-					Kind: domain.THEORICAL,
+					Kind: constants.THEORICAL,
 				},
 			},
 			want: apperrors.ErrInvalidInput,
@@ -168,7 +169,7 @@ func TestEntryValid(t *testing.T) {
 				Init: domain.NewHour(1, 0),
 				End:  domain.NewHour(2, 0),
 				Subject: domain.Subject{
-					Kind: domain.THEORICAL,
+					Kind: constants.THEORICAL,
 					Name: "Prog 1",
 				},
 			},
@@ -181,7 +182,7 @@ func TestEntryValid(t *testing.T) {
 				End:  domain.NewHour(2, 0),
 				Room: domain.Room{Name: "1"},
 				Subject: domain.Subject{
-					Kind: domain.PRACTICES,
+					Kind: constants.PRACTICES,
 					Name: "Prog 1",
 				},
 				Group: "1",
@@ -195,7 +196,7 @@ func TestEntryValid(t *testing.T) {
 				End:  domain.NewHour(2, 0),
 				Room: domain.Room{Name: "1"},
 				Subject: domain.Subject{
-					Kind: domain.PRACTICES,
+					Kind: constants.PRACTICES,
 					Name: "Prog 1",
 				},
 				Week: "a",
@@ -209,7 +210,7 @@ func TestEntryValid(t *testing.T) {
 				End:  domain.NewHour(2, 0),
 				Room: domain.Room{Name: "1"},
 				Subject: domain.Subject{
-					Kind: domain.PRACTICES,
+					Kind: constants.PRACTICES,
 					Name: "Prog 1",
 				},
 				Week:  "a",
@@ -224,7 +225,7 @@ func TestEntryValid(t *testing.T) {
 				End:  domain.NewHour(2, 0),
 				Room: domain.Room{Name: "1"},
 				Subject: domain.Subject{
-					Kind: domain.EXERCISES,
+					Kind: constants.EXERCISES,
 					Name: "Prog 1",
 				},
 			},
@@ -237,7 +238,7 @@ func TestEntryValid(t *testing.T) {
 				End:  domain.NewHour(2, 0),
 				Room: domain.Room{Name: "1"},
 				Subject: domain.Subject{
-					Kind: domain.EXERCISES,
+					Kind: constants.EXERCISES,
 					Name: "Prog 1",
 				},
 

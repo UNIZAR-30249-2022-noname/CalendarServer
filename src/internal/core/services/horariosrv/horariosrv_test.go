@@ -1,7 +1,6 @@
 package horariosrv_test
 
 import (
-	"io/ioutil"
 	"testing"
 	"time"
 
@@ -9,20 +8,21 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/horariosrv"
 	mock_ports "github.com/D-D-EINA-Calendar/CalendarServer/src/mocks/mockups"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/golang/mock/gomock"
 )
 
 type mocks struct {
-	horarioRepository *mock_ports.MockHorarioRepositorio
+	horarioRepository *mock_ports.MockSchedulerRepository
 }
 
 //Checks all the cases for the function GetAvailableHours of the service [horariosrv]
 func TestGetAvailableHours(t *testing.T) {
 	// · Mocks · //
 	AvailableHours := simpleAvailableHours()
-	ternaAsked := domain.Terna{
+	ternaAsked := domain.DegreeSet{
 		Degree: "Ing.Informática",
 		Year:   2,
 		Group:  "1",
@@ -30,7 +30,7 @@ func TestGetAvailableHours(t *testing.T) {
 
 	// · Test · //
 	type args struct {
-		terna domain.Terna
+		terna domain.DegreeSet
 	}
 	type want struct {
 		result []domain.AvailableHours
@@ -59,26 +59,26 @@ func TestGetAvailableHours(t *testing.T) {
 		},
 		{
 			name: "Should return error when [titulación] is empty",
-			args: args{terna: domain.Terna{Year: 1, Group: "1"}},
+			args: args{terna: domain.DegreeSet{Year: 1, Group: "1"}},
 			want: want{result: []domain.AvailableHours{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Year: 1, Group: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+				m.horarioRepository.EXPECT().GetAvailableHours(domain.DegreeSet{Year: 1, Group: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 		{
 			name: "Should return error when [curso] is empty",
-			args: args{terna: domain.Terna{Degree: "A", Group: "1"}},
+			args: args{terna: domain.DegreeSet{Degree: "A", Group: "1"}},
 			want: want{result: []domain.AvailableHours{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Degree: "A", Group: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+				m.horarioRepository.EXPECT().GetAvailableHours(domain.DegreeSet{Degree: "A", Group: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 		{
 			name: "Should return error when [Group] is empty",
-			args: args{terna: domain.Terna{Degree: "A", Year: 1}},
+			args: args{terna: domain.DegreeSet{Degree: "A", Year: 1}},
 			want: want{result: []domain.AvailableHours{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Degree: "A", Year: 1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+				m.horarioRepository.EXPECT().GetAvailableHours(domain.DegreeSet{Degree: "A", Year: 1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 	}
@@ -88,7 +88,7 @@ func TestGetAvailableHours(t *testing.T) {
 			//Prepare
 
 			m := mocks{
-				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+				horarioRepository: mock_ports.NewMockSchedulerRepository(gomock.NewController(t)),
 			}
 
 			tt.mocks(m)
@@ -115,14 +115,14 @@ func simpleAvailableHours() []domain.AvailableHours {
 	return []domain.AvailableHours{
 		{
 
-			Subject:        domain.Subject{Kind: domain.THEORICAL, Name: "IC"},
+			Subject:        domain.Subject{Kind: constants.THEORICAL, Name: "IC"},
 			RemainingHours: 5,
 			MaxHours:       5,
 			RemainingMin:   0,
 			MaxMin:         0,
 		},
 		{
-			Subject:        domain.Subject{Name: "Prog 1", Kind: domain.PRACTICES},
+			Subject:        domain.Subject{Name: "Prog 1", Kind: constants.PRACTICES},
 			RemainingHours: 2,
 			MaxHours:       3,
 			RemainingMin:   0,
@@ -142,7 +142,7 @@ func TestUpdateEntries(t *testing.T) {
 	// · Test · //
 	type args struct {
 		entries []domain.Entry
-		terna   domain.Terna
+		terna   domain.DegreeSet
 	}
 	type want struct {
 		result string
@@ -179,7 +179,7 @@ func TestUpdateEntries(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			//Prepare
 			m := mocks{
-				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+				horarioRepository: mock_ports.NewMockSchedulerRepository(gomock.NewController(t)),
 			}
 
 			tt.mocks(m)
@@ -210,21 +210,21 @@ func simpleEntries() []domain.Entry {
 			Init: domain.NewHour(1, 1),
 			End:  domain.NewHour(2, 2),
 			Subject: domain.Subject{
-				Kind: domain.THEORICAL,
+				Kind: constants.THEORICAL,
 				Name: "Prog 1",
 			},
 			Room:    domain.Room{Name: "1"},
-			Weekday: domain.MOONDAY,
+			Weekday: constants.MOONDAY,
 		},
 		{
 			Init: domain.NewHour(5, 0),
 			End:  domain.NewHour(9, 0),
 			Subject: domain.Subject{
-				Kind: domain.THEORICAL,
+				Kind: constants.THEORICAL,
 				Name: "Prog 2",
 			},
 			Room:    domain.Room{Name: "2"},
-			Weekday: domain.THUERSDAY,
+			Weekday: constants.THUERSDAY,
 		},
 	}
 }
@@ -235,8 +235,8 @@ func currentDate() string {
 
 }
 
-func simpleTerna() domain.Terna {
-	return domain.Terna{
+func simpleTerna() domain.DegreeSet {
+	return domain.DegreeSet{
 		Group:  "1",
 		Year:   1,
 		Degree: "Ing Informática",
@@ -284,7 +284,7 @@ func TestListSubject(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			//Prepare
 			m := mocks{
-				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+				horarioRepository: mock_ports.NewMockSchedulerRepository(gomock.NewController(t)),
 			}
 
 			tt.mocks(m)
@@ -332,7 +332,7 @@ func simpleListDegreeDescriptions() []domain.DegreeDescription {
 func TestGetEntries(t *testing.T) {
 	// · Mocks · //
 	entries := simpleEntries()
-	ternaAsked := domain.Terna{
+	ternaAsked := domain.DegreeSet{
 		Degree: "Ing.Informática",
 		Year:   2,
 		Group:  "1",
@@ -340,7 +340,7 @@ func TestGetEntries(t *testing.T) {
 
 	// · Test · //
 	type args struct {
-		terna domain.Terna
+		terna domain.DegreeSet
 	}
 	type want struct {
 		result []domain.Entry
@@ -370,19 +370,19 @@ func TestGetEntries(t *testing.T) {
 		},
 		{
 			name:  "Should return error when [titulación] is empty",
-			args:  args{terna: domain.Terna{Year: 1, Group: "1"}},
+			args:  args{terna: domain.DegreeSet{Year: 1, Group: "1"}},
 			want:  want{result: []domain.Entry{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {},
 		},
 		{
 			name:  "Should return error when [Group] is empty",
-			args:  args{terna: domain.Terna{Degree: "A", Year: 1}},
+			args:  args{terna: domain.DegreeSet{Degree: "A", Year: 1}},
 			want:  want{result: []domain.Entry{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {},
 		},
 		{
 			name:  "Should return error when [Year] is empty",
-			args:  args{terna: domain.Terna{Degree: "A", Group: "1"}},
+			args:  args{terna: domain.DegreeSet{Degree: "A", Group: "1"}},
 			want:  want{result: []domain.Entry{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {},
 		},
@@ -394,7 +394,7 @@ func TestGetEntries(t *testing.T) {
 			//Prepare
 
 			m := mocks{
-				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+				horarioRepository: mock_ports.NewMockSchedulerRepository(gomock.NewController(t)),
 			}
 
 			tt.mocks(m)
@@ -419,7 +419,7 @@ func TestGetEntries(t *testing.T) {
 func TestGetICS(t *testing.T) {
 	// · Mocks · //
 	entries := simpleEntries()
-	ternaAsked := domain.Terna{
+	ternaAsked := domain.DegreeSet{
 		Degree: "Ing.Informática",
 		Year:   2,
 		Group:  "1",
@@ -427,7 +427,7 @@ func TestGetICS(t *testing.T) {
 
 	// · Test · //
 	type args struct {
-		terna domain.Terna
+		terna domain.DegreeSet
 	}
 	type want struct {
 		result string
@@ -457,31 +457,31 @@ func TestGetICS(t *testing.T) {
 		},
 		{
 			name:  "Should return error when [titulación] is empty",
-			args:  args{terna: domain.Terna{Year: 1, Group: "1"}},
+			args:  args{terna: domain.DegreeSet{Year: 1, Group: "1"}},
 			want:  want{result: "", err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {},
 		},
 		{
 			name:  "Should return error when [Group] is empty",
-			args:  args{terna: domain.Terna{Degree: "A", Year: 1}},
+			args:  args{terna: domain.DegreeSet{Degree: "A", Year: 1}},
 			want:  want{result: "", err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {},
 		},
 		{
 			name:  "Should return error when [Year] is empty",
-			args:  args{terna: domain.Terna{Degree: "A", Group: "1"}},
+			args:  args{terna: domain.DegreeSet{Degree: "A", Group: "1"}},
 			want:  want{result: "", err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {},
 		},
 	}
 
 	// · Runner · //
-	for i , tt := range tests {
+	for i, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			//Prepare
 
 			m := mocks{
-				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+				horarioRepository: mock_ports.NewMockSchedulerRepository(gomock.NewController(t)),
 			}
 
 			tt.mocks(m)
@@ -489,103 +489,6 @@ func TestGetICS(t *testing.T) {
 
 			//Execute
 			result, err := service.GetICS(tt.args.terna)
-
-			//Verify
-			if tt.want.err != nil && err != nil {
-				assert.Equal(t, tt.want.err.Error(), err.Error())
-			}
-
-			if i != 0 {
-				assert.Equal(t, tt.want.result, result)
-			} else {
-				assert.NotEqual(t, "", result)
-			}
-
-		})
-
-	}
-
-}
-
-func TestUpdateByCSV(t *testing.T) {
-	// · Mocks · //
-
-	// · Test · //
-	type args struct {
-		terna domain.Terna
-	}
-	type want struct {
-		result bool
-		err    error
-	}
-	tests := []struct {
-		name  string
-		args  args
-		want  want
-		mocks func(m mocks)
-	}{
-		{
-			name: "Should Update correctly",
-			args: args{},
-			want: want{result: true},
-			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto").Return(true, nil)
-				m.horarioRepository.EXPECT().CreateNewYear(1,558).Return(true, nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('55811','1','5581'), ('55812','2','5581')").Return(nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `asignatura` (`id`, `codigo`, `nombre`, `idT`) VALUES ('25802','25802','Informática','558')").Return(nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `idasignatura`, `idgrupo`, `grupo`, `semana`) VALUES (NULL,'3500','3500','1','25802','55811','',''), (NULL,'1000','1000','2','25802','55811','1',''), (NULL,'1000','1000','2','25802','55811','2',''), (NULL,'1500','1500','3','25802','55811','1','a'), (NULL,'1500','1500','3','25802','55811','2','a'), (NULL,'1500','1500','3','25802','55811','3','a'), (NULL,'3500','3500','1','25802','55812','',''), (NULL,'1000','1000','2','25802','55812','1',''), (NULL,'1000','1000','2','25802','55812','2',''), (NULL,'1500','1500','3','25802','55812','1','a'), (NULL,'1500','1500','3','25802','55812','2','a'), (NULL,'1500','1500','3','25802','55812','3','a')").Return(nil)
-			},
-		},
-		{
-			name: "Subject creation fails",
-			args: args{},
-			want: want{result: false, err: apperrors.ErrSql},
-			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto").Return(true, nil)
-				m.horarioRepository.EXPECT().CreateNewYear(1,558).Return(true, nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('55811','1','5581'), ('55812','2','5581')").Return(nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `asignatura` (`id`, `codigo`, `nombre`, `idT`) VALUES ('25802','25802','Informática','558')").Return(apperrors.ErrSql)
-			},
-		},
-		{
-			name: "Hour creation fails",
-			args: args{},
-			want: want{result: false, err: apperrors.ErrSql},
-			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto").Return(true, nil)
-				m.horarioRepository.EXPECT().CreateNewYear(1,558).Return(true, nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('55811','1','5581'), ('55812','2','5581')").Return(nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `asignatura` (`id`, `codigo`, `nombre`, `idT`) VALUES ('25802','25802','Informática','558')").Return(nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `hora` (`id`, `disponibles`, `totales`, `tipo`, `idasignatura`, `idgrupo`, `grupo`, `semana`) VALUES (NULL,'3500','3500','1','25802','55811','',''), (NULL,'1000','1000','2','25802','55811','1',''), (NULL,'1000','1000','2','25802','55811','2',''), (NULL,'1500','1500','3','25802','55811','1','a'), (NULL,'1500','1500','3','25802','55811','2','a'), (NULL,'1500','1500','3','25802','55811','3','a'), (NULL,'3500','3500','1','25802','55812','',''), (NULL,'1000','1000','2','25802','55812','1',''), (NULL,'1000','1000','2','25802','55812','2',''), (NULL,'1500','1500','3','25802','55812','1','a'), (NULL,'1500','1500','3','25802','55812','2','a'), (NULL,'1500','1500','3','25802','55812','3','a')").Return(apperrors.ErrSql)
-			},
-		},
-		{
-			name: "Group creation fails",
-			args: args{},
-			want: want{result: false, err: apperrors.ErrSql},
-			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().CreateNewDegree(558,"Graduado en Ingeniería en Diseño Industrial y Desarrollo de Producto").Return(true, nil)
-				m.horarioRepository.EXPECT().CreateNewYear(1,558).Return(true, nil)
-				m.horarioRepository.EXPECT().RawExec("INSERT INTO `grupodocente` (`id`, `numero`, `idcurso`) VALUES ('55811','1','5581'), ('55812','2','5581')").Return(apperrors.ErrSql)
-			},
-		},
-	}
-
-	// · Runner · //
-	for i , tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			//Prepare
-
-			m := mocks{
-				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
-			}
-
-			tt.mocks(m)
-			service := horariosrv.New(m.horarioRepository)
-			content, err := ioutil.ReadFile("../../../../pkg/csv/Listado207_1Asig.csv")
-			contentString := string(content)
-			//Execute
-			result, err := service.UpdateByCSV(contentString)
 
 			//Verify
 			if tt.want.err != nil && err != nil {
