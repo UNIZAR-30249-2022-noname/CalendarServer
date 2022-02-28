@@ -29,7 +29,7 @@ func TestPingRoute(t *testing.T) {
 
 	w := httptest.NewRecorder()
 	//doing the request
-	req, _ := http.NewRequest("GET", "/ping", nil)
+	req, _ := http.NewRequest("GET", constants.PING_URL, nil)
 	router.ServeHTTP(w, req)
 
 	//Checking results
@@ -142,7 +142,7 @@ func TestGetAvailableHours(t *testing.T) {
 			setUpRouter := func() *gin.Engine {
 				horarioHandler := handlers.NewHTTPHandler(m.horarioService, nil)
 				r := gin.Default()
-				r.GET("/availableHours", horarioHandler.GetAvailableHours)
+				r.GET(constants.GET_AVAILABLE_HOURS_URL, horarioHandler.GetAvailableHours)
 				return r
 
 			}
@@ -178,7 +178,7 @@ func TestPostSchedulerEntry(t *testing.T) {
 	//errorParam := handlers.ErrorHttp{Message: "Parámetros incorrectos"}
 
 	// · Test · //
-	path := "/updateScheduler"
+	path := constants.UPDATE_SCHEDULER_URL
 
 	type args struct {
 		newEntry []handlers.EntryDTO
@@ -329,7 +329,7 @@ func TestListDegrees(t *testing.T) {
 	// · Mocks · //
 
 	// · Test · //
-	path := "/listDegrees"
+	path := constants.LIST_DEGREES_URL
 
 	type want struct {
 		result interface{}
@@ -419,7 +419,7 @@ func TestGetEntries(t *testing.T) {
 	// · Mocks · //
 
 	// · Test · //
-	path := "/getEntries"
+	path := constants.LIST_SCHEDULER_ENTRIES_URL
 	type args struct {
 		terna handlers.TernaDto
 	}
@@ -478,7 +478,7 @@ func TestGetEntries(t *testing.T) {
 func TestGetICS(t *testing.T) {
 	// · Mocks · //
 	// · Test · //
-	path := "/getICS"
+	path := constants.GENERATE_ICAL_URL
 	type args struct {
 		terna handlers.TernaDto
 	}
@@ -534,6 +534,7 @@ func TestGetICS(t *testing.T) {
 	}
 }
 
+//TODO fix it
 /*
 //The argument isn't a string anymore
 func TestUpdateByCSV(t *testing.T) {
@@ -541,7 +542,7 @@ func TestUpdateByCSV(t *testing.T) {
 	// · Mocks · //
 	//content, _ := ioutil.ReadFile("../../pkg/csv/Listado207_1Asig.csv") //no cabe
 	// · Test · //
-	path := "/updateByCSV"
+	path := constants.UPLOAD_DATA_DEGREES_URL
 	type args struct {
 		csv string
 	}

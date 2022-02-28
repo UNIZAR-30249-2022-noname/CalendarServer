@@ -8,6 +8,7 @@ import (
 	uploaddata "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/uploadData"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
 	horariorepositoriomysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/MySQL"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -25,13 +26,13 @@ func SetupRouter() *gin.Engine {
 	horariosrv := horariosrv.New(horariorepo)
 	uploaddata := uploaddata.New()
 	horarioHandler := handlers.NewHTTPHandler(horariosrv, uploaddata)
-	r.GET("/ping", handlers.Ping)
-	r.GET("/availableHours", horarioHandler.GetAvailableHours)
-	r.POST("/updateScheduler", horarioHandler.PostUpdateScheduler)
-	r.GET("/listDegrees", horarioHandler.ListDegrees)
-	r.GET("/getEntries", horarioHandler.GetEntries)
-	r.GET("/getICS", horarioHandler.GetICS)
-	r.POST("/updateByCSV", horarioHandler.UpdateByCSV)
+	r.GET(constants.PING_URL, handlers.Ping)
+	r.GET(constants.GET_AVAILABLE_HOURS_URL, horarioHandler.GetAvailableHours)
+	r.POST(constants.UPDATE_SCHEDULER_URL, horarioHandler.PostUpdateScheduler)
+	r.GET(constants.LIST_DEGREES_URL, horarioHandler.ListDegrees)
+	r.GET(constants.LIST_SCHEDULER_ENTRIES_URL, horarioHandler.GetEntries)
+	r.GET(constants.GENERATE_ICAL_URL, horarioHandler.GetICS)
+	r.POST(constants.UPLOAD_DATA_DEGREES_URL, horarioHandler.UpdateByCSV)
 
 	return r
 }

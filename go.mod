@@ -44,16 +44,12 @@ require (
 )
 
 require (
+	github.com/go-playground/assert/v2 v2.0.1
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/swaggo/swag v1.7.8
 )
 
 require (
 	github.com/arran4/golang-ical v0.0.0-20211212012649-32b67e209c4f
-	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
-	github.com/ghodss/yaml v1.0.0 // indirect
-	github.com/gin-contrib/cors v1.3.1 // indirect
-	github.com/russross/blackfriday/v2 v2.1.0 // indirect
-	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
-	github.com/urfave/cli/v2 v2.3.0 // indirect
+	github.com/gin-contrib/cors v1.3.1
 )
