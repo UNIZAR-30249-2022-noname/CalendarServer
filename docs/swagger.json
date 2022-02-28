@@ -6,6 +6,60 @@
     "paths": {
         "/availableHours/": {
             "get": {
+                "description": "List all the hours remaining for creaiting an entrie on the schedule",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "titulacion de las horas a obtener",
+                        "name": "titulacion",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "curso de las horas a obtener",
+                        "name": "curso",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "grupo de las horas a obtener",
+                        "name": "grupo",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.AvailableHours"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            }
+        },
+        "/getEntries/": {
+            "get": {
                 "description": "List all the entries of the  schedule",
                 "produces": [
                     "application/json"
