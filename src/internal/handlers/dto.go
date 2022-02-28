@@ -2,7 +2,7 @@ package handlers
 
 import "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 
-type TernaDto struct {
+type DegreeSetDto struct {
 	Degree string `json:"degree"`
 	Year   int    `json:"year"`
 	Group  string `json:"group"`

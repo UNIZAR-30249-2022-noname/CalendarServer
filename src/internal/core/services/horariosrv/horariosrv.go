@@ -10,19 +10,19 @@ import (
 	ics "github.com/arran4/golang-ical"
 )
 
-//HorarioServiceImp is the implemetation of [HorarioService] interface.
-type HorarioServiceImp struct {
-	horarioRepositorio ports.HorarioRepositorio
+//SchedulerServiceImp is the implemetation of [SchedulerService] interface.
+type SchedulerServiceImp struct {
+	horarioRepositorio ports.SchedulerRepository
 }
 
-//New is a function which creates a new [HorarioServiceImp]
-func New(horarioRepositorio ports.HorarioRepositorio) *HorarioServiceImp {
-	return &HorarioServiceImp{horarioRepositorio: horarioRepositorio}
+//New is a function which creates a new [SchedulerServiceImp]
+func New(horarioRepositorio ports.SchedulerRepository) *SchedulerServiceImp {
+	return &SchedulerServiceImp{horarioRepositorio: horarioRepositorio}
 }
 
 //GetAvaiabledHours is a function which returns a set of [AvailableHours]
 //given a completed [Terna] (not null fields)
-func (srv *HorarioServiceImp) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours, error) {
+func (srv *SchedulerServiceImp) GetAvailableHours(terna domain.DegreeSet) ([]domain.AvailableHours, error) {
 	res, err := srv.horarioRepositorio.GetAvailableHours(terna)
 	if err != nil {
 		return []domain.AvailableHours{}, err
@@ -31,7 +31,7 @@ func (srv *HorarioServiceImp) GetAvailableHours(terna domain.Terna) ([]domain.Av
 	return res, nil
 }
 
-func (srv *HorarioServiceImp) CreateNewEntry(entry domain.Entry) (string, error) {
+func (srv *SchedulerServiceImp) CreateNewEntry(entry domain.Entry) (string, error) {
 	err := entry.IsValid()
 	if err != nil {
 		return "", err
@@ -49,12 +49,12 @@ func (srv *HorarioServiceImp) CreateNewEntry(entry domain.Entry) (string, error)
 	return time.Now().Format("02/01/2006"), nil
 }
 
-func (srv *HorarioServiceImp) ListAllDegrees() ([]domain.DegreeDescription, error) {
+func (srv *SchedulerServiceImp) ListAllDegrees() ([]domain.DegreeDescription, error) {
 	list, err := srv.horarioRepositorio.ListAllDegrees()
 	return list, err
 }
 
-func (srv *HorarioServiceImp) UpdateScheduler(entries []domain.Entry, terna domain.Terna) (string, error) {
+func (srv *SchedulerServiceImp) UpdateScheduler(entries []domain.Entry, terna domain.DegreeSet) (string, error) {
 	var lastMod string
 	srv.horarioRepositorio.DeleteAllEntries(terna)
 	/*if err != nil {
@@ -77,7 +77,7 @@ func (srv *HorarioServiceImp) UpdateScheduler(entries []domain.Entry, terna doma
 	return lastMod, nil
 }
 
-func (srv *HorarioServiceImp) GetEntries(terna domain.Terna) ([]domain.Entry, error) {
+func (srv *SchedulerServiceImp) GetEntries(terna domain.DegreeSet) ([]domain.Entry, error) {
 
 	if terna.Degree == "" || terna.Year == 0 || terna.Group == "" {
 		return []domain.Entry{}, apperrors.ErrInvalidInput
@@ -90,7 +90,7 @@ func (srv *HorarioServiceImp) GetEntries(terna domain.Terna) ([]domain.Entry, er
 
 }
 
-func (srv *HorarioServiceImp) GetICS(terna domain.Terna) (string, error) {
+func (srv *SchedulerServiceImp) GetICS(terna domain.DegreeSet) (string, error) {
 	if terna.Degree == "" || terna.Year == 0 || terna.Group == "" {
 		return "", apperrors.ErrInvalidInput
 	}

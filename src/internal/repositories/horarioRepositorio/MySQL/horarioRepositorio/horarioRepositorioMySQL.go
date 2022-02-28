@@ -27,7 +27,7 @@ func (repo *HorarioRepositorioMySQL) CloseConn() error {
 
 //GetAvaiabledHours is a function which returns a set of [AvailableHours]
 //given a completed [Terna]
-func (repo *HorarioRepositorioMySQL) GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours, error) {
+func (repo *HorarioRepositorioMySQL) GetAvailableHours(terna domain.DegreeSet) ([]domain.AvailableHours, error) {
 
 	res := make([]domain.AvailableHours, 0)
 	//Select hours given a degree, course and group
@@ -160,7 +160,7 @@ func (repo *HorarioRepositorioMySQL) updateHours(ini, fin domain.Hour, idhora in
 	return nil
 }
 
-func (repo *HorarioRepositorioMySQL) DeleteAllEntries(terna domain.Terna) error {
+func (repo *HorarioRepositorioMySQL) DeleteAllEntries(terna domain.DegreeSet) error {
 	res, err := repo.db.Exec(consultas.DeleteEntradas, terna.Degree, terna.Group, terna.Year)
 	rows, _ := res.RowsAffected()
 	if rows < 1 {
@@ -240,7 +240,7 @@ func (repo *HorarioRepositorioMySQL) ListAllDegrees() ([]domain.DegreeDescriptio
 	return res, nil
 }
 
-func (repo *HorarioRepositorioMySQL) GetEntries(terna domain.Terna) ([]domain.Entry, error) {
+func (repo *HorarioRepositorioMySQL) GetEntries(terna domain.DegreeSet) ([]domain.Entry, error) {
 	res := make([]domain.Entry, 0)
 	//Select entries given a degree, course and group
 	results, err := repo.db.Query(consultas.SelectEntries, terna.Group, terna.Year, terna.Degree)

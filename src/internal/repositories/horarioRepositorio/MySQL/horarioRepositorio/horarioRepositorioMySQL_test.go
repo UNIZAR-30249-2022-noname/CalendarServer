@@ -43,7 +43,7 @@ func TestGetAvaiableHours(t *testing.T) {
 			MaxMin:         0,
 		},
 	}
-	ternaAsked := domain.Terna{
+	ternaAsked := domain.DegreeSet{
 		Degree: "Ing. Informatica",
 		Year:   1,
 		Group:  "1",
@@ -427,7 +427,7 @@ func TestDeleteAllEntries(t *testing.T) {
 	repos.CreateNewEntry(entryAsked3)
 	assert.Equal(t, repos.EntryFound(entryAsked3), true)
 
-	ternaAsked := domain.Terna{
+	ternaAsked := domain.DegreeSet{
 		Degree: "Ing. Informatica",
 		Year:   1,
 		Group:  "1",
@@ -594,7 +594,7 @@ func TestGetEntries(t *testing.T) {
 			Weekday: 2,
 		},
 	}
-	ternaAsked := domain.Terna{
+	ternaAsked := domain.DegreeSet{
 		Degree: "Ing. Informatica",
 		Year:   1,
 		Group:  "1",

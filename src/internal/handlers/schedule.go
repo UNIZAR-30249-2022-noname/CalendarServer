@@ -27,7 +27,7 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 	titulacion := c.Query("degree")
 	curso, _ := strconv.Atoi(c.Query("year"))
 	grupo := c.Query("group")
-	terna := domain.Terna{
+	terna := domain.DegreeSet{
 		Year:   curso,
 		Degree: titulacion,
 		Group:  grupo,
@@ -74,7 +74,7 @@ func (hdl *HTTPHandler) PostUpdateScheduler(c *gin.Context) {
 	titulacion := c.Query("degree")
 	curso, _ := strconv.Atoi(c.Query("year"))
 	grupo := c.Query("group")
-	terna := domain.Terna{
+	terna := domain.DegreeSet{
 		Year:   curso,
 		Degree: titulacion,
 		Group:  grupo,
@@ -129,7 +129,7 @@ func (hdl *HTTPHandler) GetEntries(c *gin.Context) {
 	titulacion := c.Query("degree")
 	curso, _ := strconv.Atoi(c.Query("year"))
 	grupo := c.Query("group")
-	terna := domain.Terna{
+	terna := domain.DegreeSet{
 		Year:   curso,
 		Degree: titulacion,
 		Group:  grupo,
@@ -170,7 +170,7 @@ func (hdl *HTTPHandler) GetICS(c *gin.Context) {
 	titulacion := c.Query("degree")
 	curso, _ := strconv.Atoi(c.Query("year"))
 	grupo := c.Query("group")
-	terna := domain.Terna{
+	terna := domain.DegreeSet{
 		Year:   curso,
 		Degree: titulacion,
 		Group:  grupo,

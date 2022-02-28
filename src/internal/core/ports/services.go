@@ -4,14 +4,14 @@ import "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 
 //HorarioServie is the interface which provide access to all the
 //scheduler services related
-type HorarioService interface {
+type SchedulerService interface {
 	//GetAvaiabledHours is a function which returns a set of [AvailableHours]
 	//given a completed [Terna] (not null fields)
-	GetAvailableHours(terna domain.Terna) ([]domain.AvailableHours, error)
+	GetAvailableHours(terna domain.DegreeSet) ([]domain.AvailableHours, error)
 	ListAllDegrees() ([]domain.DegreeDescription, error)
-	GetEntries(terna domain.Terna) ([]domain.Entry, error)
-	UpdateScheduler(entries []domain.Entry, terna domain.Terna) (string, error)
-	GetICS(terna domain.Terna) (string, error)
+	GetEntries(terna domain.DegreeSet) ([]domain.Entry, error)
+	UpdateScheduler(entries []domain.Entry, terna domain.DegreeSet) (string, error)
+	GetICS(terna domain.DegreeSet) (string, error)
 }
 
 type UploadDataservice interface {

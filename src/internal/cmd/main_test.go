@@ -20,7 +20,7 @@ import (
 )
 
 type mocks struct {
-	horarioService *mock_ports.MockHorarioService
+	horarioService *mock_ports.MockSchedulerService
 }
 
 func TestPingRoute(t *testing.T) {
@@ -44,7 +44,7 @@ func TestGetAvailableHours(t *testing.T) {
 	errorParam := handlers.ErrorHttp{Message: "Parámetros incorrectos"}
 	// · Test · //
 	type args struct {
-		terna handlers.TernaDto
+		terna handlers.DegreeSetDto
 	}
 
 	type want struct {
@@ -59,14 +59,14 @@ func TestGetAvailableHours(t *testing.T) {
 	}{
 		{
 			name: "Should return available hours succesfully",
-			args: args{terna: handlers.TernaDto{
+			args: args{terna: handlers.DegreeSetDto{
 				Degree: "Ing.Informática",
 				Year:   2,
 				Group:  "1",
 			}},
 			want: want{result: availableHours.AvailableHours, code: http.StatusOK},
 			mocks: func(m mocks) {
-				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
+				m.horarioService.EXPECT().GetAvailableHours(domain.DegreeSet{
 					Degree: "Ing.Informática",
 					Year:   2,
 					Group:  "1"}).Return(simpleAvailableHours(), nil)
@@ -74,56 +74,56 @@ func TestGetAvailableHours(t *testing.T) {
 		},
 		{
 			name: "Error when [Degree] is empty",
-			args: args{terna: handlers.TernaDto{
+			args: args{terna: handlers.DegreeSetDto{
 
 				Year:  2,
 				Group: "1",
 			}},
 			want: want{result: errorParam, code: http.StatusBadRequest},
 			mocks: func(m mocks) {
-				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
+				m.horarioService.EXPECT().GetAvailableHours(domain.DegreeSet{
 					Year:  2,
 					Group: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 		{
 			name: "Error when [curso] is empty",
-			args: args{terna: handlers.TernaDto{
+			args: args{terna: handlers.DegreeSetDto{
 
 				Degree: "Ing.Informática",
 				Group:  "1",
 			}},
 			want: want{result: errorParam, code: http.StatusBadRequest},
 			mocks: func(m mocks) {
-				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
+				m.horarioService.EXPECT().GetAvailableHours(domain.DegreeSet{
 					Degree: "Ing.Informática",
 					Group:  "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 		{
 			name: "Error when [Group] is empty",
-			args: args{terna: handlers.TernaDto{
+			args: args{terna: handlers.DegreeSetDto{
 
 				Degree: "Ing.Informática",
 				Year:   1,
 			}},
 			want: want{result: errorParam, code: http.StatusBadRequest},
 			mocks: func(m mocks) {
-				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
+				m.horarioService.EXPECT().GetAvailableHours(domain.DegreeSet{
 					Degree: "Ing.Informática",
 					Year:   1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 		{
 			name: "Error [terna] has not resources attached",
-			args: args{terna: handlers.TernaDto{
+			args: args{terna: handlers.DegreeSetDto{
 				Degree: "Ing.Informática",
 				Year:   2,
 				Group:  "1",
 			}},
 			want: want{result: handlers.ErrorHttp{Message: "La terna no existe"}, code: http.StatusNotFound},
 			mocks: func(m mocks) {
-				m.horarioService.EXPECT().GetAvailableHours(domain.Terna{
+				m.horarioService.EXPECT().GetAvailableHours(domain.DegreeSet{
 					Degree: "Ing.Informática",
 					Year:   2,
 					Group:  "1"}).Return([]domain.AvailableHours{}, apperrors.ErrNotFound)
@@ -136,7 +136,7 @@ func TestGetAvailableHours(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			//Prepare
 			m := mocks{
-				horarioService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
+				horarioService: mock_ports.NewMockSchedulerService(gomock.NewController(t)),
 			}
 			tt.mocks(m)
 			setUpRouter := func() *gin.Engine {
@@ -182,7 +182,7 @@ func TestPostSchedulerEntry(t *testing.T) {
 
 	type args struct {
 		newEntry []handlers.EntryDTO
-		terna    domain.Terna
+		terna    domain.DegreeSet
 	}
 
 	type want struct {
@@ -246,7 +246,7 @@ func TestPostSchedulerEntry(t *testing.T) {
 			//Prepare
 
 			m := mocks{
-				horarioService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
+				horarioService: mock_ports.NewMockSchedulerService(gomock.NewController(t)),
 			}
 			setUpRouter := func() *gin.Engine {
 				horarioHandler := handlers.NewHTTPHandler(m.horarioService, nil)
@@ -313,8 +313,8 @@ func simpleExercisesEntry() handlers.EntryDTO {
 	}
 }
 
-func simpleTerna() domain.Terna {
-	return domain.Terna{
+func simpleTerna() domain.DegreeSet {
+	return domain.DegreeSet{
 		Group:  "1",
 		Year:   1,
 		Degree: "Ing Informática",
@@ -363,7 +363,7 @@ func TestListDegrees(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			//Prepare
 			m := mocks{
-				horarioService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
+				horarioService: mock_ports.NewMockSchedulerService(gomock.NewController(t)),
 			}
 			setUpRouter := func() *gin.Engine {
 				horarioHandler := handlers.NewHTTPHandler(m.horarioService, nil)
@@ -421,7 +421,7 @@ func TestGetEntries(t *testing.T) {
 	// · Test · //
 	path := constants.LIST_SCHEDULER_ENTRIES_URL
 	type args struct {
-		terna handlers.TernaDto
+		terna handlers.DegreeSetDto
 	}
 	type want struct {
 		result interface{}
@@ -449,7 +449,7 @@ func TestGetEntries(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			//Prepare
 			m := mocks{
-				horarioService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
+				horarioService: mock_ports.NewMockSchedulerService(gomock.NewController(t)),
 			}
 			tt.mocks(m)
 			setUpRouter := func() *gin.Engine {
@@ -480,7 +480,7 @@ func TestGetICS(t *testing.T) {
 	// · Test · //
 	path := constants.GENERATE_ICAL_URL
 	type args struct {
-		terna handlers.TernaDto
+		terna handlers.DegreeSetDto
 	}
 	type want struct {
 		result interface{}
@@ -508,7 +508,7 @@ func TestGetICS(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			//Prepare
 			m := mocks{
-				horarioService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
+				horarioService: mock_ports.NewMockSchedulerService(gomock.NewController(t)),
 			}
 			tt.mocks(m)
 			setUpRouter := func() *gin.Engine {
@@ -572,7 +572,7 @@ func TestUpdateByCSV(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			//Prepare
 			m := mocks{
-				uploadDataService: mock_ports.NewMockHorarioService(gomock.NewController(t)),
+				uploadDataService: mock_ports.NewMockSchedulerService(gomock.NewController(t)),
 			}
 			tt.mocks(m)
 			setUpRouter := func() *gin.Engine {
@@ -597,13 +597,13 @@ func TestUpdateByCSV(t *testing.T) {
 	}
 }
 */
-func simpleTernaDTO() handlers.TernaDto {
-	return handlers.TernaDto(simpleTerna())
+func simpleTernaDTO() handlers.DegreeSetDto {
+	return handlers.DegreeSetDto(simpleTerna())
 }
 
 /*
-func simpleTerna() domain.Terna {
-	return domain.Terna{
+func simpleTerna() domain.DegreeSet{
+	return domain.DegreeSet{
 		Degree: "Ing.Informática",
 		Year:      2,
 		Group:      "1",

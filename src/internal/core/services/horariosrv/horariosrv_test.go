@@ -15,14 +15,14 @@ import (
 )
 
 type mocks struct {
-	horarioRepository *mock_ports.MockHorarioRepositorio
+	horarioRepository *mock_ports.MockSchedulerRepository
 }
 
 //Checks all the cases for the function GetAvailableHours of the service [horariosrv]
 func TestGetAvailableHours(t *testing.T) {
 	// · Mocks · //
 	AvailableHours := simpleAvailableHours()
-	ternaAsked := domain.Terna{
+	ternaAsked := domain.DegreeSet{
 		Degree: "Ing.Informática",
 		Year:   2,
 		Group:  "1",
@@ -30,7 +30,7 @@ func TestGetAvailableHours(t *testing.T) {
 
 	// · Test · //
 	type args struct {
-		terna domain.Terna
+		terna domain.DegreeSet
 	}
 	type want struct {
 		result []domain.AvailableHours
@@ -59,26 +59,26 @@ func TestGetAvailableHours(t *testing.T) {
 		},
 		{
 			name: "Should return error when [titulación] is empty",
-			args: args{terna: domain.Terna{Year: 1, Group: "1"}},
+			args: args{terna: domain.DegreeSet{Year: 1, Group: "1"}},
 			want: want{result: []domain.AvailableHours{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Year: 1, Group: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+				m.horarioRepository.EXPECT().GetAvailableHours(domain.DegreeSet{Year: 1, Group: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 		{
 			name: "Should return error when [curso] is empty",
-			args: args{terna: domain.Terna{Degree: "A", Group: "1"}},
+			args: args{terna: domain.DegreeSet{Degree: "A", Group: "1"}},
 			want: want{result: []domain.AvailableHours{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Degree: "A", Group: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+				m.horarioRepository.EXPECT().GetAvailableHours(domain.DegreeSet{Degree: "A", Group: "1"}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 		{
 			name: "Should return error when [Group] is empty",
-			args: args{terna: domain.Terna{Degree: "A", Year: 1}},
+			args: args{terna: domain.DegreeSet{Degree: "A", Year: 1}},
 			want: want{result: []domain.AvailableHours{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().GetAvailableHours(domain.Terna{Degree: "A", Year: 1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
+				m.horarioRepository.EXPECT().GetAvailableHours(domain.DegreeSet{Degree: "A", Year: 1}).Return([]domain.AvailableHours{}, apperrors.ErrInvalidInput)
 			},
 		},
 	}
@@ -88,7 +88,7 @@ func TestGetAvailableHours(t *testing.T) {
 			//Prepare
 
 			m := mocks{
-				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+				horarioRepository: mock_ports.NewMockSchedulerRepository(gomock.NewController(t)),
 			}
 
 			tt.mocks(m)
@@ -142,7 +142,7 @@ func TestUpdateEntries(t *testing.T) {
 	// · Test · //
 	type args struct {
 		entries []domain.Entry
-		terna   domain.Terna
+		terna   domain.DegreeSet
 	}
 	type want struct {
 		result string
@@ -179,7 +179,7 @@ func TestUpdateEntries(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			//Prepare
 			m := mocks{
-				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+				horarioRepository: mock_ports.NewMockSchedulerRepository(gomock.NewController(t)),
 			}
 
 			tt.mocks(m)
@@ -235,8 +235,8 @@ func currentDate() string {
 
 }
 
-func simpleTerna() domain.Terna {
-	return domain.Terna{
+func simpleTerna() domain.DegreeSet {
+	return domain.DegreeSet{
 		Group:  "1",
 		Year:   1,
 		Degree: "Ing Informática",
@@ -284,7 +284,7 @@ func TestListSubject(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			//Prepare
 			m := mocks{
-				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+				horarioRepository: mock_ports.NewMockSchedulerRepository(gomock.NewController(t)),
 			}
 
 			tt.mocks(m)
@@ -332,7 +332,7 @@ func simpleListDegreeDescriptions() []domain.DegreeDescription {
 func TestGetEntries(t *testing.T) {
 	// · Mocks · //
 	entries := simpleEntries()
-	ternaAsked := domain.Terna{
+	ternaAsked := domain.DegreeSet{
 		Degree: "Ing.Informática",
 		Year:   2,
 		Group:  "1",
@@ -340,7 +340,7 @@ func TestGetEntries(t *testing.T) {
 
 	// · Test · //
 	type args struct {
-		terna domain.Terna
+		terna domain.DegreeSet
 	}
 	type want struct {
 		result []domain.Entry
@@ -370,19 +370,19 @@ func TestGetEntries(t *testing.T) {
 		},
 		{
 			name:  "Should return error when [titulación] is empty",
-			args:  args{terna: domain.Terna{Year: 1, Group: "1"}},
+			args:  args{terna: domain.DegreeSet{Year: 1, Group: "1"}},
 			want:  want{result: []domain.Entry{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {},
 		},
 		{
 			name:  "Should return error when [Group] is empty",
-			args:  args{terna: domain.Terna{Degree: "A", Year: 1}},
+			args:  args{terna: domain.DegreeSet{Degree: "A", Year: 1}},
 			want:  want{result: []domain.Entry{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {},
 		},
 		{
 			name:  "Should return error when [Year] is empty",
-			args:  args{terna: domain.Terna{Degree: "A", Group: "1"}},
+			args:  args{terna: domain.DegreeSet{Degree: "A", Group: "1"}},
 			want:  want{result: []domain.Entry{}, err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {},
 		},
@@ -394,7 +394,7 @@ func TestGetEntries(t *testing.T) {
 			//Prepare
 
 			m := mocks{
-				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+				horarioRepository: mock_ports.NewMockSchedulerRepository(gomock.NewController(t)),
 			}
 
 			tt.mocks(m)
@@ -419,7 +419,7 @@ func TestGetEntries(t *testing.T) {
 func TestGetICS(t *testing.T) {
 	// · Mocks · //
 	entries := simpleEntries()
-	ternaAsked := domain.Terna{
+	ternaAsked := domain.DegreeSet{
 		Degree: "Ing.Informática",
 		Year:   2,
 		Group:  "1",
@@ -427,7 +427,7 @@ func TestGetICS(t *testing.T) {
 
 	// · Test · //
 	type args struct {
-		terna domain.Terna
+		terna domain.DegreeSet
 	}
 	type want struct {
 		result string
@@ -457,19 +457,19 @@ func TestGetICS(t *testing.T) {
 		},
 		{
 			name:  "Should return error when [titulación] is empty",
-			args:  args{terna: domain.Terna{Year: 1, Group: "1"}},
+			args:  args{terna: domain.DegreeSet{Year: 1, Group: "1"}},
 			want:  want{result: "", err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {},
 		},
 		{
 			name:  "Should return error when [Group] is empty",
-			args:  args{terna: domain.Terna{Degree: "A", Year: 1}},
+			args:  args{terna: domain.DegreeSet{Degree: "A", Year: 1}},
 			want:  want{result: "", err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {},
 		},
 		{
 			name:  "Should return error when [Year] is empty",
-			args:  args{terna: domain.Terna{Degree: "A", Group: "1"}},
+			args:  args{terna: domain.DegreeSet{Degree: "A", Group: "1"}},
 			want:  want{result: "", err: apperrors.ErrInvalidInput},
 			mocks: func(m mocks) {},
 		},
@@ -481,7 +481,7 @@ func TestGetICS(t *testing.T) {
 			//Prepare
 
 			m := mocks{
-				horarioRepository: mock_ports.NewMockHorarioRepositorio(gomock.NewController(t)),
+				horarioRepository: mock_ports.NewMockSchedulerRepository(gomock.NewController(t)),
 			}
 
 			tt.mocks(m)

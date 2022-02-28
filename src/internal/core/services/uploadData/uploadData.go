@@ -10,11 +10,11 @@ import (
 )
 
 type UploadDataserviceImp struct {
-	uploadDataRepositorio ports.UploadDataRepositorio
+	uploadDataRepository ports.UploadDataRepository
 }
 
-func New(uploadDataRepositorio ports.UploadDataRepositorio) *UploadDataserviceImp {
-	return &UploadDataserviceImp{uploadDataRepositorio: uploadDataRepositorio}
+func New(uploadDataRepository ports.UploadDataRepository) *UploadDataserviceImp {
+	return &UploadDataserviceImp{uploadDataRepository: uploadDataRepository}
 }
 
 //3->Code subject, 4->Name subject, 11->Code Degree, 12->Name degree
@@ -58,14 +58,14 @@ func (srv *UploadDataserviceImp) UpdateByCSV(csv string) (bool, error) {
 		hoursT3, _ := strconv.Atoi(aux[0])
 
 		if prevDegree != degreeId {
-			srv.uploadDataRepositorio.CreateNewDegree(degreeId, degreeName)
+			srv.uploadDataRepository.CreateNewDegree(degreeId, degreeName)
 			fmt.Println("Nuevo grado")
 			prevDegree = degreeId
 		}
 
 		actYearId := degreeId*10 + year
 		if prevYear != actYearId {
-			srv.uploadDataRepositorio.CreateNewYear(year, degreeId)
+			srv.uploadDataRepository.CreateNewYear(year, degreeId)
 			fmt.Println("Nuevo año")
 			prevYear = actYearId
 		}
@@ -112,14 +112,14 @@ func (srv *UploadDataserviceImp) UpdateByCSV(csv string) (bool, error) {
 		}
 	}
 	fmt.Println(longstringGroup)
-	err := srv.uploadDataRepositorio.RawExec(longstringGroup)
+	err := srv.uploadDataRepository.RawExec(longstringGroup)
 	if err != nil {
 		fmt.Println("Fallo de longstring group" + err.Error())
 		return false, err
 	}
 	if subjectsIn > 0 {
 		fmt.Println(longstring)
-		err := srv.uploadDataRepositorio.RawExec(longstring)
+		err := srv.uploadDataRepository.RawExec(longstring)
 		if err != nil {
 			fmt.Println("Fallo de longstring " + err.Error())
 			return false, err
@@ -127,7 +127,7 @@ func (srv *UploadDataserviceImp) UpdateByCSV(csv string) (bool, error) {
 	}
 	if hoursIn > 0 {
 		fmt.Println(longstringHours)
-		err := srv.uploadDataRepositorio.RawExec(longstringHours)
+		err := srv.uploadDataRepository.RawExec(longstringHours)
 		if err != nil {
 			fmt.Println("Fallo de longstring " + err.Error())
 			return false, err

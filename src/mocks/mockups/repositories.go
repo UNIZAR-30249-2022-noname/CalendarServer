@@ -11,31 +11,31 @@ import (
 	gomock "github.com/golang/mock/gomock"
 )
 
-// MockHorarioRepositorio is a mock of HorarioRepositorio interface.
-type MockHorarioRepositorio struct {
+// MockSchedulerRepository is a mock of SchedulerRepository interface.
+type MockSchedulerRepository struct {
 	ctrl     *gomock.Controller
-	recorder *MockHorarioRepositorioMockRecorder
+	recorder *MockSchedulerRepositoryMockRecorder
 }
 
-// MockHorarioRepositorioMockRecorder is the mock recorder for MockHorarioRepositorio.
-type MockHorarioRepositorioMockRecorder struct {
-	mock *MockHorarioRepositorio
+// MockSchedulerRepositoryMockRecorder is the mock recorder for MockSchedulerRepository.
+type MockSchedulerRepositoryMockRecorder struct {
+	mock *MockSchedulerRepository
 }
 
-// NewMockHorarioRepositorio creates a new mock instance.
-func NewMockHorarioRepositorio(ctrl *gomock.Controller) *MockHorarioRepositorio {
-	mock := &MockHorarioRepositorio{ctrl: ctrl}
-	mock.recorder = &MockHorarioRepositorioMockRecorder{mock}
+// NewMockSchedulerRepository creates a new mock instance.
+func NewMockSchedulerRepository(ctrl *gomock.Controller) *MockSchedulerRepository {
+	mock := &MockSchedulerRepository{ctrl: ctrl}
+	mock.recorder = &MockSchedulerRepositoryMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockHorarioRepositorio) EXPECT() *MockHorarioRepositorioMockRecorder {
+func (m *MockSchedulerRepository) EXPECT() *MockSchedulerRepositoryMockRecorder {
 	return m.recorder
 }
 
 // CreateNewEntry mocks base method.
-func (m *MockHorarioRepositorio) CreateNewEntry(arg0 domain.Entry) error {
+func (m *MockSchedulerRepository) CreateNewEntry(arg0 domain.Entry) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateNewEntry", arg0)
 	ret0, _ := ret[0].(error)
@@ -43,13 +43,13 @@ func (m *MockHorarioRepositorio) CreateNewEntry(arg0 domain.Entry) error {
 }
 
 // CreateNewEntry indicates an expected call of CreateNewEntry.
-func (mr *MockHorarioRepositorioMockRecorder) CreateNewEntry(arg0 interface{}) *gomock.Call {
+func (mr *MockSchedulerRepositoryMockRecorder) CreateNewEntry(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewEntry", reflect.TypeOf((*MockHorarioRepositorio)(nil).CreateNewEntry), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewEntry", reflect.TypeOf((*MockSchedulerRepository)(nil).CreateNewEntry), arg0)
 }
 
 // DeleteAllEntries mocks base method.
-func (m *MockHorarioRepositorio) DeleteAllEntries(terna domain.Terna) error {
+func (m *MockSchedulerRepository) DeleteAllEntries(terna domain.DegreeSet) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteAllEntries", terna)
 	ret0, _ := ret[0].(error)
@@ -57,13 +57,13 @@ func (m *MockHorarioRepositorio) DeleteAllEntries(terna domain.Terna) error {
 }
 
 // DeleteAllEntries indicates an expected call of DeleteAllEntries.
-func (mr *MockHorarioRepositorioMockRecorder) DeleteAllEntries(terna interface{}) *gomock.Call {
+func (mr *MockSchedulerRepositoryMockRecorder) DeleteAllEntries(terna interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteAllEntries", reflect.TypeOf((*MockHorarioRepositorio)(nil).DeleteAllEntries), terna)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteAllEntries", reflect.TypeOf((*MockSchedulerRepository)(nil).DeleteAllEntries), terna)
 }
 
 // DeleteEntry mocks base method.
-func (m *MockHorarioRepositorio) DeleteEntry(arg0 domain.Entry) error {
+func (m *MockSchedulerRepository) DeleteEntry(arg0 domain.Entry) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteEntry", arg0)
 	ret0, _ := ret[0].(error)
@@ -71,13 +71,13 @@ func (m *MockHorarioRepositorio) DeleteEntry(arg0 domain.Entry) error {
 }
 
 // DeleteEntry indicates an expected call of DeleteEntry.
-func (mr *MockHorarioRepositorioMockRecorder) DeleteEntry(arg0 interface{}) *gomock.Call {
+func (mr *MockSchedulerRepositoryMockRecorder) DeleteEntry(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteEntry", reflect.TypeOf((*MockHorarioRepositorio)(nil).DeleteEntry), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteEntry", reflect.TypeOf((*MockSchedulerRepository)(nil).DeleteEntry), arg0)
 }
 
 // GetAvailableHours mocks base method.
-func (m *MockHorarioRepositorio) GetAvailableHours(arg0 domain.Terna) ([]domain.AvailableHours, error) {
+func (m *MockSchedulerRepository) GetAvailableHours(arg0 domain.DegreeSet) ([]domain.AvailableHours, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetAvailableHours", arg0)
 	ret0, _ := ret[0].([]domain.AvailableHours)
@@ -86,13 +86,13 @@ func (m *MockHorarioRepositorio) GetAvailableHours(arg0 domain.Terna) ([]domain.
 }
 
 // GetAvailableHours indicates an expected call of GetAvailableHours.
-func (mr *MockHorarioRepositorioMockRecorder) GetAvailableHours(arg0 interface{}) *gomock.Call {
+func (mr *MockSchedulerRepositoryMockRecorder) GetAvailableHours(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAvailableHours", reflect.TypeOf((*MockHorarioRepositorio)(nil).GetAvailableHours), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAvailableHours", reflect.TypeOf((*MockSchedulerRepository)(nil).GetAvailableHours), arg0)
 }
 
 // GetEntries mocks base method.
-func (m *MockHorarioRepositorio) GetEntries(arg0 domain.Terna) ([]domain.Entry, error) {
+func (m *MockSchedulerRepository) GetEntries(arg0 domain.DegreeSet) ([]domain.Entry, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetEntries", arg0)
 	ret0, _ := ret[0].([]domain.Entry)
@@ -101,13 +101,13 @@ func (m *MockHorarioRepositorio) GetEntries(arg0 domain.Terna) ([]domain.Entry, 
 }
 
 // GetEntries indicates an expected call of GetEntries.
-func (mr *MockHorarioRepositorioMockRecorder) GetEntries(arg0 interface{}) *gomock.Call {
+func (mr *MockSchedulerRepositoryMockRecorder) GetEntries(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetEntries", reflect.TypeOf((*MockHorarioRepositorio)(nil).GetEntries), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetEntries", reflect.TypeOf((*MockSchedulerRepository)(nil).GetEntries), arg0)
 }
 
 // ListAllDegrees mocks base method.
-func (m *MockHorarioRepositorio) ListAllDegrees() ([]domain.DegreeDescription, error) {
+func (m *MockSchedulerRepository) ListAllDegrees() ([]domain.DegreeDescription, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListAllDegrees")
 	ret0, _ := ret[0].([]domain.DegreeDescription)
@@ -116,36 +116,36 @@ func (m *MockHorarioRepositorio) ListAllDegrees() ([]domain.DegreeDescription, e
 }
 
 // ListAllDegrees indicates an expected call of ListAllDegrees.
-func (mr *MockHorarioRepositorioMockRecorder) ListAllDegrees() *gomock.Call {
+func (mr *MockSchedulerRepositoryMockRecorder) ListAllDegrees() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAllDegrees", reflect.TypeOf((*MockHorarioRepositorio)(nil).ListAllDegrees))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAllDegrees", reflect.TypeOf((*MockSchedulerRepository)(nil).ListAllDegrees))
 }
 
-// MockUploadDataRepositorio is a mock of UploadDataRepositorio interface.
-type MockUploadDataRepositorio struct {
+// MockUploadDataRepository is a mock of UploadDataRepository interface.
+type MockUploadDataRepository struct {
 	ctrl     *gomock.Controller
-	recorder *MockUploadDataRepositorioMockRecorder
+	recorder *MockUploadDataRepositoryMockRecorder
 }
 
-// MockUploadDataRepositorioMockRecorder is the mock recorder for MockUploadDataRepositorio.
-type MockUploadDataRepositorioMockRecorder struct {
-	mock *MockUploadDataRepositorio
+// MockUploadDataRepositoryMockRecorder is the mock recorder for MockUploadDataRepository.
+type MockUploadDataRepositoryMockRecorder struct {
+	mock *MockUploadDataRepository
 }
 
-// NewMockUploadDataRepositorio creates a new mock instance.
-func NewMockUploadDataRepositorio(ctrl *gomock.Controller) *MockUploadDataRepositorio {
-	mock := &MockUploadDataRepositorio{ctrl: ctrl}
-	mock.recorder = &MockUploadDataRepositorioMockRecorder{mock}
+// NewMockUploadDataRepository creates a new mock instance.
+func NewMockUploadDataRepository(ctrl *gomock.Controller) *MockUploadDataRepository {
+	mock := &MockUploadDataRepository{ctrl: ctrl}
+	mock.recorder = &MockUploadDataRepositoryMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockUploadDataRepositorio) EXPECT() *MockUploadDataRepositorioMockRecorder {
+func (m *MockUploadDataRepository) EXPECT() *MockUploadDataRepositoryMockRecorder {
 	return m.recorder
 }
 
 // CreateNewDegree mocks base method.
-func (m *MockUploadDataRepositorio) CreateNewDegree(id int, name string) (bool, error) {
+func (m *MockUploadDataRepository) CreateNewDegree(id int, name string) (bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateNewDegree", id, name)
 	ret0, _ := ret[0].(bool)
@@ -154,13 +154,13 @@ func (m *MockUploadDataRepositorio) CreateNewDegree(id int, name string) (bool, 
 }
 
 // CreateNewDegree indicates an expected call of CreateNewDegree.
-func (mr *MockUploadDataRepositorioMockRecorder) CreateNewDegree(id, name interface{}) *gomock.Call {
+func (mr *MockUploadDataRepositoryMockRecorder) CreateNewDegree(id, name interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewDegree", reflect.TypeOf((*MockUploadDataRepositorio)(nil).CreateNewDegree), id, name)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewDegree", reflect.TypeOf((*MockUploadDataRepository)(nil).CreateNewDegree), id, name)
 }
 
 // CreateNewGroup mocks base method.
-func (m *MockUploadDataRepositorio) CreateNewGroup(group, yearCode int) (bool, error) {
+func (m *MockUploadDataRepository) CreateNewGroup(group, yearCode int) (bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateNewGroup", group, yearCode)
 	ret0, _ := ret[0].(bool)
@@ -169,13 +169,13 @@ func (m *MockUploadDataRepositorio) CreateNewGroup(group, yearCode int) (bool, e
 }
 
 // CreateNewGroup indicates an expected call of CreateNewGroup.
-func (mr *MockUploadDataRepositorioMockRecorder) CreateNewGroup(group, yearCode interface{}) *gomock.Call {
+func (mr *MockUploadDataRepositoryMockRecorder) CreateNewGroup(group, yearCode interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewGroup", reflect.TypeOf((*MockUploadDataRepositorio)(nil).CreateNewGroup), group, yearCode)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewGroup", reflect.TypeOf((*MockUploadDataRepository)(nil).CreateNewGroup), group, yearCode)
 }
 
 // CreateNewHour mocks base method.
-func (m *MockUploadDataRepositorio) CreateNewHour(available, total, subjectCode, groupCode, kind int, group, week string) (bool, error) {
+func (m *MockUploadDataRepository) CreateNewHour(available, total, subjectCode, groupCode, kind int, group, week string) (bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateNewHour", available, total, subjectCode, groupCode, kind, group, week)
 	ret0, _ := ret[0].(bool)
@@ -184,13 +184,13 @@ func (m *MockUploadDataRepositorio) CreateNewHour(available, total, subjectCode,
 }
 
 // CreateNewHour indicates an expected call of CreateNewHour.
-func (mr *MockUploadDataRepositorioMockRecorder) CreateNewHour(available, total, subjectCode, groupCode, kind, group, week interface{}) *gomock.Call {
+func (mr *MockUploadDataRepositoryMockRecorder) CreateNewHour(available, total, subjectCode, groupCode, kind, group, week interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewHour", reflect.TypeOf((*MockUploadDataRepositorio)(nil).CreateNewHour), available, total, subjectCode, groupCode, kind, group, week)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewHour", reflect.TypeOf((*MockUploadDataRepository)(nil).CreateNewHour), available, total, subjectCode, groupCode, kind, group, week)
 }
 
 // CreateNewSubject mocks base method.
-func (m *MockUploadDataRepositorio) CreateNewSubject(id int, name string, degreeCode int) (bool, error) {
+func (m *MockUploadDataRepository) CreateNewSubject(id int, name string, degreeCode int) (bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateNewSubject", id, name, degreeCode)
 	ret0, _ := ret[0].(bool)
@@ -199,13 +199,13 @@ func (m *MockUploadDataRepositorio) CreateNewSubject(id int, name string, degree
 }
 
 // CreateNewSubject indicates an expected call of CreateNewSubject.
-func (mr *MockUploadDataRepositorioMockRecorder) CreateNewSubject(id, name, degreeCode interface{}) *gomock.Call {
+func (mr *MockUploadDataRepositoryMockRecorder) CreateNewSubject(id, name, degreeCode interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewSubject", reflect.TypeOf((*MockUploadDataRepositorio)(nil).CreateNewSubject), id, name, degreeCode)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewSubject", reflect.TypeOf((*MockUploadDataRepository)(nil).CreateNewSubject), id, name, degreeCode)
 }
 
 // CreateNewYear mocks base method.
-func (m *MockUploadDataRepositorio) CreateNewYear(year, degreeCode int) (bool, error) {
+func (m *MockUploadDataRepository) CreateNewYear(year, degreeCode int) (bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateNewYear", year, degreeCode)
 	ret0, _ := ret[0].(bool)
@@ -214,13 +214,13 @@ func (m *MockUploadDataRepositorio) CreateNewYear(year, degreeCode int) (bool, e
 }
 
 // CreateNewYear indicates an expected call of CreateNewYear.
-func (mr *MockUploadDataRepositorioMockRecorder) CreateNewYear(year, degreeCode interface{}) *gomock.Call {
+func (mr *MockUploadDataRepositoryMockRecorder) CreateNewYear(year, degreeCode interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewYear", reflect.TypeOf((*MockUploadDataRepositorio)(nil).CreateNewYear), year, degreeCode)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewYear", reflect.TypeOf((*MockUploadDataRepository)(nil).CreateNewYear), year, degreeCode)
 }
 
 // RawExec mocks base method.
-func (m *MockUploadDataRepositorio) RawExec(exec string) error {
+func (m *MockUploadDataRepository) RawExec(exec string) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RawExec", exec)
 	ret0, _ := ret[0].(error)
@@ -228,7 +228,7 @@ func (m *MockUploadDataRepositorio) RawExec(exec string) error {
 }
 
 // RawExec indicates an expected call of RawExec.
-func (mr *MockUploadDataRepositorioMockRecorder) RawExec(exec interface{}) *gomock.Call {
+func (mr *MockUploadDataRepositoryMockRecorder) RawExec(exec interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RawExec", reflect.TypeOf((*MockUploadDataRepositorio)(nil).RawExec), exec)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RawExec", reflect.TypeOf((*MockUploadDataRepository)(nil).RawExec), exec)
 }
