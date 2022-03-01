@@ -2,14 +2,14 @@ package main
 
 import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/docs"
-	"github.com/gin-contrib/cors"
-
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/horariosrv"
 	uploaddata "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/uploadData"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
 	uploaddatarepositorymysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/MySQL/UploadDataRepository"
 	horariorepositoriorabbit "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/rabbitMQ/repoRabbit"
+	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -23,8 +23,9 @@ func SetupRouter() *gin.Engine {
 	r.Use(cors.Default())
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
-	horariorepoRMQ := horariorepositoriorabbit.New(constants.AMQPURL)
+	conn, ch, _ := connection.Connect(constants.AMQPURL)
+	defer connection.Disconnect(conn, ch)
+	horariorepoRMQ := horariorepositoriorabbit.New(ch)
 	horariosrv := horariosrv.New(horariorepoRMQ)
 	uploadrepo := uploaddatarepositorymysql.New()
 	uploaddata := uploaddata.New(uploadrepo)

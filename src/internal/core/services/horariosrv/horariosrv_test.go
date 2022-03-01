@@ -9,6 +9,7 @@ import (
 	horariorepositoriorabbit "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/rabbitMQ/repoRabbit"
 	mock_ports "github.com/D-D-EINA-Calendar/CalendarServer/src/mocks/mockups"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
+	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -93,7 +94,9 @@ func TestGetAvailableHours(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			horariorepoRMQ := horariorepositoriorabbit.New(constants.AMQPURL)
+			conn, ch, _ := connection.Connect(constants.AMQPURL)
+			defer connection.Disconnect(conn, ch)
+			horariorepoRMQ := horariorepositoriorabbit.New(ch)
 			service := horariosrv.New(horariorepoRMQ)
 
 			//Execute
@@ -185,7 +188,9 @@ func TestUpdateEntries(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			horariorepoRMQ := horariorepositoriorabbit.New(constants.AMQPURL)
+			conn, ch, _ := connection.Connect(constants.AMQPURL)
+			defer connection.Disconnect(conn, ch)
+			horariorepoRMQ := horariorepositoriorabbit.New(ch)
 			service := horariosrv.New(horariorepoRMQ)
 
 			//Execute
@@ -291,7 +296,9 @@ func TestListSubject(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			horariorepoRMQ := horariorepositoriorabbit.New(constants.AMQPURL)
+			conn, ch, _ := connection.Connect(constants.AMQPURL)
+			defer connection.Disconnect(conn, ch)
+			horariorepoRMQ := horariorepositoriorabbit.New(ch)
 			service := horariosrv.New(horariorepoRMQ)
 
 			//Execute
@@ -402,7 +409,9 @@ func TestGetEntries(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			horariorepoRMQ := horariorepositoriorabbit.New(constants.AMQPURL)
+			conn, ch, _ := connection.Connect(constants.AMQPURL)
+			defer connection.Disconnect(conn, ch)
+			horariorepoRMQ := horariorepositoriorabbit.New(ch)
 			service := horariosrv.New(horariorepoRMQ)
 
 			//Execute
@@ -490,7 +499,9 @@ func TestGetICS(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			horariorepoRMQ := horariorepositoriorabbit.New(constants.AMQPURL)
+			conn, ch, _ := connection.Connect(constants.AMQPURL)
+			defer connection.Disconnect(conn, ch)
+			horariorepoRMQ := horariorepositoriorabbit.New(ch)
 			service := horariosrv.New(horariorepoRMQ)
 
 			//Execute
