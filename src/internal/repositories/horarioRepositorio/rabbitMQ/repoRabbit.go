@@ -2,21 +2,23 @@ package rabbitMQ
 
 import (
 	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/streadway/amqp"
 )
 
-type HorarioRepositorioMySQL struct {
+type HorarioRepositorioRabbit struct {
 	conn *amqp.Connection
 	ch *amqp.Channel
 }
 
-func New(address string) *HorarioRepositorioMySQL {
+func New(address string) *HorarioRepositorioRabbit {
 	conn, ch, _ := connection.Connect(address)
-	return &HorarioRepositorioMySQL{conn, ch}
+	return &HorarioRepositorioRabbit{conn, ch}
 }
 
-func (repo *HorarioRepositorioMySQL) CloseConn() {
+func (repo *HorarioRepositorioRabbit) CloseConn() {
 	connection.Disconnect(repo.conn, repo.ch)
 }
 
+func (repo *HorarioRepositorioRabbit) Monitoring(){
+	
+}
