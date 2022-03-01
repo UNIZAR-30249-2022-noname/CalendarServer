@@ -94,7 +94,7 @@ func TestGetAvailableHours(t *testing.T) {
 
 			tt.mocks(m)
 			horariorepoRMQ := horariorepositoriorabbit.New(constants.AMQPURL)
-			service := horariosrv.New(m.horarioRepository, horariorepoRMQ)
+			service := horariosrv.New(horariorepoRMQ)
 
 			//Execute
 			result, err := service.GetAvailableHours(tt.args.terna)
@@ -186,7 +186,7 @@ func TestUpdateEntries(t *testing.T) {
 
 			tt.mocks(m)
 			horariorepoRMQ := horariorepositoriorabbit.New(constants.AMQPURL)
-			service := horariosrv.New(m.horarioRepository, horariorepoRMQ)
+			service := horariosrv.New(horariorepoRMQ)
 
 			//Execute
 			result, err := service.UpdateScheduler(tt.args.entries, tt.args.terna)
@@ -292,7 +292,7 @@ func TestListSubject(t *testing.T) {
 
 			tt.mocks(m)
 			horariorepoRMQ := horariorepositoriorabbit.New(constants.AMQPURL)
-			service := horariosrv.New(m.horarioRepository, horariorepoRMQ)
+			service := horariosrv.New(horariorepoRMQ)
 
 			//Execute
 			result, err := service.ListAllDegrees()
@@ -403,7 +403,7 @@ func TestGetEntries(t *testing.T) {
 
 			tt.mocks(m)
 			horariorepoRMQ := horariorepositoriorabbit.New(constants.AMQPURL)
-			service := horariosrv.New(m.horarioRepository, horariorepoRMQ)
+			service := horariosrv.New(horariorepoRMQ)
 
 			//Execute
 			result, err := service.GetEntries(tt.args.terna)
@@ -491,7 +491,7 @@ func TestGetICS(t *testing.T) {
 
 			tt.mocks(m)
 			horariorepoRMQ := horariorepositoriorabbit.New(constants.AMQPURL)
-			service := horariosrv.New(m.horarioRepository, horariorepoRMQ)
+			service := horariosrv.New(horariorepoRMQ)
 
 			//Execute
 			result, err := service.GetICS(tt.args.terna)

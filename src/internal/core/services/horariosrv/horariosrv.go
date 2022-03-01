@@ -1,24 +1,21 @@
 package horariosrv
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/ports"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
-	ics "github.com/arran4/golang-ical"
 )
 
 //SchedulerServiceImp is the implemetation of [SchedulerService] interface.
 type SchedulerServiceImp struct {
-	horarioRepositorio ports.SchedulerRepository
 	horarioRepositorioRMQ ports.RabbitRepository
 }
 
 //New is a function which creates a new [SchedulerServiceImp]
-func New(horarioRepositorio ports.SchedulerRepository, horarioRepositorioRMQ ports.RabbitRepository) *SchedulerServiceImp {
-	return &SchedulerServiceImp{horarioRepositorio: horarioRepositorio, horarioRepositorioRMQ: horarioRepositorioRMQ}
+func New(horarioRepositorioRMQ ports.RabbitRepository) *SchedulerServiceImp {
+	return &SchedulerServiceImp{horarioRepositorioRMQ: horarioRepositorioRMQ}
 }
 
 
@@ -29,12 +26,7 @@ func (srv *SchedulerServiceImp) Monitoring() (bool, error) {
 //GetAvaiabledHours is a function which returns a set of [AvailableHours]
 //given a completed [Terna] (not null fields)
 func (srv *SchedulerServiceImp) GetAvailableHours(terna domain.DegreeSet) ([]domain.AvailableHours, error) {
-	res, err := srv.horarioRepositorio.GetAvailableHours(terna)
-	if err != nil {
-		return []domain.AvailableHours{}, err
-	}
-
-	return res, nil
+	return []domain.AvailableHours{}, apperrors.ErrToDo
 }
 
 func (srv *SchedulerServiceImp) CreateNewEntry(entry domain.Entry) (string, error) {
@@ -48,39 +40,17 @@ func (srv *SchedulerServiceImp) CreateNewEntry(entry domain.Entry) (string, erro
 		return "", apperrors.ErrInvalidInput
 	}
 
-	err = srv.horarioRepositorio.CreateNewEntry(entry)
-	if err != nil {
-		return "", apperrors.ErrInternal
-	}
-	return time.Now().Format("02/01/2006"), nil
+	return time.Now().Format("02/01/2006"), apperrors.ErrToDo
 }
 
 func (srv *SchedulerServiceImp) ListAllDegrees() ([]domain.DegreeDescription, error) {
-	list, err := srv.horarioRepositorio.ListAllDegrees()
-	return list, err
+
+	return []domain.DegreeDescription{}, apperrors.ErrToDo
 }
 
 func (srv *SchedulerServiceImp) UpdateScheduler(entries []domain.Entry, terna domain.DegreeSet) (string, error) {
-	var lastMod string
-	srv.horarioRepositorio.DeleteAllEntries(terna)
-	/*if err != nil {
-		return "", apperrors.ErrSql
-	}*/
-
-	lastMod = time.Now().Format("02/01/2006")
-
-	for i, e := range entries {
-		//add
-		date, err := srv.CreateNewEntry(e)
-		if err != nil {
-			return "", apperrors.ErrSql
-		}
-		if len(entries)-1 == i {
-			lastMod = date
-		}
-
-	}
-	return lastMod, nil
+	lastMod := time.Now().Format("02/01/2006")
+	return lastMod, apperrors.ErrToDo
 }
 
 func (srv *SchedulerServiceImp) GetEntries(terna domain.DegreeSet) ([]domain.Entry, error) {
@@ -88,11 +58,8 @@ func (srv *SchedulerServiceImp) GetEntries(terna domain.DegreeSet) ([]domain.Ent
 	if terna.Degree == "" || terna.Year == 0 || terna.Group == "" {
 		return []domain.Entry{}, apperrors.ErrInvalidInput
 	}
-	entries, err := srv.horarioRepositorio.GetEntries(terna)
-	if err != nil {
-		return []domain.Entry{}, apperrors.ErrNotFound
-	}
-	return entries, nil
+	
+	return []domain.Entry{}, apperrors.ErrToDo
 
 }
 
@@ -100,6 +67,7 @@ func (srv *SchedulerServiceImp) GetICS(terna domain.DegreeSet) (string, error) {
 	if terna.Degree == "" || terna.Year == 0 || terna.Group == "" {
 		return "", apperrors.ErrInvalidInput
 	}
+	/*
 	entries, err := srv.horarioRepositorio.GetEntries(terna)
 	if err != nil {
 		return "", apperrors.ErrSql
@@ -125,5 +93,8 @@ func (srv *SchedulerServiceImp) GetICS(terna domain.DegreeSet) (string, error) {
 		event.AddRrule("FREQ=DAILY;INTERVAL=7")
 		i++
 	}
+	
 	return cal.Serialize(), nil
+	*/
+	return "", apperrors.ErrToDo
 }

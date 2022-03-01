@@ -26,5 +26,9 @@ var (
 	//ErrInvalidKind is an error returned when the Kind is incompatible
 	//with the Group and Week
 	ErrInvalidKind = errors.New("invalid_subject_kind")
+
+	//ErrInvalidKind is an error returned when the Kind is incompatible
+	//with the Group and Week
+	ErrToDo = errors.New("not_done_yet")
   
 )

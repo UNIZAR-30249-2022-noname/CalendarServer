@@ -8,7 +8,6 @@ import (
 	uploaddata "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/uploadData"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
 	uploaddatarepositorymysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/MySQL/UploadDataRepository"
-	horariorepositoriomysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/MySQL/horarioRepositorio"
 	horariorepositoriorabbit "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/rabbitMQ/repoRabbit"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/gin-gonic/gin"
@@ -24,9 +23,9 @@ func SetupRouter() *gin.Engine {
 	r.Use(cors.Default())
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	horariorepo := horariorepositoriomysql.New()
+
 	horariorepoRMQ := horariorepositoriorabbit.New(constants.AMQPURL)
-	horariosrv := horariosrv.New(horariorepo, horariorepoRMQ)
+	horariosrv := horariosrv.New(horariorepoRMQ)
 	uploadrepo := uploaddatarepositorymysql.New()
 	uploaddata := uploaddata.New(uploadrepo)
 	horarioHandler := handlers.NewHTTPHandler(horariosrv, uploaddata)
