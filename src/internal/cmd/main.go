@@ -11,12 +11,13 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/streadway/amqp"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 //SetupRouter is a func which bind each uri with a handler function
-func SetupRouter() *gin.Engine {
+func SetupRouter() (*gin.Engine, *amqp.Connection, *amqp.Channel) {
 
 	r := gin.Default()
 
@@ -24,7 +25,6 @@ func SetupRouter() *gin.Engine {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	conn, ch, _ := connection.Connect(constants.AMQPURL)
-	defer connection.Disconnect(conn, ch)
 	horariorepoRMQ := horariorepositoriorabbit.New(ch)
 	horariosrv := horariosrv.New(horariorepoRMQ)
 	uploadrepo := uploaddatarepositorymysql.New()
@@ -38,7 +38,7 @@ func SetupRouter() *gin.Engine {
 	r.GET(constants.GENERATE_ICAL_URL, horarioHandler.GetICS)
 	r.POST(constants.UPLOAD_DATA_DEGREES_URL, horarioHandler.UpdateByCSV)
 
-	return r
+	return r, conn, ch
 }
 
 func main() {
@@ -49,7 +49,8 @@ func main() {
 	docs.SwaggerInfo.Host = "localhost:8080/"
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
-	r := SetupRouter()
+	r, conn, ch := SetupRouter()
+	defer connection.Disconnect(conn, ch)
 
 	r.Run(":8080")
 }
