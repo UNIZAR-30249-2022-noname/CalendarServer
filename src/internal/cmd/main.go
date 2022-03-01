@@ -30,7 +30,7 @@ func SetupRouter() *gin.Engine {
 	uploadrepo := uploaddatarepositorymysql.New()
 	uploaddata := uploaddata.New(uploadrepo)
 	horarioHandler := handlers.NewHTTPHandler(horariosrv, uploaddata)
-	r.GET(constants.PING_URL, handlers.Ping)
+	r.GET(constants.PING_URL, horarioHandler.Ping)
 	r.GET(constants.GET_AVAILABLE_HOURS_URL, horarioHandler.GetAvailableHours)
 	r.POST(constants.UPDATE_SCHEDULER_URL, horarioHandler.PostUpdateScheduler)
 	r.GET(constants.LIST_DEGREES_URL, horarioHandler.ListDegrees)

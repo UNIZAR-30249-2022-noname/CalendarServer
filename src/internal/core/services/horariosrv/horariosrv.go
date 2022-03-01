@@ -20,7 +20,8 @@ func New(horarioRepositorioRMQ ports.RabbitRepository) *SchedulerServiceImp {
 
 
 func (srv *SchedulerServiceImp) Monitoring() (bool, error) {
-	return true, nil
+	res, err := srv.horarioRepositorioRMQ.Monitoring()
+	return res, err
 }
 
 //GetAvaiabledHours is a function which returns a set of [AvailableHours]
