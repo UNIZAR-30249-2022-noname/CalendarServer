@@ -19,7 +19,7 @@ func (repo *HorarioRepositorioRabbit) CloseConn() {
 }
 
 func (repo *HorarioRepositorioRabbit) Monitoring() (bool, error){
-	_, err := repo.ch.QueueDeclare(
+	q, err := repo.ch.QueueDeclare(
 		"rpc_queue", // name
 		false,       // durable
 		false,       // delete when unused
@@ -27,6 +27,7 @@ func (repo *HorarioRepositorioRabbit) Monitoring() (bool, error){
 		false,       // no-wait
 		nil,         // arguments
 	)
+	_=q
 	if err != nil {
 		return false, apperrors.ErrConn
 	}

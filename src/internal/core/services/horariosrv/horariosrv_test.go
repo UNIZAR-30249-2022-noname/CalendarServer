@@ -20,6 +20,17 @@ type mocks struct {
 	horarioRepository *mock_ports.MockSchedulerRepository
 }
 
+
+func TestPing(t *testing.T) {
+	conn, ch, _ := connection.Connect(constants.AMQPURL)
+	defer connection.Disconnect(conn, ch)
+	horariorepoRMQ := horariorepositoriorabbit.New(ch)
+	horariosrv := horariosrv.New(horariorepoRMQ)
+	res, err := horariosrv.Monitoring()
+	assert.Equal(t, res, true)
+	assert.Equal(t, err, nil)
+}
+
 //Checks all the cases for the function GetAvailableHours of the service [horariosrv]
 func TestGetAvailableHours(t *testing.T) {
 	// · Mocks · //
