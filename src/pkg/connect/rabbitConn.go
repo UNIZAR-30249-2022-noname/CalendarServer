@@ -1,6 +1,8 @@
 package connect
 
-import "github.com/streadway/amqp"
+import (
+	"github.com/streadway/amqp"
+)
 
 func Connect(address string) (*amqp.Connection, *amqp.Channel, error) {
 	conn, err := amqp.Dial(address)
