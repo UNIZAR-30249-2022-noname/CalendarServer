@@ -6,13 +6,14 @@ import (
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/horariosrv"
+	horariorepositoriorabbit "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/rabbitMQ/repoRabbit"
 	mock_ports "github.com/D-D-EINA-Calendar/CalendarServer/src/mocks/mockups"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
-	"github.com/stretchr/testify/assert"
-
 	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
 )
+
 
 type mocks struct {
 	horarioRepository *mock_ports.MockSchedulerRepository
@@ -92,7 +93,8 @@ func TestGetAvailableHours(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			service := horariosrv.New(m.horarioRepository)
+			horariorepoRMQ := horariorepositoriorabbit.New(constants.AMQPURL)
+			service := horariosrv.New(m.horarioRepository, horariorepoRMQ)
 
 			//Execute
 			result, err := service.GetAvailableHours(tt.args.terna)
@@ -183,7 +185,8 @@ func TestUpdateEntries(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			service := horariosrv.New(m.horarioRepository)
+			horariorepoRMQ := horariorepositoriorabbit.New(constants.AMQPURL)
+			service := horariosrv.New(m.horarioRepository, horariorepoRMQ)
 
 			//Execute
 			result, err := service.UpdateScheduler(tt.args.entries, tt.args.terna)
@@ -288,7 +291,8 @@ func TestListSubject(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			service := horariosrv.New(m.horarioRepository)
+			horariorepoRMQ := horariorepositoriorabbit.New(constants.AMQPURL)
+			service := horariosrv.New(m.horarioRepository, horariorepoRMQ)
 
 			//Execute
 			result, err := service.ListAllDegrees()
@@ -398,7 +402,8 @@ func TestGetEntries(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			service := horariosrv.New(m.horarioRepository)
+			horariorepoRMQ := horariorepositoriorabbit.New(constants.AMQPURL)
+			service := horariosrv.New(m.horarioRepository, horariorepoRMQ)
 
 			//Execute
 			result, err := service.GetEntries(tt.args.terna)
@@ -485,7 +490,8 @@ func TestGetICS(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			service := horariosrv.New(m.horarioRepository)
+			horariorepoRMQ := horariorepositoriorabbit.New(constants.AMQPURL)
+			service := horariosrv.New(m.horarioRepository, horariorepoRMQ)
 
 			//Execute
 			result, err := service.GetICS(tt.args.terna)

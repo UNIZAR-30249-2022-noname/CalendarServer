@@ -13,11 +13,12 @@ import (
 //SchedulerServiceImp is the implemetation of [SchedulerService] interface.
 type SchedulerServiceImp struct {
 	horarioRepositorio ports.SchedulerRepository
+	horarioRepositorioRMQ ports.RabbitRepository
 }
 
 //New is a function which creates a new [SchedulerServiceImp]
-func New(horarioRepositorio ports.SchedulerRepository) *SchedulerServiceImp {
-	return &SchedulerServiceImp{horarioRepositorio: horarioRepositorio}
+func New(horarioRepositorio ports.SchedulerRepository, horarioRepositorioRMQ ports.RabbitRepository) *SchedulerServiceImp {
+	return &SchedulerServiceImp{horarioRepositorio: horarioRepositorio, horarioRepositorioRMQ: horarioRepositorioRMQ}
 }
 
 

@@ -1,4 +1,4 @@
-package rabbitMQ
+package repoRabbit
 
 import (
 	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
@@ -19,6 +19,6 @@ func (repo *HorarioRepositorioRabbit) CloseConn() {
 	connection.Disconnect(repo.conn, repo.ch)
 }
 
-func (repo *HorarioRepositorioRabbit) Monitoring(){
-	
+func (repo *HorarioRepositorioRabbit) Monitoring() (bool, error){
+	return true, nil
 }
