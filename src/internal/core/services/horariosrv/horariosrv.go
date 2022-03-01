@@ -20,6 +20,11 @@ func New(horarioRepositorio ports.SchedulerRepository) *SchedulerServiceImp {
 	return &SchedulerServiceImp{horarioRepositorio: horarioRepositorio}
 }
 
+
+func (srv *SchedulerServiceImp) Monitoring() (bool, error) {
+	return true, nil
+}
+
 //GetAvaiabledHours is a function which returns a set of [AvailableHours]
 //given a completed [Terna] (not null fields)
 func (srv *SchedulerServiceImp) GetAvailableHours(terna domain.DegreeSet) ([]domain.AvailableHours, error) {
