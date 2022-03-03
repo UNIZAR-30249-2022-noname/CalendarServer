@@ -12,6 +12,7 @@ type SchedulerService interface {
 	GetEntries(terna domain.DegreeSet) ([]domain.Entry, error)
 	UpdateScheduler(entries []domain.Entry, terna domain.DegreeSet) (string, error)
 	GetICS(terna domain.DegreeSet) (string, error)
+	Monitoring() (bool, error)
 }
 
 type UploadDataservice interface {

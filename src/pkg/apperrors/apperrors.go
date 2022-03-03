@@ -26,5 +26,11 @@ var (
 	//ErrInvalidKind is an error returned when the Kind is incompatible
 	//with the Group and Week
 	ErrInvalidKind = errors.New("invalid_subject_kind")
+
+	//ErrToDo is an error returned when the functionality isn't made yet
+	ErrToDo = errors.New("not_done_yet")
+
+	//ErrConnis an error returned when the connection to AMQP fails
+	ErrConn = errors.New("amqp_connection_error")
   
 )

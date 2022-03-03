@@ -21,3 +21,7 @@ type UploadDataRepository interface {
 	CreateNewHour(available, total, subjectCode, groupCode, kind int, group, week string) (bool, error)
 	RawExec(exec string) error
 }
+
+type RabbitRepository interface {
+	Monitoring() (bool, error)
+}
