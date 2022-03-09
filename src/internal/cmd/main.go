@@ -4,9 +4,11 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/docs"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/ports"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/horariosrv"
+	rabbit "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/monitoring"
 	uploaddata "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/uploadData"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
 	uploaddatarepositorymysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/MySQL/UploadDataRepository"
+	horarioRepositorio "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/MySQL/horarioRepositorio"
 	horariorepositoriorabbit "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/rabbitMQ/repoRabbit"
 	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
@@ -19,6 +21,7 @@ import (
 type services struct {
 	scheduler  ports.SchedulerService
 	uploadData ports.UploadDataservice
+	rabbit 	   ports.RabbitService
 }
 
 var rabbitConn connection.Connection
@@ -34,12 +37,14 @@ func config() (services, error) {
 	if err != nil {
 		//TODO
 	}
-	schedulerRepo := horariorepositoriorabbit.New(chScheduler)
+	schedulerRepo := horarioRepositorio.New()
 	uploadrepo := uploaddatarepositorymysql.New()
+	rabbitRepo := horariorepositoriorabbit.New(chScheduler)
 
 	return services{
 		scheduler:  horariosrv.New(schedulerRepo),
 		uploadData: uploaddata.New(uploadrepo),
+		rabbit:  	rabbit.New(rabbitRepo),
 	}, nil
 
 }
@@ -56,7 +61,7 @@ func SetupRouter() *gin.Engine {
 	if err != nil {
 		//TODO
 	}
-	horarioHandler := handlers.NewHTTPHandler(srvs.scheduler, srvs.uploadData)
+	horarioHandler := handlers.NewHTTPHandler(srvs.scheduler, srvs.uploadData, srvs.rabbit)
 	r.GET(constants.PING_URL, horarioHandler.Ping)
 	r.GET(constants.GET_AVAILABLE_HOURS_URL, horarioHandler.GetAvailableHours)
 	r.POST(constants.UPDATE_SCHEDULER_URL, horarioHandler.PostUpdateScheduler)

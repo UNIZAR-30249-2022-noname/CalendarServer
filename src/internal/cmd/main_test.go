@@ -7,7 +7,6 @@ import (
 
 	main "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/cmd"
 	mock_ports "github.com/D-D-EINA-Calendar/CalendarServer/src/mocks/mockups"
-	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/stretchr/testify/assert"
 )
@@ -18,8 +17,7 @@ type mocks struct {
 
 func TestPingRoute(t *testing.T) {
 	//setup the real router
-	router, conn, ch  := main.SetupRouter()
-	defer connection.Disconnect(conn, ch)
+	router := main.SetupRouter()
 
 	w := httptest.NewRecorder()
 	//doing the request

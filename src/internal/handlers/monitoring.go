@@ -11,7 +11,7 @@ import "github.com/gin-gonic/gin"
 //@Router /ping/ [get]
 func (hdl *HTTPHandler) Ping(c *gin.Context) {
 	payload := ""
-	res, err := hdl.horarioService.Monitoring()
+	res, err := hdl.rabbit.Monitoring()
 	if !res {
 		payload = err.Error()
 	} else {

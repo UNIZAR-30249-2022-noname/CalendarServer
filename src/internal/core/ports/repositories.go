@@ -22,6 +22,6 @@ type UploadDataRepository interface {
 	RawExec(exec string) error
 }
 
-type Monitoring interface {
-	Ping() (bool, error)
+type MonitoringRepository interface {
+	Monitoring() (bool, error)
 }
