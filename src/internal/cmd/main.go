@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/docs"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/ports"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/horariosrv"
 	uploaddata "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/uploadData"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
@@ -11,25 +12,51 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/streadway/amqp"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+type services struct {
+	scheduler  ports.SchedulerService
+	uploadData ports.UploadDataservice
+}
+
+var rabbitConn connection.Connection
+
+func config() (services, error) {
+	//Conexión con rabbit
+	var err error
+	rabbitConn, err = connection.New(constants.AMQPURL)
+	if err != nil {
+		//TODO
+	}
+	chScheduler, err := rabbitConn.NewChannel()
+	if err != nil {
+		//TODO
+	}
+	schedulerRepo := horariorepositoriorabbit.New(chScheduler)
+	uploadrepo := uploaddatarepositorymysql.New()
+
+	return services{
+		scheduler:  horariosrv.New(schedulerRepo),
+		uploadData: uploaddata.New(uploadrepo),
+	}, nil
+
+}
+
 //SetupRouter is a func which bind each uri with a handler function
-func SetupRouter() (*gin.Engine, *amqp.Connection, *amqp.Channel) {
+func SetupRouter() *gin.Engine {
 
 	r := gin.Default()
 
 	r.Use(cors.Default())
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	conn, ch, _ := connection.Connect(constants.AMQPURL)
-	horariorepoRMQ := horariorepositoriorabbit.New(ch)
-	horariosrv := horariosrv.New(horariorepoRMQ)
-	uploadrepo := uploaddatarepositorymysql.New()
-	uploaddata := uploaddata.New(uploadrepo)
-	horarioHandler := handlers.NewHTTPHandler(horariosrv, uploaddata)
+	srvs, err := config()
+	if err != nil {
+		//TODO
+	}
+	horarioHandler := handlers.NewHTTPHandler(srvs.scheduler, srvs.uploadData)
 	r.GET(constants.PING_URL, horarioHandler.Ping)
 	r.GET(constants.GET_AVAILABLE_HOURS_URL, horarioHandler.GetAvailableHours)
 	r.POST(constants.UPDATE_SCHEDULER_URL, horarioHandler.PostUpdateScheduler)
@@ -38,7 +65,7 @@ func SetupRouter() (*gin.Engine, *amqp.Connection, *amqp.Channel) {
 	r.GET(constants.GENERATE_ICAL_URL, horarioHandler.GetICS)
 	r.POST(constants.UPLOAD_DATA_DEGREES_URL, horarioHandler.UpdateByCSV)
 
-	return r, conn, ch
+	return r
 }
 
 func main() {
@@ -49,8 +76,8 @@ func main() {
 	docs.SwaggerInfo.Host = "localhost:8080/"
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
-	r, conn, ch := SetupRouter()
-	defer connection.Disconnect(conn, ch)
+	r := SetupRouter()
+	defer rabbitConn.Disconnect()
 
 	r.Run(":8080")
 }

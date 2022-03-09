@@ -4,19 +4,34 @@ import (
 	"github.com/streadway/amqp"
 )
 
-func Connect(address string) (*amqp.Connection, *amqp.Channel, error) {
-	conn, err := amqp.Dial(address)
-	if err != nil {
-		return nil, nil, err
-	}
-    ch, err := conn.Channel()
-	if err != nil {
-		return nil, nil, err
-	}
-	return conn, ch, err
+type Connection struct {
+	connection *amqp.Connection
+	channels   []*amqp.Channel
+	open       bool
 }
 
-func Disconnect(conn *amqp.Connection, ch *amqp.Channel) {
-    conn.Close()
-    ch.Close()
+func New(address string) (Connection, error) {
+	conn, err := amqp.Dial(address)
+	if err != nil {
+		return Connection{}, err //TODO poner un error nuestro
+	}
+	return Connection{connection: conn, channels: []*amqp.Channel{}, open: true}, err
+}
+func (conn *Connection) Disconnect() {
+	for _, ch := range conn.channels {
+		ch.Close()
+	}
+	conn.connection.Close()
+	conn.open = false
+
+}
+
+func (conn *Connection) NewChannel() (*amqp.Channel, error) {
+	ch, err := conn.connection.Channel()
+	if err != nil {
+		return nil, err //TOSO poner un error nuestro
+	}
+	conn.channels = append(conn.channels, ch)
+	return ch, err
+
 }
