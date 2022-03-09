@@ -198,6 +198,30 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/handlers.ErrorHttp'
+  /login/:
+    get:
+      description: Get credentials for doing task which requires certain privileges
+      parameters:
+      - description: name of the user
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
   /ping/:
     get:
       description: Response "pong" if the server is currrently available
