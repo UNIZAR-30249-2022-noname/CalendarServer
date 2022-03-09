@@ -232,3 +232,79 @@ func (mr *MockUploadDataRepositoryMockRecorder) RawExec(exec interface{}) *gomoc
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RawExec", reflect.TypeOf((*MockUploadDataRepository)(nil).RawExec), exec)
 }
+
+// MockMonitoringRepository is a mock of MonitoringRepository interface.
+type MockMonitoringRepository struct {
+	ctrl     *gomock.Controller
+	recorder *MockMonitoringRepositoryMockRecorder
+}
+
+// MockMonitoringRepositoryMockRecorder is the mock recorder for MockMonitoringRepository.
+type MockMonitoringRepositoryMockRecorder struct {
+	mock *MockMonitoringRepository
+}
+
+// NewMockMonitoringRepository creates a new mock instance.
+func NewMockMonitoringRepository(ctrl *gomock.Controller) *MockMonitoringRepository {
+	mock := &MockMonitoringRepository{ctrl: ctrl}
+	mock.recorder = &MockMonitoringRepositoryMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockMonitoringRepository) EXPECT() *MockMonitoringRepositoryMockRecorder {
+	return m.recorder
+}
+
+// Ping mocks base method.
+func (m *MockMonitoringRepository) Ping() (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Ping")
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Ping indicates an expected call of Ping.
+func (mr *MockMonitoringRepositoryMockRecorder) Ping() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Ping", reflect.TypeOf((*MockMonitoringRepository)(nil).Ping))
+}
+
+// MockUsersRepository is a mock of UsersRepository interface.
+type MockUsersRepository struct {
+	ctrl     *gomock.Controller
+	recorder *MockUsersRepositoryMockRecorder
+}
+
+// MockUsersRepositoryMockRecorder is the mock recorder for MockUsersRepository.
+type MockUsersRepositoryMockRecorder struct {
+	mock *MockUsersRepository
+}
+
+// NewMockUsersRepository creates a new mock instance.
+func NewMockUsersRepository(ctrl *gomock.Controller) *MockUsersRepository {
+	mock := &MockUsersRepository{ctrl: ctrl}
+	mock.recorder = &MockUsersRepositoryMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockUsersRepository) EXPECT() *MockUsersRepositoryMockRecorder {
+	return m.recorder
+}
+
+// GetCredentials mocks base method.
+func (m *MockUsersRepository) GetCredentials(username string) (domain.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetCredentials", username)
+	ret0, _ := ret[0].(domain.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetCredentials indicates an expected call of GetCredentials.
+func (mr *MockUsersRepositoryMockRecorder) GetCredentials(username interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCredentials", reflect.TypeOf((*MockUsersRepository)(nil).GetCredentials), username)
+}
