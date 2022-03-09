@@ -2,14 +2,9 @@ package main
 
 import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/docs"
-	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/ports"
-	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/horariosrv"
-	rabbit "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/monitoring"
-	uploaddata "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/uploadData"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/monitoring"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
-	uploaddatarepositorymysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/MySQL/UploadDataRepository"
-	horarioRepositorio "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/MySQL/horarioRepositorio"
-	horariorepositoriorabbit "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/rabbitMQ/repoRabbit"
+	monitoringrepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/monitoringRepository"
 	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/gin-contrib/cors"
@@ -18,33 +13,23 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-type services struct {
-	scheduler  ports.SchedulerService
-	uploadData ports.UploadDataservice
-	rabbit 	   ports.RabbitService
-}
-
 var rabbitConn connection.Connection
 
-func config() (services, error) {
+func config() (handlers.HTTPHandler, error) {
 	//Conexión con rabbit
 	var err error
 	rabbitConn, err = connection.New(constants.AMQPURL)
 	if err != nil {
 		//TODO
 	}
-	chScheduler, err := rabbitConn.NewChannel()
+	chMonitoring, err := rabbitConn.NewChannel()
 	if err != nil {
 		//TODO
 	}
-	schedulerRepo := horarioRepositorio.New()
-	uploadrepo := uploaddatarepositorymysql.New()
-	rabbitRepo := horariorepositoriorabbit.New(chScheduler)
+	monitoringRepo := monitoringrepositoryrabbitamq.New(chMonitoring)
 
-	return services{
-		scheduler:  horariosrv.New(schedulerRepo),
-		uploadData: uploaddata.New(uploadrepo),
-		rabbit:  	rabbit.New(rabbitRepo),
+	return handlers.HTTPHandler{
+		Monitoring: monitoring.New(monitoringRepo),
 	}, nil
 
 }
@@ -57,18 +42,17 @@ func SetupRouter() *gin.Engine {
 	r.Use(cors.Default())
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	srvs, err := config()
+	handler, err := config()
 	if err != nil {
 		//TODO
 	}
-	horarioHandler := handlers.NewHTTPHandler(srvs.scheduler, srvs.uploadData, srvs.rabbit)
-	r.GET(constants.PING_URL, horarioHandler.Ping)
-	r.GET(constants.GET_AVAILABLE_HOURS_URL, horarioHandler.GetAvailableHours)
-	r.POST(constants.UPDATE_SCHEDULER_URL, horarioHandler.PostUpdateScheduler)
-	r.GET(constants.LIST_DEGREES_URL, horarioHandler.ListDegrees)
-	r.GET(constants.LIST_SCHEDULER_ENTRIES_URL, horarioHandler.GetEntries)
-	r.GET(constants.GENERATE_ICAL_URL, horarioHandler.GetICS)
-	r.POST(constants.UPLOAD_DATA_DEGREES_URL, horarioHandler.UpdateByCSV)
+	r.GET(constants.PING_URL, handler.Ping)
+	r.GET(constants.GET_AVAILABLE_HOURS_URL, handler.GetAvailableHours)
+	r.POST(constants.UPDATE_SCHEDULER_URL, handler.PostUpdateScheduler)
+	r.GET(constants.LIST_DEGREES_URL, handler.ListDegrees)
+	r.GET(constants.LIST_SCHEDULER_ENTRIES_URL, handler.GetEntries)
+	r.GET(constants.GENERATE_ICAL_URL, handler.GetICS)
+	r.POST(constants.UPLOAD_DATA_DEGREES_URL, handler.UpdateByCSV)
 
 	return r
 }

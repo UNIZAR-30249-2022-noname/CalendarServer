@@ -18,6 +18,6 @@ type UploadDataservice interface {
 	UpdateByCSV(csv string) (bool, error)
 }
 
-type RabbitService interface {
-	Monitoring() (bool, error)
+type Monitoring interface {
+	Ping() (bool, error)
 }

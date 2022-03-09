@@ -14,6 +14,6 @@ func New(monitoringRepository ports.MonitoringRepository) *MonitoringServiceImp 
 	return &MonitoringServiceImp{monitoringRepository: monitoringRepository}
 }
 
-func (srv *MonitoringServiceImp) Monitoring() (bool, error){
-	return srv.monitoringRepository.Monitoring()
+func (srv *MonitoringServiceImp) Ping() (bool, error) {
+	return srv.monitoringRepository.Ping()
 }

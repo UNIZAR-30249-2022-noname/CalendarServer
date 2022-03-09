@@ -23,5 +23,5 @@ type UploadDataRepository interface {
 }
 
 type MonitoringRepository interface {
-	Monitoring() (bool, error)
+	Ping() (bool, error)
 }

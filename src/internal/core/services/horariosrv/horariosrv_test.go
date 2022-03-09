@@ -6,7 +6,7 @@ import (
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/horariosrv"
-	horariorepositoriomysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/MySQL/horarioRepositorio"
+	schedulerrepositorymysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/MySQL/schedulerRepository"
 	mock_ports "github.com/D-D-EINA-Calendar/CalendarServer/src/mocks/mockups"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
@@ -14,12 +14,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-
 type mocks struct {
 	horarioRepository *mock_ports.MockSchedulerRepository
 }
-
-
 
 //Checks all the cases for the function GetAvailableHours of the service [horariosrv]
 func TestGetAvailableHours(t *testing.T) {
@@ -96,7 +93,7 @@ func TestGetAvailableHours(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			horariorepo := horariorepositoriomysql.New()
+			horariorepo := schedulerrepositorymysql.New()
 			service := horariosrv.New(horariorepo)
 
 			//Execute
@@ -189,7 +186,7 @@ func TestUpdateEntries(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			horariorepo := horariorepositoriomysql.New()
+			horariorepo := schedulerrepositorymysql.New()
 			service := horariosrv.New(horariorepo)
 
 			//Execute
@@ -296,7 +293,7 @@ func TestListSubject(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			horariorepo := horariorepositoriomysql.New()
+			horariorepo := schedulerrepositorymysql.New()
 			service := horariosrv.New(horariorepo)
 
 			//Execute
@@ -408,7 +405,7 @@ func TestGetEntries(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			horariorepo := horariorepositoriomysql.New()
+			horariorepo := schedulerrepositorymysql.New()
 			service := horariosrv.New(horariorepo)
 
 			//Execute
@@ -497,7 +494,7 @@ func TestGetICS(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			horariorepo := horariorepositoriomysql.New()
+			horariorepo := schedulerrepositorymysql.New()
 			service := horariosrv.New(horariorepo)
 
 			//Execute

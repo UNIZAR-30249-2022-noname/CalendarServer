@@ -11,11 +11,11 @@ import "github.com/gin-gonic/gin"
 //@Router /ping/ [get]
 func (hdl *HTTPHandler) Ping(c *gin.Context) {
 	payload := ""
-	res, err := hdl.rabbit.Monitoring()
+	res, err := hdl.Monitoring.Ping()
 	if !res {
 		payload = err.Error()
 	} else {
 		payload = "ame un kebab"
 	}
-	c.String(200, "pong " + payload)
+	c.String(200, "pong "+payload)
 }

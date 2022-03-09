@@ -41,7 +41,7 @@ func (hdl *HTTPHandler) UpdateByCSV(c *gin.Context) {
 	defer f.Close()
 
 	fileBytes, _ := ioutil.ReadAll(f)
-	success, err := hdl.uploadDataservice.UpdateByCSV(string(fileBytes))
+	success, err := hdl.UploadDataService.UpdateByCSV(string(fileBytes))
 	if err == nil {
 		c.JSON(http.StatusOK, success)
 	} else {
