@@ -3,7 +3,7 @@ package uploaddatarepositorymysql_test
 import (
 	"testing"
 
-	uploaddatarepositorymysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/MySQL/UploadDataRepository"
+	uploaddatarepositorymysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/MySQL/UploadDataRepository"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	consultas "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/sql"

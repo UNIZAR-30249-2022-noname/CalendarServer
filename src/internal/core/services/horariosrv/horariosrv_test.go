@@ -6,29 +6,16 @@ import (
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/horariosrv"
-	horariorepositoriorabbit "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/rabbitMQ/repoRabbit"
+	schedulerrepositorymysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/MySQL/schedulerRepository"
 	mock_ports "github.com/D-D-EINA-Calendar/CalendarServer/src/mocks/mockups"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
-	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 )
 
-
 type mocks struct {
 	horarioRepository *mock_ports.MockSchedulerRepository
-}
-
-
-func TestPing(t *testing.T) {
-	conn, ch, _ := connection.Connect(constants.AMQPURL)
-	defer connection.Disconnect(conn, ch)
-	horariorepoRMQ := horariorepositoriorabbit.New(ch)
-	horariosrv := horariosrv.New(horariorepoRMQ)
-	res, err := horariosrv.Monitoring()
-	assert.Equal(t, res, true)
-	assert.Equal(t, err, nil)
 }
 
 //Checks all the cases for the function GetAvailableHours of the service [horariosrv]
@@ -106,10 +93,8 @@ func TestGetAvailableHours(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			conn, ch, _ := connection.Connect(constants.AMQPURL)
-			defer connection.Disconnect(conn, ch)
-			horariorepoRMQ := horariorepositoriorabbit.New(ch)
-			service := horariosrv.New(horariorepoRMQ)
+			horariorepo := schedulerrepositorymysql.New()
+			service := horariosrv.New(horariorepo)
 
 			//Execute
 			result, err := service.GetAvailableHours(tt.args.terna)
@@ -201,10 +186,8 @@ func TestUpdateEntries(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			conn, ch, _ := connection.Connect(constants.AMQPURL)
-			defer connection.Disconnect(conn, ch)
-			horariorepoRMQ := horariorepositoriorabbit.New(ch)
-			service := horariosrv.New(horariorepoRMQ)
+			horariorepo := schedulerrepositorymysql.New()
+			service := horariosrv.New(horariorepo)
 
 			//Execute
 			result, err := service.UpdateScheduler(tt.args.entries, tt.args.terna)
@@ -310,10 +293,8 @@ func TestListSubject(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			conn, ch, _ := connection.Connect(constants.AMQPURL)
-			defer connection.Disconnect(conn, ch)
-			horariorepoRMQ := horariorepositoriorabbit.New(ch)
-			service := horariosrv.New(horariorepoRMQ)
+			horariorepo := schedulerrepositorymysql.New()
+			service := horariosrv.New(horariorepo)
 
 			//Execute
 			result, err := service.ListAllDegrees()
@@ -424,10 +405,8 @@ func TestGetEntries(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			conn, ch, _ := connection.Connect(constants.AMQPURL)
-			defer connection.Disconnect(conn, ch)
-			horariorepoRMQ := horariorepositoriorabbit.New(ch)
-			service := horariosrv.New(horariorepoRMQ)
+			horariorepo := schedulerrepositorymysql.New()
+			service := horariosrv.New(horariorepo)
 
 			//Execute
 			result, err := service.GetEntries(tt.args.terna)
@@ -515,10 +494,8 @@ func TestGetICS(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			conn, ch, _ := connection.Connect(constants.AMQPURL)
-			defer connection.Disconnect(conn, ch)
-			horariorepoRMQ := horariorepositoriorabbit.New(ch)
-			service := horariosrv.New(horariorepoRMQ)
+			horariorepo := schedulerrepositorymysql.New()
+			service := horariosrv.New(horariorepo)
 
 			//Execute
 			result, err := service.GetICS(tt.args.terna)

@@ -1,10 +1,11 @@
-package horariorepositoriomysql_test
+package schedulerrepositorymysql_test
 
 import (
 	"testing"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
-	horarioRepositorio "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/horarioRepositorio/MySQL/horarioRepositorio"
+	schedulerrepositorymysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/MySQL/schedulerRepository"
+
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	consultas "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/sql"
@@ -12,7 +13,8 @@ import (
 )
 
 func TestDeleteAllBeforeTest(t *testing.T) {
-	repos := horarioRepositorio.New()
+	t.Skip()
+	repos := schedulerrepositorymysql.New()
 	repos.RawExec(consultas.TruncEntry)
 	repos.RawExec(consultas.TruncHora)
 	repos.RawExec(consultas.TruncAsignatura)
@@ -49,7 +51,7 @@ func TestGetAvaiableHours(t *testing.T) {
 		Group:  "1",
 	}
 
-	repos := horarioRepositorio.New()
+	repos := schedulerrepositorymysql.New()
 	repos.RawExec(consultas.Degree1)
 	repos.RawExec(consultas.Degree2)
 	repos.RawExec(consultas.Year1)
@@ -93,7 +95,7 @@ func TestCreateEntry(t *testing.T) {
 		Weekday: 1,
 	}
 
-	repos := horarioRepositorio.New()
+	repos := schedulerrepositorymysql.New()
 	repos.RawExec(consultas.Degree1)
 	repos.RawExec(consultas.Degree2)
 	repos.RawExec(consultas.Year1)
@@ -167,7 +169,7 @@ func TestCreateEntryPract(t *testing.T) {
 		Group:   "mananas",
 	}
 
-	repos := horarioRepositorio.New()
+	repos := schedulerrepositorymysql.New()
 	repos.RawExec(consultas.Degree1)
 	repos.RawExec(consultas.Degree2)
 	repos.RawExec(consultas.Year1)
@@ -244,7 +246,7 @@ func TestCreateEntryProb(t *testing.T) {
 		Group:   "niapar",
 	}
 
-	repos := horarioRepositorio.New()
+	repos := schedulerrepositorymysql.New()
 	repos.RawExec(consultas.Degree1)
 	repos.RawExec(consultas.Degree2)
 	repos.RawExec(consultas.Year1)
@@ -306,7 +308,7 @@ func TestDeleteEntry(t *testing.T) {
 		Group:   "",
 	}
 
-	repos := horarioRepositorio.New()
+	repos := schedulerrepositorymysql.New()
 	repos.RawExec(consultas.Degree1)
 	repos.RawExec(consultas.Degree2)
 	repos.RawExec(consultas.Year1)
@@ -384,7 +386,7 @@ func TestDeleteAllEntries(t *testing.T) {
 		Group:   "",
 	}
 
-	repos := horarioRepositorio.New()
+	repos := schedulerrepositorymysql.New()
 	repos.RawExec(consultas.Degree1)
 	repos.RawExec(consultas.Degree2)
 	repos.RawExec(consultas.Year1)
@@ -457,7 +459,7 @@ func TestListAllDegrees(t *testing.T) {
 	//Prepare
 	assert := assert.New(t)
 
-	repos := horarioRepositorio.New()
+	repos := schedulerrepositorymysql.New()
 
 	repos.RawExec(consultas.TruncHora)
 	repos.RawExec(consultas.TruncGroup)
@@ -600,7 +602,7 @@ func TestGetEntries(t *testing.T) {
 		Group:  "1",
 	}
 
-	repos := horarioRepositorio.New()
+	repos := schedulerrepositorymysql.New()
 	repos.RawExec(consultas.Degree1)
 	repos.RawExec(consultas.Degree2)
 	repos.RawExec(consultas.Year1)

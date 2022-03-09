@@ -1,4 +1,4 @@
-package repoRabbit
+package monitoringrepositoryrabbitamq
 
 import (
 	"math/rand"
@@ -15,10 +15,7 @@ func New(ch *amqp.Channel) *HorarioRepositorioRabbit {
 	return &HorarioRepositorioRabbit{ch}
 }
 
-func (repo *HorarioRepositorioRabbit) CloseConn() {
-}
-
-func (repo *HorarioRepositorioRabbit) Monitoring() (bool, error){
+func (repo *HorarioRepositorioRabbit) Ping() (bool, error) {
 	q, err := repo.ch.QueueDeclare(
 		"rpc_queue", // name
 		false,       // durable
@@ -27,7 +24,7 @@ func (repo *HorarioRepositorioRabbit) Monitoring() (bool, error){
 		false,       // no-wait
 		nil,         // arguments
 	)
-	_=q
+	_ = q
 	if err != nil {
 		return false, apperrors.ErrConn
 	}
@@ -40,10 +37,10 @@ func (repo *HorarioRepositorioRabbit) Monitoring() (bool, error){
 		return false, apperrors.ErrConn
 	}
 	err = repo.ch.Publish(
-		"",        // exchange
+		"",          // exchange
 		"rpc_queue", // routing key
-		false,     // mandatory
-		false,     // immediate
+		false,       // mandatory
+		false,       // immediate
 		amqp.Publishing{
 			ContentType:   "text/plain",
 			CorrelationId: RandomString(10),
@@ -53,11 +50,11 @@ func (repo *HorarioRepositorioRabbit) Monitoring() (bool, error){
 }
 
 func RandomString(n int) string {
-    var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
- 
-    s := make([]rune, n)
-    for i := range s {
-        s[i] = letters[rand.Intn(len(letters))]
-    }
-    return string(s)
+	var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+
+	s := make([]rune, n)
+	for i := range s {
+		s[i] = letters[rand.Intn(len(letters))]
+	}
+	return string(s)
 }

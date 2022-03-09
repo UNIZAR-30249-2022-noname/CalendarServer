@@ -10,18 +10,12 @@ import (
 
 //SchedulerServiceImp is the implemetation of [SchedulerService] interface.
 type SchedulerServiceImp struct {
-	horarioRepositorioRMQ ports.RabbitRepository
+	schedluerRepository ports.SchedulerRepository
 }
 
 //New is a function which creates a new [SchedulerServiceImp]
-func New(horarioRepositorioRMQ ports.RabbitRepository) *SchedulerServiceImp {
-	return &SchedulerServiceImp{horarioRepositorioRMQ: horarioRepositorioRMQ}
-}
-
-
-func (srv *SchedulerServiceImp) Monitoring() (bool, error) {
-	res, err := srv.horarioRepositorioRMQ.Monitoring()
-	return res, err
+func New(schedluerRepository ports.SchedulerRepository) *SchedulerServiceImp {
+	return &SchedulerServiceImp{schedluerRepository: schedluerRepository}
 }
 
 //GetAvaiabledHours is a function which returns a set of [AvailableHours]
@@ -59,7 +53,7 @@ func (srv *SchedulerServiceImp) GetEntries(terna domain.DegreeSet) ([]domain.Ent
 	if terna.Degree == "" || terna.Year == 0 || terna.Group == "" {
 		return []domain.Entry{}, apperrors.ErrInvalidInput
 	}
-	
+
 	return []domain.Entry{}, apperrors.ErrToDo
 
 }
@@ -69,33 +63,33 @@ func (srv *SchedulerServiceImp) GetICS(terna domain.DegreeSet) (string, error) {
 		return "", apperrors.ErrInvalidInput
 	}
 	/*
-	entries, err := srv.horarioRepositorio.GetEntries(terna)
-	if err != nil {
-		return "", apperrors.ErrSql
-	}
-	cal := ics.NewCalendar()
-	t := time.Now()
-	month := t.Month()
-	year := t.Year()
-	if month < 8 {
-		month = 2
-	} else {
-		month = 9
-	}
-	taux := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
-	for i, entry := range entries {
-		event := cal.AddEvent(fmt.Sprintf("%d@unizar.es", i))
-		event.SetSummary(entry.Subject.Name)
-		day := (8-int(taux.Weekday()))%7 + entry.Weekday + 1
-		t1 := time.Date(year, month, day, entry.Init.Hour, entry.Init.Min, 0, 0, t.Location())
-		event.SetStartAt(t1)
-		t2 := time.Date(year, month, day, entry.End.Hour, entry.End.Min, 0, 0, t.Location())
-		event.SetEndAt(t2)
-		event.AddRrule("FREQ=DAILY;INTERVAL=7")
-		i++
-	}
-	
-	return cal.Serialize(), nil
+		entries, err := srv.horarioRepositorio.GetEntries(terna)
+		if err != nil {
+			return "", apperrors.ErrSql
+		}
+		cal := ics.NewCalendar()
+		t := time.Now()
+		month := t.Month()
+		year := t.Year()
+		if month < 8 {
+			month = 2
+		} else {
+			month = 9
+		}
+		taux := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
+		for i, entry := range entries {
+			event := cal.AddEvent(fmt.Sprintf("%d@unizar.es", i))
+			event.SetSummary(entry.Subject.Name)
+			day := (8-int(taux.Weekday()))%7 + entry.Weekday + 1
+			t1 := time.Date(year, month, day, entry.Init.Hour, entry.Init.Min, 0, 0, t.Location())
+			event.SetStartAt(t1)
+			t2 := time.Date(year, month, day, entry.End.Hour, entry.End.Min, 0, 0, t.Location())
+			event.SetEndAt(t2)
+			event.AddRrule("FREQ=DAILY;INTERVAL=7")
+			i++
+		}
+
+		return cal.Serialize(), nil
 	*/
 	return "", apperrors.ErrToDo
 }
