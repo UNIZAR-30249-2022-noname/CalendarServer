@@ -14,10 +14,14 @@ type SchedulerService interface {
 	GetICS(terna domain.DegreeSet) (string, error)
 }
 
-type UploadDataservice interface {
+type UploadDataService interface {
 	UpdateByCSV(csv string) (bool, error)
 }
 
-type Monitoring interface {
+type MonitoringService interface {
 	Ping() (bool, error)
+}
+
+type UsersService interface {
+	GetCredentials(username string) (domain.User, error)
 }

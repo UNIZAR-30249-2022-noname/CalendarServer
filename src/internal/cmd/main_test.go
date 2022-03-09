@@ -141,7 +141,7 @@ func TestGetAvailableHours(t *testing.T) {
 			}
 			tt.mocks(m)
 			setUpRouter := func() *gin.Engine {
-				horarioHandler := handlers.HTTPHandler{SchedulerService: m.horarioService}
+				horarioHandler := handlers.HTTPHandler{Scheduler: m.horarioService}
 				r := gin.Default()
 				r.GET(constants.GET_AVAILABLE_HOURS_URL, horarioHandler.GetAvailableHours)
 				return r
@@ -251,7 +251,7 @@ func TestPostSchedulerEntry(t *testing.T) {
 				horarioService: mock_ports.NewMockSchedulerService(gomock.NewController(t)),
 			}
 			setUpRouter := func() *gin.Engine {
-				horarioHandler := handlers.HTTPHandler{SchedulerService: m.horarioService}
+				horarioHandler := handlers.HTTPHandler{Scheduler: m.horarioService}
 				r := gin.Default()
 				r.POST(path, horarioHandler.PostUpdateScheduler)
 				return r
@@ -369,7 +369,7 @@ func TestListDegrees(t *testing.T) {
 				horarioService: mock_ports.NewMockSchedulerService(gomock.NewController(t)),
 			}
 			setUpRouter := func() *gin.Engine {
-				horarioHandler := handlers.HTTPHandler{SchedulerService: m.horarioService}
+				horarioHandler := handlers.HTTPHandler{Scheduler: m.horarioService}
 				r := gin.Default()
 				r.GET(path, horarioHandler.ListDegrees)
 				return r
@@ -457,7 +457,7 @@ func TestGetEntries(t *testing.T) {
 			}
 			tt.mocks(m)
 			setUpRouter := func() *gin.Engine {
-				horarioHandler := handlers.HTTPHandler{SchedulerService: m.horarioService}
+				horarioHandler := handlers.HTTPHandler{Scheduler: m.horarioService}
 				r := gin.Default()
 				r.GET(path, horarioHandler.GetEntries)
 				return r
@@ -517,7 +517,7 @@ func TestGetICS(t *testing.T) {
 			}
 			tt.mocks(m)
 			setUpRouter := func() *gin.Engine {
-				horarioHandler := handlers.HTTPHandler{SchedulerService: m.horarioService}
+				horarioHandler := handlers.HTTPHandler{Scheduler: m.horarioService}
 				r := gin.Default()
 				r.GET(path, horarioHandler.GetICS)
 				return r

@@ -3,7 +3,9 @@ package main
 import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/docs"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/monitoring"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/users"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
+	usersrepositorymemory "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/Memory/usersRepository"
 	monitoringrepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/monitoringRepository"
 	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
@@ -27,9 +29,11 @@ func config() (handlers.HTTPHandler, error) {
 		//TODO
 	}
 	monitoringRepo := monitoringrepositoryrabbitamq.New(chMonitoring)
+	usersRepo := usersrepositorymemory.New()
 
 	return handlers.HTTPHandler{
 		Monitoring: monitoring.New(monitoringRepo),
+		Users:      users.New(usersRepo),
 	}, nil
 
 }
@@ -47,12 +51,7 @@ func SetupRouter() *gin.Engine {
 		//TODO
 	}
 	r.GET(constants.PING_URL, handler.Ping)
-	r.GET(constants.GET_AVAILABLE_HOURS_URL, handler.GetAvailableHours)
-	r.POST(constants.UPDATE_SCHEDULER_URL, handler.PostUpdateScheduler)
-	r.GET(constants.LIST_DEGREES_URL, handler.ListDegrees)
-	r.GET(constants.LIST_SCHEDULER_ENTRIES_URL, handler.GetEntries)
-	r.GET(constants.GENERATE_ICAL_URL, handler.GetICS)
-	r.POST(constants.UPLOAD_DATA_DEGREES_URL, handler.UpdateByCSV)
+	r.GET(constants.LOGIN, handler.Login)
 
 	return r
 }

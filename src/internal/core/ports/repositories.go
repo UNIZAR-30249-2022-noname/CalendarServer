@@ -25,3 +25,7 @@ type UploadDataRepository interface {
 type MonitoringRepository interface {
 	Ping() (bool, error)
 }
+
+type UsersRepository interface {
+	GetCredentials(username string) (domain.User, error)
+}

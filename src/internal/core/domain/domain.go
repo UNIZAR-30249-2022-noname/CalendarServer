@@ -147,3 +147,8 @@ func (e Entry) IsValid() error {
 	}
 	return nil
 }
+
+type User struct {
+	Name       string `json:"name"`
+	Privileges string `json:"privileges"`
+}
