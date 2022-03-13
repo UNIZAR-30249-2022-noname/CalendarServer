@@ -13,14 +13,16 @@ import (
 func TestReserve(t *testing.T) {
 	//t.Skip() //remove for activating it
 	assert := assert.New(t)
+	
 	rabbitConn, err := connection.New(constants.AMQPURL)
 	assert.Equal(err, nil, "Shouldn't be an error")
-	chMonitoring, err := rabbitConn.NewChannel()
+	chReserve, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
-	spaceRepo := spaceRepo.New(chMonitoring)
+	spaceRepo := spaceRepo.New(chReserve)
 	done, err := spaceRepo.Reserve(domain.Space{},domain.Hour{Hour: 12, Min: 30},domain.Hour{Hour: 13, Min: 30})
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.Equal(done, true, "Should be true")
+	chReserve.QueueDelete(constants.RESERVE,true,false,true)
 }
 
 func TestReservBatch(t *testing.T) {
@@ -28,10 +30,11 @@ func TestReservBatch(t *testing.T) {
 	assert := assert.New(t)
 	rabbitConn, err := connection.New(constants.AMQPURL)
 	assert.Equal(err, nil, "Shouldn't be an error")
-	chMonitoring, err := rabbitConn.NewChannel()
+	chBatch, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
-	spaceRepo := spaceRepo.New(chMonitoring)
+	spaceRepo := spaceRepo.New(chBatch)
 	done, err := spaceRepo.ReserveBatch([]domain.Space{},domain.Hour{Hour: 12, Min: 30},domain.Hour{Hour: 13, Min: 30})
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.Equal(done, true, "Should be true")
+	chBatch.QueueDelete(constants.BATCH,true,false,true)
 }

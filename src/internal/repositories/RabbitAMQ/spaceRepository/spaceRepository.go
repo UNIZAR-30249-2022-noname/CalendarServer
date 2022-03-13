@@ -46,6 +46,9 @@ func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domai
 		return false, err
 	}
 	msg, err := json.Marshal(domain.ReserveBatch{Spaces: spaces, Init: init, End: end})
+	if err != nil {
+		return false, err
+	}
 	err = repo.ch.Publish(
 		"",          // exchange
 		constants.BATCH, // routing key
