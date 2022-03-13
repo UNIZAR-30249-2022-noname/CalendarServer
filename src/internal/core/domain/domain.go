@@ -53,6 +53,10 @@ type Hour struct {
 	Min  int
 }
 
+type Space struct {
+	
+}
+
 func NewHour(h, m int) Hour {
 	return Hour{
 		Hour: h,
