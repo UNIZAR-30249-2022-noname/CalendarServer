@@ -29,3 +29,9 @@ type MonitoringRepository interface {
 type UsersRepository interface {
 	GetCredentials(username string) (domain.User, error)
 }
+
+type SpaceRepository interface {
+	Reserve() (bool, error)
+	ReserveBatch() (bool, error)
+}
+
