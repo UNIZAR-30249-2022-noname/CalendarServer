@@ -43,7 +43,7 @@ func TestReserveBatch(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	spaceRepo := spaceRepo.New(chBatch)
 	msgs, _ := chBatch.Consume(
-		constants.BATCH_REPLY, // queue
+		constants.BATCH, // queue
 		"",     // consumer
 		false,  // auto-ack
 		false,  // exclusive
