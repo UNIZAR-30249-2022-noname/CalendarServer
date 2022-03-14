@@ -60,7 +60,9 @@ func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domai
 			CorrelationId: corrId,
 			Body:          msg,
 		})
-
+	if err != nil {
+		return false, err
+	}
 	msgs, err := repo.ch.Consume(
 		constants.BATCH_REPLY, // queue
 		"",     // consumer

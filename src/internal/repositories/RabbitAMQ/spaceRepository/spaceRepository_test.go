@@ -29,7 +29,7 @@ func TestReserve(t *testing.T) {
 	chReserve.QueueDelete(constants.RESERVE,true,false,true)
 }
 
-func TestReservBatch(t *testing.T) {
+func TestReserveBatch(t *testing.T) {
 	//t.Skip() //remove for activating it
 	assert := assert.New(t)
 	a := time.Now().Local()
@@ -56,10 +56,8 @@ func TestReservBatch(t *testing.T) {
 		corrId := "-1"
 		for resp := range msgs {
 			corrId = resp.CorrelationId
-			break
-		}
-		response, _ := json.Marshal("1")
-		chBatch.Publish(
+			response, _ := json.Marshal("1")
+			chBatch.Publish(
 			"",          // exchange
 			constants.BATCH_REPLY, // routing key
 			false,       // mandatory
@@ -69,6 +67,10 @@ func TestReservBatch(t *testing.T) {
 				CorrelationId: corrId,
 				Body:          response,
 			})
+			resp.Ack(false)
+			break
+		}
+		
 	}()
 	done, err := spaceRepo.ReserveBatch([]domain.Space{},domain.Hour{Hour: 12, Min: 30},domain.Hour{Hour: 13, Min: 30},[]string{s})
 	assert.Equal(err, nil, "Shouldn't be an error")
