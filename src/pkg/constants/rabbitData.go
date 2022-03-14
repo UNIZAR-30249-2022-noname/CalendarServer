@@ -6,6 +6,7 @@ const (
 )
 
 const (
-	RESERVE = "reserve_queue"
-	BATCH   = "reservebatch_queue"
+	RESERVE     = "reserve_queue"
+	BATCH       = "reservebatch_queue"
+	BATCH_REPLY = "reservebatch_reply"
 )

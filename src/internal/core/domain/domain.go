@@ -54,7 +54,7 @@ type Hour struct {
 }
 
 type Space struct {
-	
+	Id string
 }
 
 type Reserve struct {
@@ -67,6 +67,7 @@ type ReserveBatch struct {
 	Spaces []Space
 	Init Hour
 	End Hour
+	Dates []string
 }
 
 func NewHour(h, m int) Hour {

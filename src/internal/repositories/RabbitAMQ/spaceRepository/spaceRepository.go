@@ -18,6 +18,7 @@ func New(ch *amqp.Channel) *SpaceRepository {
 	return &SpaceRepository{ch}
 }
 
+//TODO Poner fecha
 func (repo *SpaceRepository) Reserve(sp domain.Space, init, end domain.Hour) (bool, error) {
 	err := connect.PrepareChannel(repo.ch, constants.RESERVE)
 	if err != nil {
@@ -40,24 +41,44 @@ func (repo *SpaceRepository) Reserve(sp domain.Space, init, end domain.Hour) (bo
 	return true, err
 }
 
-func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domain.Hour) (bool, error) {
-	err := connect.PrepareChannel(repo.ch, constants.BATCH)
+
+//TODO Poner fechas
+func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domain.Hour, dates []string) (bool, error) {
+
+	msg, err := json.Marshal(domain.ReserveBatch{Spaces: spaces, Init: init, End: end, Dates: dates})
 	if err != nil {
 		return false, err
 	}
-	msg, err := json.Marshal(domain.ReserveBatch{Spaces: spaces, Init: init, End: end})
-	if err != nil {
-		return false, err
-	}
+	corrId := auxFuncs.RandomString(10)
 	err = repo.ch.Publish(
 		"",          // exchange
 		constants.BATCH, // routing key
 		false,       // mandatory
 		false,       // immediate
 		amqp.Publishing{
-			ContentType:   "text/plain",
-			CorrelationId: auxFuncs.RandomString(10),
+			ContentType:   "application/json",
+			CorrelationId: corrId,
 			Body:          msg,
 		})
+
+	msgs, err := repo.ch.Consume(
+		constants.BATCH_REPLY, // queue
+		"",     // consumer
+		false,  // auto-ack
+		false,  // exclusive
+		false,  // no-local
+		false,  // no-wait
+		nil,    // args
+	)
+
+	lastId := "-1"
+	for resp := range msgs {
+		if corrId == resp.CorrelationId {
+			if err == nil {
+				json.Unmarshal(resp.Body, &lastId)
+			}
+			break
+		}
+	}
 	return true, err
 }
