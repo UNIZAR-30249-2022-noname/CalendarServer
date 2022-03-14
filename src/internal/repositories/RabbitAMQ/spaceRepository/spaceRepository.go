@@ -85,5 +85,8 @@ func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domai
 			break
 		}
 	}
+	if lastId == "-1" {
+		return false, err
+	}
 	return true, err
 }
