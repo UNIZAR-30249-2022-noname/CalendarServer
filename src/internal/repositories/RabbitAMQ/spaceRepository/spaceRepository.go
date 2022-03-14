@@ -18,7 +18,7 @@ func New(ch *amqp.Channel) *SpaceRepository {
 	return &SpaceRepository{ch}
 }
 
-//TODO Poner fecha
+//TODO Este sobra
 func (repo *SpaceRepository) Reserve(sp domain.Space, init, end domain.Hour) (bool, error) {
 	err := connect.PrepareChannel(repo.ch, constants.RESERVE)
 	if err != nil {
@@ -42,7 +42,6 @@ func (repo *SpaceRepository) Reserve(sp domain.Space, init, end domain.Hour) (bo
 }
 
 
-//TODO Poner fechas
 func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domain.Hour, dates []string) (bool, error) {
 
 	msg, err := json.Marshal(domain.ReserveBatch{Spaces: spaces, Init: init, End: end, Dates: dates})
