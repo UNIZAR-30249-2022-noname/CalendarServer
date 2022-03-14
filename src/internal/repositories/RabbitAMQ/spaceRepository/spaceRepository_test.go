@@ -7,7 +7,6 @@ import (
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	spaceRepo "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/spaceRepository"
-	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/streadway/amqp"
@@ -38,9 +37,9 @@ func TestReserveBatch(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chBatch, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connect.PrepareChannel(chBatch, constants.BATCH)
+	err = connection.PrepareChannel(chBatch, constants.BATCH)
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connect.PrepareChannel(chBatch, constants.BATCH_REPLY)
+	err = connection.PrepareChannel(chBatch, constants.BATCH_REPLY)
 	assert.Equal(err, nil, "Shouldn't be an error")
 	spaceRepo := spaceRepo.New(chBatch)
 	go func() {
@@ -54,22 +53,23 @@ func TestReserveBatch(t *testing.T) {
 			nil,    // args
 		)
 		corrId := "-1"
-		for resp := range msgs {
-			corrId = resp.CorrelationId
-			response, _ := json.Marshal("1")
-			chBatch.Publish(
-			"",          // exchange
-			constants.BATCH_REPLY, // routing key
-			false,       // mandatory
-			false,       // immediate
-			amqp.Publishing{
-				ContentType:   "application/json",
-				CorrelationId: corrId,
-				Body:          response,
-			})
-			resp.Ack(false)
-			break
-		}
+		go func (){
+			for resp := range msgs{
+				corrId = resp.CorrelationId
+				response, _ := json.Marshal("1")
+				chBatch.Publish(
+				"",          // exchange
+				constants.BATCH_REPLY, // routing key
+				false,       // mandatory
+				false,       // immediate
+				amqp.Publishing{
+					ContentType:   "application/json",
+					CorrelationId: corrId,
+					Body:          response,
+				})
+				resp.Ack(false)
+			}
+		}()
 		
 	}()
 	done, err := spaceRepo.ReserveBatch([]domain.Space{},domain.Hour{Hour: 12, Min: 30},domain.Hour{Hour: 13, Min: 30},[]string{s})

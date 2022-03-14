@@ -49,6 +49,17 @@ func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domai
 	if err != nil {
 		return false, err
 	}
+
+	msgs, err := repo.ch.Consume(
+		constants.BATCH_REPLY, // queue
+		"",     // consumer
+		false,  // auto-ack
+		false,  // exclusive
+		false,  // no-local
+		false,  // no-wait
+		nil,    // args
+	)
+	
 	corrId := auxFuncs.RandomString(10)
 	err = repo.ch.Publish(
 		"",          // exchange
@@ -63,16 +74,7 @@ func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domai
 	if err != nil {
 		return false, err
 	}
-	msgs, err := repo.ch.Consume(
-		constants.BATCH_REPLY, // queue
-		"",     // consumer
-		false,  // auto-ack
-		false,  // exclusive
-		false,  // no-local
-		false,  // no-wait
-		nil,    // args
-	)
-
+	
 	lastId := "-1"
 	for resp := range msgs {
 		if corrId == resp.CorrelationId {
