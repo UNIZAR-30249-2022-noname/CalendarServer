@@ -59,7 +59,7 @@ func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domai
 		false,  // no-wait
 		nil,    // args
 	)
-	
+
 	corrId := auxFuncs.RandomString(10)
 	err = repo.ch.Publish(
 		"",          // exchange
@@ -69,6 +69,7 @@ func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domai
 		amqp.Publishing{
 			ContentType:   "application/json",
 			CorrelationId: corrId,
+			ReplyTo: constants.BATCH_REPLY,
 			Body:          msg,
 		})
 	if err != nil {

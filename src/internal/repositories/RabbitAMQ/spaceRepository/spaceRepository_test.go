@@ -42,16 +42,15 @@ func TestReserveBatch(t *testing.T) {
 	err = connection.PrepareChannel(chBatch, constants.BATCH_REPLY)
 	assert.Equal(err, nil, "Shouldn't be an error")
 	spaceRepo := spaceRepo.New(chBatch)
-	go func() {
-		msgs, _ := chBatch.Consume(
-			constants.BATCH_REPLY, // queue
-			"",     // consumer
-			false,  // auto-ack
-			false,  // exclusive
-			false,  // no-local
-			false,  // no-wait
-			nil,    // args
-		)
+	msgs, _ := chBatch.Consume(
+		constants.BATCH_REPLY, // queue
+		"",     // consumer
+		false,  // auto-ack
+		false,  // exclusive
+		false,  // no-local
+		false,  // no-wait
+		nil,    // args
+	)
 		corrId := "-1"
 		go func (){
 			for resp := range msgs{
@@ -71,7 +70,6 @@ func TestReserveBatch(t *testing.T) {
 			}
 		}()
 		
-	}()
 	done, err := spaceRepo.ReserveBatch([]domain.Space{},domain.Hour{Hour: 12, Min: 30},domain.Hour{Hour: 13, Min: 30},[]string{s})
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.Equal(done, true, "Should be true")
