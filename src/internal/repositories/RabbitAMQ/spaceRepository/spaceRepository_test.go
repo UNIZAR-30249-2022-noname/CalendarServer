@@ -14,7 +14,7 @@ import (
 )
 
 func TestReserve(t *testing.T) {
-	//t.Skip() //remove for activating it
+	t.Skip() //remove for activating it
 	assert := assert.New(t)
 	
 	rabbitConn, err := connection.New(constants.AMQPURL)
@@ -74,4 +74,5 @@ func TestReserveBatch(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.Equal(done, true, "Should be true")
 	chBatch.QueueDelete(constants.BATCH,true,false,true)
+	chBatch.QueueDelete(constants.BATCH_REPLY,true,false,true)
 }
