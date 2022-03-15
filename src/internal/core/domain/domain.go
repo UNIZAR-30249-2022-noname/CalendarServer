@@ -171,17 +171,16 @@ type User struct {
 }
 
 type SpaceFilterParams struct {
-	Capacity   int    `json:"capacity"`
-	Day        string `json:"day"`
-	Hour       Hour   `json:"hour"`
-	Floor      string `json:"floor"`
-	Capability int    `json:"capability"`
-	Building   string `json:"building"`
+	Capacity int    `json:"capacity"`
+	Day      string `json:"day"`
+	Hour     Hour   `json:"hour"`
+	Floor    string `json:"floor"`
+	Building string `json:"building"`
 }
 
 type Spaces struct {
-	Name       string `json:"name"`
-	Capability int    `json:"capability"`
-	Building   string `json:"building"`
-	Kind       string `json:"kind"`
+	Name     string `json:"name"`
+	Capacity int    `json:"capacity"`
+	Building string `json:"building"`
+	Kind     string `json:"kind"`
 }

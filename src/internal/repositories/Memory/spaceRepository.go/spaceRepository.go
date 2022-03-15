@@ -26,22 +26,22 @@ func (repo *SpaceRepository) FilterBy(domain.SpaceFilterParams) ([]domain.Spaces
 
 	return []domain.Spaces{
 		{
-			Name:       "A1",
-			Capability: 20,
-			Building:   "Ada",
-			Kind:       "aula",
+			Name:     "A1",
+			Capacity: 20,
+			Building: "Ada",
+			Kind:     "aula",
 		},
 		{
-			Name:       "A2",
-			Capability: 30,
-			Building:   "Ada",
-			Kind:       "aula",
+			Name:     "A2",
+			Capacity: 30,
+			Building: "Ada",
+			Kind:     "aula",
 		},
 		{
-			Name:       "L0",
-			Capability: 35,
-			Building:   "Ada",
-			Kind:       "laboratorio",
+			Name:     "L0",
+			Capacity: 35,
+			Building: "Ada",
+			Kind:     "laboratorio",
 		},
 	}, nil
 
