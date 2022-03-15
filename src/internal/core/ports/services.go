@@ -27,6 +27,7 @@ type UsersService interface {
 }
 
 type SpacesService interface {
+	FilterBy() ()
 	Reserve(sp domain.Space, init, end domain.Hour, date string) (string, error)
 	ReserveBatch(spaces []domain.Space, init, end domain.Hour, dates []string) (string, error)
 }
