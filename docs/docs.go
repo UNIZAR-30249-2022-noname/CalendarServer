@@ -77,6 +77,70 @@ var doc = `{
                 }
             }
         },
+        "/filterSlots": {
+            "get": {
+                "description": "Get spaces filtered by params",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "day of availability",
+                        "name": "day",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "hour",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "min",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "floor where is the space",
+                        "name": "floor",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": " minimun capacity of the space",
+                        "name": "capacity",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "building where is the space",
+                        "name": "building",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            }
+        },
         "/getEntries/": {
             "get": {
                 "description": "List all the entries of the  schedule",

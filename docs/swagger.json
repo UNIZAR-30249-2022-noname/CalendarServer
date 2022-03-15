@@ -1,599 +1,641 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "contact": {}
-    },
-    "paths": {
-        "/availableHours/": {
-            "get": {
-                "description": "List all the hours remaining for creaiting an entrie on the schedule",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "titulacion de las horas a obtener",
-                        "name": "titulacion",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "curso de las horas a obtener",
-                        "name": "curso",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "grupo de las horas a obtener",
-                        "name": "grupo",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domain.AvailableHours"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ErrorHttp"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ErrorHttp"
-                        }
-                    }
-                }
+  "swagger": "2.0",
+  "info": {
+    "contact": {}
+  },
+  "paths": {
+    "/availableHours/": {
+      "get": {
+        "description": "List all the hours remaining for creaiting an entrie on the schedule",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "titulacion de las horas a obtener",
+            "name": "titulacion",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "curso de las horas a obtener",
+            "name": "curso",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "grupo de las horas a obtener",
+            "name": "grupo",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/domain.AvailableHours"
+              }
             }
-        },
-        "/getEntries/": {
-            "get": {
-                "description": "List all the entries of the  schedule",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "titulacion de las horas a obtener",
-                        "name": "degree",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "curso de las horas a obtener",
-                        "name": "year",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "grupo de las horas a obtener",
-                        "name": "group",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domain.AvailableHours"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ErrorHttp"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ErrorHttp"
-                        }
-                    }
-                }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/handlers.ErrorHttp"
             }
-        },
-        "/getICS/": {
-            "get": {
-                "description": "Get the schedule in ics format",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "titulacion de las horas a obtener",
-                        "name": "degree",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "curso de las horas a obtener",
-                        "name": "year",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "grupo de las horas a obtener",
-                        "name": "group",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ErrorHttp"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ErrorHttp"
-                        }
-                    }
-                }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/handlers.ErrorHttp"
             }
-        },
-        "/listDegrees/": {
-            "get": {
-                "description": "List all degrees' descriptions avaiable, it do not require any parameter",
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/handlers.ListDegreesDTO"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ErrorHttp"
-                        }
-                    }
-                }
-            }
-        },
-        "/login/": {
-            "get": {
-                "description": "Get credentials for doing task which requires certain privileges",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "name of the user",
-                        "name": "username",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ErrorHttp"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ErrorHttp"
-                        }
-                    }
-                }
-            }
-        },
-        "/ping/": {
-            "get": {
-                "description": "Response \"pong\" if the server is currrently available",
-                "produces": [
-                    "text/plain"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Returns \"pong\" "
-                    }
-                }
-            }
-        },
-        "/reserve/": {
-            "get": {
-                "description": "Reserve Space a day from an initial hour to an end hour",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "initial hour",
-                        "name": "initH",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "initial minute",
-                        "name": "initM",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "end hour",
-                        "name": "endH",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "end minute",
-                        "name": "endM",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "date of reserve",
-                        "name": "date",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ErrorHttp"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ErrorHttp"
-                        }
-                    }
-                }
-            }
-        },
-        "/reserveBatch/": {
-            "get": {
-                "description": "Reserve Space a day from an initial hour to an end hour",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "description": "space ids",
-                        "name": "spaces",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/domain.Space"
-                        }
-                    },
-                    {
-                        "type": "integer",
-                        "description": "initial hour",
-                        "name": "initH",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "initial minute",
-                        "name": "initM",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "end hour",
-                        "name": "endH",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "end minute",
-                        "name": "endM",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "description": "dates of reserve",
-                        "name": "dates",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ErrorHttp"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ErrorHttp"
-                        }
-                    }
-                }
-            }
-        },
-        "/updateByCSV/": {
-            "post": {
-                "description": "The request will update the database creating degrees, subjects, years, groups and hours",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "csv file",
-                        "name": "csv",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "boolean"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ErrorHttp"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ErrorHttp"
-                        }
-                    }
-                }
-            }
-        },
-        "/updateScheduler/": {
-            "post": {
-                "description": "The request will erase the current scheduler an create one new with\nthe requested entries for the scheduler. The entry will be definied by the initial hour\nand the ending hour, adintional info must be indicated depending of the kind of hours\nthe kinds of subject hours are:\n- Theorical = 1\n- Practices = 2\n- Exercises = 3",
-                "produces": [
-                    "text/plain"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "titulacion de las horas a obtener",
-                        "name": "degree",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "curso de las horas a obtener",
-                        "name": "year",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "grupo de las horas a obtener",
-                        "name": "group",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "description": "Entry to create",
-                        "name": "entry",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/handlers.EntryDTO"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Receive the date of the latests entry modification with format dd/mm/aaaa"
-                    }
-                }
-            }
+          }
         }
+      }
     },
-    "definitions": {
-        "domain.AvailableHours": {
-            "type": "object",
-            "properties": {
-                "maxHours": {
-                    "type": "integer"
-                },
-                "maxMin": {
-                    "type": "integer"
-                },
-                "remainingHours": {
-                    "type": "integer"
-                },
-                "remainingMin": {
-                    "type": "integer"
-                },
-                "subject": {
-                    "$ref": "#/definitions/domain.Subject"
-                }
+    "/filterSlots": {
+      "get": {
+        "description": "Get spaces filtered by params",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "day of availability",
+            "name": "day",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "hour",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "min",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "floor where is the space",
+            "name": "floor",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": " minimun capacity of the space",
+            "name": "capacity",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "building where is the space",
+            "name": "building",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
             }
-        },
-        "domain.DegreeDescription": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "years": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/domain.YearDescription"
-                    }
-                }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/handlers.ErrorHttp"
             }
-        },
-        "domain.Space": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/handlers.ErrorHttp"
             }
-        },
-        "domain.Subject": {
-            "type": "object",
-            "properties": {
-                "kind": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "domain.YearDescription": {
-            "type": "object",
-            "properties": {
-                "groups": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "name": {
-                    "type": "integer"
-                }
-            }
-        },
-        "handlers.EntryDTO": {
-            "type": "object",
-            "properties": {
-                "endHour": {
-                    "type": "integer"
-                },
-                "endMin": {
-                    "type": "integer"
-                },
-                "grupo": {
-                    "type": "string"
-                },
-                "initHour": {
-                    "type": "integer"
-                },
-                "initMin": {
-                    "type": "integer"
-                },
-                "kind": {
-                    "type": "integer"
-                },
-                "room": {
-                    "type": "string"
-                },
-                "semana": {
-                    "type": "string"
-                },
-                "subject": {
-                    "type": "string"
-                },
-                "weekday": {
-                    "type": "integer"
-                }
-            }
-        },
-        "handlers.ErrorHttp": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "handlers.ListDegreesDTO": {
-            "type": "object",
-            "properties": {
-                "list": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/domain.DegreeDescription"
-                    }
-                }
-            }
+          }
         }
+      }
+    },
+    "/getEntries/": {
+      "get": {
+        "description": "List all the entries of the  schedule",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "titulacion de las horas a obtener",
+            "name": "degree",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "curso de las horas a obtener",
+            "name": "year",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "grupo de las horas a obtener",
+            "name": "group",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/domain.AvailableHours"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/handlers.ErrorHttp"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/handlers.ErrorHttp"
+            }
+          }
+        }
+      }
+    },
+    "/getICS/": {
+      "get": {
+        "description": "Get the schedule in ics format",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "titulacion de las horas a obtener",
+            "name": "degree",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "curso de las horas a obtener",
+            "name": "year",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "grupo de las horas a obtener",
+            "name": "group",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/handlers.ErrorHttp"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/handlers.ErrorHttp"
+            }
+          }
+        }
+      }
+    },
+    "/listDegrees/": {
+      "get": {
+        "description": "List all degrees' descriptions avaiable, it do not require any parameter",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/handlers.ListDegreesDTO"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/handlers.ErrorHttp"
+            }
+          }
+        }
+      }
+    },
+    "/login/": {
+      "get": {
+        "description": "Get credentials for doing task which requires certain privileges",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "name of the user",
+            "name": "username",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/handlers.ErrorHttp"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/handlers.ErrorHttp"
+            }
+          }
+        }
+      }
+    },
+    "/ping/": {
+      "get": {
+        "description": "Response \"pong\" if the server is currrently available",
+        "produces": ["text/plain"],
+        "responses": {
+          "200": {
+            "description": "Returns \"pong\" "
+          }
+        }
+      }
+    },
+    "/reserve/": {
+      "get": {
+        "description": "Reserve Space a day from an initial hour to an end hour",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "initial hour",
+            "name": "initH",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "initial minute",
+            "name": "initM",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "end hour",
+            "name": "endH",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "end minute",
+            "name": "endM",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "date of reserve",
+            "name": "date",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/handlers.ErrorHttp"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/handlers.ErrorHttp"
+            }
+          }
+        }
+      }
+    },
+    "/reserveBatch/": {
+      "get": {
+        "description": "Reserve Space a day from an initial hour to an end hour",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "description": "space ids",
+            "name": "spaces",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/domain.Space"
+            }
+          },
+          {
+            "type": "integer",
+            "description": "initial hour",
+            "name": "initH",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "initial minute",
+            "name": "initM",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "end hour",
+            "name": "endH",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "end minute",
+            "name": "endM",
+            "in": "query",
+            "required": true
+          },
+          {
+            "description": "dates of reserve",
+            "name": "dates",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/handlers.ErrorHttp"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/handlers.ErrorHttp"
+            }
+          }
+        }
+      }
+    },
+    "/updateByCSV/": {
+      "post": {
+        "description": "The request will update the database creating degrees, subjects, years, groups and hours",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "type": "file",
+            "description": "csv file",
+            "name": "csv",
+            "in": "formData",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/handlers.ErrorHttp"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/handlers.ErrorHttp"
+            }
+          }
+        }
+      }
+    },
+    "/updateScheduler/": {
+      "post": {
+        "description": "The request will erase the current scheduler an create one new with\nthe requested entries for the scheduler. The entry will be definied by the initial hour\nand the ending hour, adintional info must be indicated depending of the kind of hours\nthe kinds of subject hours are:\n- Theorical = 1\n- Practices = 2\n- Exercises = 3",
+        "produces": ["text/plain"],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "titulacion de las horas a obtener",
+            "name": "degree",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "curso de las horas a obtener",
+            "name": "year",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "grupo de las horas a obtener",
+            "name": "group",
+            "in": "query",
+            "required": true
+          },
+          {
+            "description": "Entry to create",
+            "name": "entry",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/handlers.EntryDTO"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Receive the date of the latests entry modification with format dd/mm/aaaa"
+          }
+        }
+      }
     }
+  },
+  "definitions": {
+    "domain.AvailableHours": {
+      "type": "object",
+      "properties": {
+        "maxHours": {
+          "type": "integer"
+        },
+        "maxMin": {
+          "type": "integer"
+        },
+        "remainingHours": {
+          "type": "integer"
+        },
+        "remainingMin": {
+          "type": "integer"
+        },
+        "subject": {
+          "$ref": "#/definitions/domain.Subject"
+        }
+      }
+    },
+    "domain.DegreeDescription": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "years": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/domain.YearDescription"
+          }
+        }
+      }
+    },
+    "domain.Space": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "domain.Subject": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "domain.YearDescription": {
+      "type": "object",
+      "properties": {
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "type": "integer"
+        }
+      }
+    },
+    "handlers.EntryDTO": {
+      "type": "object",
+      "properties": {
+        "endHour": {
+          "type": "integer"
+        },
+        "endMin": {
+          "type": "integer"
+        },
+        "grupo": {
+          "type": "string"
+        },
+        "initHour": {
+          "type": "integer"
+        },
+        "initMin": {
+          "type": "integer"
+        },
+        "kind": {
+          "type": "integer"
+        },
+        "room": {
+          "type": "string"
+        },
+        "semana": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "weekday": {
+          "type": "integer"
+        }
+      }
+    },
+    "handlers.ErrorHttp": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "handlers.ListDegreesDTO": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/domain.DegreeDescription"
+          }
+        }
+      }
+    }
+  }
 }

@@ -49,8 +49,8 @@ type DegreeSet struct {
 }
 
 type Hour struct {
-	Hour int
-	Min  int
+	Hour int `json:"hour"`
+	Min  int `json:"min"`
 }
 
 type Space struct {
@@ -171,8 +171,17 @@ type User struct {
 }
 
 type SpaceFilterParams struct {
-	Capacity int
+	Capacity   int    `json:"capacity"`
+	Day        string `json:"day"`
+	Hour       Hour   `json:"hour"`
+	Floor      string `json:"floor"`
+	Capability int    `json:"capability"`
+	Building   string `json:"building"`
 }
 
 type Spaces struct {
+	Name       string `json:"name"`
+	Capability int    `json:"capability"`
+	Building   string `json:"building"`
+	Kind       string `json:"kind"`
 }
