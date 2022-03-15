@@ -19,14 +19,14 @@ func New(ch *amqp.Channel) *SpaceRepository {
 }
 
 //TODO Este sobra
-func (repo *SpaceRepository) Reserve(sp domain.Space, init, end domain.Hour) (bool, error) {
+func (repo *SpaceRepository) Reserve(sp domain.Space, init, end domain.Hour, date string) (string, error) {
 	err := connect.PrepareChannel(repo.ch, constants.RESERVE)
 	if err != nil {
-		return false, err
+		return "-1", err
 	}
 	msg, err := json.Marshal(domain.Reserve{Space: sp, Init: init, End: end})
 	if err != nil {
-		return false, err
+		return "-1", err
 	}
 	err = repo.ch.Publish(
 		"",          // exchange
@@ -38,15 +38,15 @@ func (repo *SpaceRepository) Reserve(sp domain.Space, init, end domain.Hour) (bo
 			CorrelationId: auxFuncs.RandomString(10),
 			Body:          msg,
 		})
-	return true, err
+	return "1", err
 }
 
 
-func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domain.Hour, dates []string) (bool, error) {
+func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domain.Hour, dates []string) (string, error) {
 
 	msg, err := json.Marshal(domain.ReserveBatch{Spaces: spaces, Init: init, End: end, Dates: dates})
 	if err != nil {
-		return false, err
+		return "-1", err
 	}
 
 	msgs, err := repo.ch.Consume(
@@ -72,7 +72,7 @@ func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domai
 			Body:          msg,
 		})
 	if err != nil {
-		return false, err
+		return "-1", err
 	}
 	
 	lastId := "-1"
@@ -85,7 +85,7 @@ func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domai
 		}
 	}
 	if lastId == "-1" {
-		return false, err
+		return "-1", err
 	}
-	return true, err
+	return lastId, err
 }

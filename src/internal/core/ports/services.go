@@ -25,3 +25,8 @@ type MonitoringService interface {
 type UsersService interface {
 	GetCredentials(username string) (domain.User, error)
 }
+
+type SpacesService interface {
+	Reserve(sp domain.Space, init, end domain.Hour, date string) (string, error)
+	ReserveBatch(spaces []domain.Space, init, end domain.Hour, dates []string) (string, error)
+}

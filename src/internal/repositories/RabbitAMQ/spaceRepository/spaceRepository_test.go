@@ -16,15 +16,16 @@ import (
 func TestReserve(t *testing.T) {
 	t.Skip() //remove for activating it
 	assert := assert.New(t)
-	
+	a := time.Now().Local()
+	s := a.Format("2006-01-02")
 	rabbitConn, err := connection.New(constants.AMQPURL)
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReserve, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
 	spaceRepo := spaceRepo.New(chReserve)
-	done, err := spaceRepo.Reserve(domain.Space{},domain.Hour{Hour: 12, Min: 30},domain.Hour{Hour: 13, Min: 30})
+	done, err := spaceRepo.Reserve(domain.Space{},domain.Hour{Hour: 12, Min: 30},domain.Hour{Hour: 13, Min: 30},s)
 	assert.Equal(err, nil, "Shouldn't be an error")
-	assert.Equal(done, true, "Should be true")
+	assert.Equal(done, "1", "Should be true")
 	chReserve.QueueDelete(constants.RESERVE,true,false,true)
 }
 
@@ -72,7 +73,7 @@ func TestReserveBatch(t *testing.T) {
 		
 	done, err := spaceRepo.ReserveBatch([]domain.Space{},domain.Hour{Hour: 12, Min: 30},domain.Hour{Hour: 13, Min: 30},[]string{s})
 	assert.Equal(err, nil, "Shouldn't be an error")
-	assert.Equal(done, true, "Should be true")
+	assert.NotEqual(done, "-1", "Should be positive")
 	chBatch.QueueDelete(constants.BATCH,true,false,true)
 	chBatch.QueueDelete(constants.BATCH_REPLY,true,false,true)
 }
