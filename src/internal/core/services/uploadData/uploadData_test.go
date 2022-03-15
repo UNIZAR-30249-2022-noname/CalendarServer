@@ -7,8 +7,8 @@ import (
 	uploaddata "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/uploadData"
 	mock_ports "github.com/D-D-EINA-Calendar/CalendarServer/src/mocks/mockups"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
-	"github.com/go-playground/assert/v2"
 	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
 )
 
 type mocks struct {
