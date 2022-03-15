@@ -21,6 +21,11 @@ definitions:
           $ref: '#/definitions/domain.YearDescription'
         type: array
     type: object
+  domain.Space:
+    properties:
+      id:
+        type: string
+    type: object
   domain.Subject:
     properties:
       kind:
@@ -273,11 +278,26 @@ paths:
           description: 'Returns "pong" '
   /reserve/:
     get:
-      description: Get credentials for doing task which requires certain privileges
+      description: Reserve Space a day from an initial hour to an end hour
       parameters:
-      - description: name of the user
+      - in: query
+        name: id
+        type: string
+      - in: query
+        name: hour
+        type: integer
+      - in: query
+        name: min
+        type: integer
+      - in: query
+        name: hour
+        type: integer
+      - in: query
+        name: min
+        type: integer
+      - description: date of reserve
         in: query
-        name: username
+        name: date
         required: true
         type: string
       produces:
@@ -297,13 +317,34 @@ paths:
             $ref: '#/definitions/handlers.ErrorHttp'
   /reserveBatch/:
     get:
-      description: Get credentials for doing task which requires certain privileges
+      description: Reserve Space a day from an initial hour to an end hour
       parameters:
-      - description: name of the user
-        in: query
-        name: username
+      - description: space ids
+        in: body
+        name: spaces
         required: true
-        type: string
+        schema:
+          $ref: '#/definitions/domain.Space'
+      - in: query
+        name: hour
+        type: integer
+      - in: query
+        name: min
+        type: integer
+      - in: query
+        name: hour
+        type: integer
+      - in: query
+        name: min
+        type: integer
+      - description: dates of reserve
+        in: body
+        name: dates
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
       produces:
       - application/json
       responses:

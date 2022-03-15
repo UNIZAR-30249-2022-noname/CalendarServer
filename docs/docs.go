@@ -323,15 +323,40 @@ var doc = `{
         },
         "/reserve/": {
             "get": {
-                "description": "Get credentials for doing task which requires certain privileges",
+                "description": "Reserve Space a day from an initial hour to an end hour",
                 "produces": [
                     "application/json"
                 ],
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "name of the user",
-                        "name": "username",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "hour",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "min",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "hour",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "min",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "date of reserve",
+                        "name": "date",
                         "in": "query",
                         "required": true
                     }
@@ -360,17 +385,51 @@ var doc = `{
         },
         "/reserveBatch/": {
             "get": {
-                "description": "Get credentials for doing task which requires certain privileges",
+                "description": "Reserve Space a day from an initial hour to an end hour",
                 "produces": [
                     "application/json"
                 ],
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "name of the user",
-                        "name": "username",
-                        "in": "query",
-                        "required": true
+                        "description": "space ids",
+                        "name": "spaces",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Space"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "name": "hour",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "min",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "hour",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "min",
+                        "in": "query"
+                    },
+                    {
+                        "description": "dates of reserve",
+                        "name": "dates",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
                     }
                 ],
                 "responses": {
@@ -516,6 +575,14 @@ var doc = `{
                 }
             }
         },
+        "domain.Space": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
         "domain.Subject": {
             "type": "object",
             "properties": {
@@ -649,5 +716,5 @@ func (s *s) ReadDoc() string {
 }
 
 func init() {
-	swag.Register(swag.Name, &s{})
+	swag.Register("swagger", &s{})
 }
