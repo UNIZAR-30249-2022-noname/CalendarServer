@@ -111,6 +111,47 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/handlers.ErrorHttp'
+  /filterSlots:
+    get:
+      description: Get spaces filtered by params
+      parameters:
+      - description: day of availability
+        in: query
+        name: day
+        type: string
+      - in: query
+        name: hour
+        type: integer
+      - in: query
+        name: min
+        type: integer
+      - description: floor where is the space
+        in: query
+        name: floor
+        type: string
+      - description: ' minimun capacity of the space'
+        in: query
+        name: capacity
+        type: integer
+      - description: building where is the space
+        in: query
+        name: building
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
   /getEntries/:
     get:
       description: List all the entries of the  schedule
@@ -230,6 +271,54 @@ paths:
       responses:
         "200":
           description: 'Returns "pong" '
+  /reserve/:
+    get:
+      description: Get credentials for doing task which requires certain privileges
+      parameters:
+      - description: name of the user
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+  /reserveBatch/:
+    get:
+      description: Get credentials for doing task which requires certain privileges
+      parameters:
+      - description: name of the user
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
   /updateByCSV/:
     post:
       description: The request will update the database creating degrees, subjects,

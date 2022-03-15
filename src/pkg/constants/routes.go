@@ -11,4 +11,5 @@ const (
 	LOGIN                      = "/login"
 	RESERVE_SPACE              = "/reserve"
 	RESERVE_BATCH              = "/reserveBatch"
+	FILTER_SPACES              = "/filterSlots"
 )
