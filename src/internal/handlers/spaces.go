@@ -25,12 +25,17 @@ import (
 func (hdl *HTTPHandler) Reserve(c *gin.Context) {
 	id := c.Query("spaceId")
 	sp := domain.Space{Id: id}
-	initH, _ := strconv.Atoi(c.Query("initH"))
-	initM, _ := strconv.Atoi(c.Query("initM"))
-	endH, _ := strconv.Atoi(c.Query("endH"))
-	endM, _ := strconv.Atoi(c.Query("endM"))
+
+	init := domain.Hour{}
+	initJSON := []byte(c.Query("init"))
+	json.Unmarshal(initJSON, &init)
+
+	end := domain.Hour{}
+	endJSON := []byte(c.Query("end"))
+	json.Unmarshal(endJSON, &end)
+
 	date := c.Query("date")
-	lastId, err := hdl.Spaces.Reserve(sp,domain.Hour{Hour: initH, Min: initM},domain.Hour{Hour: endH, Min: endM}, date)
+	lastId, err := hdl.Spaces.Reserve(sp ,init , end, date)
 	
 	if err == nil {
 		c.JSON(http.StatusOK, lastId)
@@ -56,14 +61,17 @@ func (hdl *HTTPHandler) ReserveBatch(c *gin.Context) {
 	spaces := []domain.Space{}
 	c.BindJSON(&spaces)
 
-	initH, _ := strconv.Atoi(c.Query("initH"))
-	initM, _ := strconv.Atoi(c.Query("initM"))
-	endH, _ := strconv.Atoi(c.Query("endH"))
-	endM, _ := strconv.Atoi(c.Query("endM"))
+	init := domain.Hour{}
+	initJSON := []byte(c.Query("init"))
+	json.Unmarshal(initJSON, &init)
+
+	end := domain.Hour{}
+	endJSON := []byte(c.Query("end"))
+	json.Unmarshal(endJSON, &end)
 
 	dates := []string{}
 	c.BindJSON(&dates)
-	lastId, err := hdl.Spaces.ReserveBatch(spaces,domain.Hour{Hour: initH, Min: initM},domain.Hour{Hour: endH, Min: endM}, dates)
+	lastId, err := hdl.Spaces.ReserveBatch(spaces,init,end,dates)
 	
 	if err == nil {
 		c.JSON(http.StatusOK, lastId)
