@@ -7,4 +7,5 @@ type HTTPHandler struct {
 	UploadData ports.UploadDataService
 	Monitoring ports.MonitoringService
 	Users      ports.UsersService
+	Spaces	   ports.SpacesService
 }
