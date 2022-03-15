@@ -56,6 +56,8 @@ func SetupRouter() *gin.Engine {
 	}
 	r.GET(constants.PING_URL, handler.Ping)
 	r.GET(constants.LOGIN, handler.Login)
+	r.GET(constants.RESERVE_SPACE, handler.Reserve)
+	r.GET(constants.RESERVE_BATCH, handler.ReserveBatch)
 
 	return r
 }
