@@ -10,7 +10,7 @@ definitions:
       remainingMin:
         type: integer
       subject:
-        $ref: "#/definitions/domain.Subject"
+        $ref: '#/definitions/domain.Subject'
     type: object
   domain.DegreeDescription:
     properties:
@@ -18,7 +18,7 @@ definitions:
         type: string
       years:
         items:
-          $ref: "#/definitions/domain.YearDescription"
+          $ref: '#/definitions/domain.YearDescription'
         type: array
     type: object
   domain.Space:
@@ -74,7 +74,7 @@ definitions:
     properties:
       list:
         items:
-          $ref: "#/definitions/domain.DegreeDescription"
+          $ref: '#/definitions/domain.DegreeDescription'
         type: array
     type: object
 info:
@@ -84,66 +84,66 @@ paths:
     get:
       description: List all the hours remaining for creaiting an entrie on the schedule
       parameters:
-        - description: titulacion de las horas a obtener
-          in: query
-          name: titulacion
-          required: true
-          type: string
-        - description: curso de las horas a obtener
-          in: query
-          name: curso
-          required: true
-          type: integer
-        - description: grupo de las horas a obtener
-          in: query
-          name: grupo
-          required: true
-          type: string
+      - description: titulacion de las horas a obtener
+        in: query
+        name: titulacion
+        required: true
+        type: string
+      - description: curso de las horas a obtener
+        in: query
+        name: curso
+        required: true
+        type: integer
+      - description: grupo de las horas a obtener
+        in: query
+        name: grupo
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: "#/definitions/domain.AvailableHours"
+              $ref: '#/definitions/domain.AvailableHours'
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: "#/definitions/handlers.ErrorHttp"
+            $ref: '#/definitions/handlers.ErrorHttp'
         "404":
           description: Not Found
           schema:
-            $ref: "#/definitions/handlers.ErrorHttp"
+            $ref: '#/definitions/handlers.ErrorHttp'
   /filterSlots:
     get:
       description: Get spaces filtered by params
       parameters:
-        - description: day of availability
-          in: query
-          name: day
-          type: string
-        - in: query
-          name: hour
-          type: integer
-        - in: query
-          name: min
-          type: integer
-        - description: floor where is the space
-          in: query
-          name: floor
-          type: string
-        - description: " minimun capacity of the space"
-          in: query
-          name: capacity
-          type: integer
-        - description: building where is the space
-          in: query
-          name: building
-          type: string
+      - description: day of availability
+        in: query
+        name: day
+        type: string
+      - in: query
+        name: hour
+        type: integer
+      - in: query
+        name: min
+        type: integer
+      - description: floor where is the space
+        in: query
+        name: floor
+        type: string
+      - description: ' minimun capacity of the space'
+        in: query
+        name: capacity
+        type: integer
+      - description: building where is the space
+        in: query
+        name: building
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -152,68 +152,68 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: "#/definitions/handlers.ErrorHttp"
+            $ref: '#/definitions/handlers.ErrorHttp'
         "404":
           description: Not Found
           schema:
-            $ref: "#/definitions/handlers.ErrorHttp"
+            $ref: '#/definitions/handlers.ErrorHttp'
   /getEntries/:
     get:
       description: List all the entries of the  schedule
       parameters:
-        - description: titulacion de las horas a obtener
-          in: query
-          name: degree
-          required: true
-          type: string
-        - description: curso de las horas a obtener
-          in: query
-          name: year
-          required: true
-          type: integer
-        - description: grupo de las horas a obtener
-          in: query
-          name: group
-          required: true
-          type: integer
+      - description: titulacion de las horas a obtener
+        in: query
+        name: degree
+        required: true
+        type: string
+      - description: curso de las horas a obtener
+        in: query
+        name: year
+        required: true
+        type: integer
+      - description: grupo de las horas a obtener
+        in: query
+        name: group
+        required: true
+        type: integer
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: "#/definitions/domain.AvailableHours"
+              $ref: '#/definitions/domain.AvailableHours'
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: "#/definitions/handlers.ErrorHttp"
+            $ref: '#/definitions/handlers.ErrorHttp'
         "404":
           description: Not Found
           schema:
-            $ref: "#/definitions/handlers.ErrorHttp"
+            $ref: '#/definitions/handlers.ErrorHttp'
   /getICS/:
     get:
       description: Get the schedule in ics format
       parameters:
-        - description: titulacion de las horas a obtener
-          in: query
-          name: degree
-          required: true
-          type: string
-        - description: curso de las horas a obtener
-          in: query
-          name: year
-          required: true
-          type: integer
-        - description: grupo de las horas a obtener
-          in: query
-          name: group
-          required: true
-          type: integer
+      - description: titulacion de las horas a obtener
+        in: query
+        name: degree
+        required: true
+        type: string
+      - description: curso de las horas a obtener
+        in: query
+        name: year
+        required: true
+        type: integer
+      - description: grupo de las horas a obtener
+        in: query
+        name: group
+        required: true
+        type: integer
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -222,40 +222,39 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: "#/definitions/handlers.ErrorHttp"
+            $ref: '#/definitions/handlers.ErrorHttp'
         "404":
           description: Not Found
           schema:
-            $ref: "#/definitions/handlers.ErrorHttp"
+            $ref: '#/definitions/handlers.ErrorHttp'
   /listDegrees/:
     get:
-      description:
-        List all degrees' descriptions avaiable, it do not require any
+      description: List all degrees' descriptions avaiable, it do not require any
         parameter
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: "#/definitions/handlers.ListDegreesDTO"
+              $ref: '#/definitions/handlers.ListDegreesDTO'
             type: array
         "500":
           description: Internal Server Error
           schema:
-            $ref: "#/definitions/handlers.ErrorHttp"
+            $ref: '#/definitions/handlers.ErrorHttp'
   /login/:
     get:
       description: Get credentials for doing task which requires certain privileges
       parameters:
-        - description: name of the user
-          in: query
-          name: username
-          required: true
-          type: string
+      - description: name of the user
+        in: query
+        name: username
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -264,16 +263,16 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: "#/definitions/handlers.ErrorHttp"
+            $ref: '#/definitions/handlers.ErrorHttp'
         "404":
           description: Not Found
           schema:
-            $ref: "#/definitions/handlers.ErrorHttp"
+            $ref: '#/definitions/handlers.ErrorHttp'
   /ping/:
     get:
       description: Response "pong" if the server is currrently available
       produces:
-        - text/plain
+      - text/plain
       responses:
         "200":
           description: 'Returns "pong" '
@@ -281,36 +280,28 @@ paths:
     get:
       description: Reserve Space a day from an initial hour to an end hour
       parameters:
-        - in: query
-          name: id
-          type: string
-        - description: initial hour
-          in: query
-          name: initH
-          required: true
-          type: integer
-        - description: initial minute
-          in: query
-          name: initM
-          required: true
-          type: integer
-        - description: end hour
-          in: query
-          name: endH
-          required: true
-          type: integer
-        - description: end minute
-          in: query
-          name: endM
-          required: true
-          type: integer
-        - description: date of reserve
-          in: query
-          name: date
-          required: true
-          type: string
+      - in: query
+        name: id
+        type: string
+      - in: query
+        name: hour
+        type: integer
+      - in: query
+        name: min
+        type: integer
+      - in: query
+        name: hour
+        type: integer
+      - in: query
+        name: min
+        type: integer
+      - description: date of reserve
+        in: query
+        name: date
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -319,51 +310,43 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: "#/definitions/handlers.ErrorHttp"
+            $ref: '#/definitions/handlers.ErrorHttp'
         "404":
           description: Not Found
           schema:
-            $ref: "#/definitions/handlers.ErrorHttp"
+            $ref: '#/definitions/handlers.ErrorHttp'
   /reserveBatch/:
     get:
       description: Reserve Space a day from an initial hour to an end hour
       parameters:
-        - description: space ids
-          in: body
-          name: spaces
-          required: true
-          schema:
-            $ref: "#/definitions/domain.Space"
-        - description: initial hour
-          in: query
-          name: initH
-          required: true
-          type: integer
-        - description: initial minute
-          in: query
-          name: initM
-          required: true
-          type: integer
-        - description: end hour
-          in: query
-          name: endH
-          required: true
-          type: integer
-        - description: end minute
-          in: query
-          name: endM
-          required: true
-          type: integer
-        - description: dates of reserve
-          in: body
-          name: dates
-          required: true
-          schema:
-            items:
-              type: string
-            type: array
+      - description: space ids
+        in: body
+        name: spaces
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Space'
+      - in: query
+        name: hour
+        type: integer
+      - in: query
+        name: min
+        type: integer
+      - in: query
+        name: hour
+        type: integer
+      - in: query
+        name: min
+        type: integer
+      - description: dates of reserve
+        in: body
+        name: dates
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -372,24 +355,23 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: "#/definitions/handlers.ErrorHttp"
+            $ref: '#/definitions/handlers.ErrorHttp'
         "404":
           description: Not Found
           schema:
-            $ref: "#/definitions/handlers.ErrorHttp"
+            $ref: '#/definitions/handlers.ErrorHttp'
   /updateByCSV/:
     post:
-      description:
-        The request will update the database creating degrees, subjects,
+      description: The request will update the database creating degrees, subjects,
         years, groups and hours
       parameters:
-        - description: csv file
-          in: formData
-          name: csv
-          required: true
-          type: file
+      - description: csv file
+        in: formData
+        name: csv
+        required: true
+        type: file
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -398,11 +380,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: "#/definitions/handlers.ErrorHttp"
+            $ref: '#/definitions/handlers.ErrorHttp'
         "404":
           description: Not Found
           schema:
-            $ref: "#/definitions/handlers.ErrorHttp"
+            $ref: '#/definitions/handlers.ErrorHttp'
   /updateScheduler/:
     post:
       description: |-
@@ -414,34 +396,33 @@ paths:
         - Practices = 2
         - Exercises = 3
       parameters:
-        - description: titulacion de las horas a obtener
-          in: query
-          name: degree
-          required: true
-          type: string
-        - description: curso de las horas a obtener
-          in: query
-          name: year
-          required: true
-          type: integer
-        - description: grupo de las horas a obtener
-          in: query
-          name: group
-          required: true
-          type: integer
-        - description: Entry to create
-          in: body
-          name: entry
-          required: true
-          schema:
-            items:
-              $ref: "#/definitions/handlers.EntryDTO"
-            type: array
+      - description: titulacion de las horas a obtener
+        in: query
+        name: degree
+        required: true
+        type: string
+      - description: curso de las horas a obtener
+        in: query
+        name: year
+        required: true
+        type: integer
+      - description: grupo de las horas a obtener
+        in: query
+        name: group
+        required: true
+        type: integer
+      - description: Entry to create
+        in: body
+        name: entry
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/handlers.EntryDTO'
+          type: array
       produces:
-        - text/plain
+      - text/plain
       responses:
         "200":
-          description:
-            Receive the date of the latests entry modification with format
+          description: Receive the date of the latests entry modification with format
             dd/mm/aaaa
 swagger: "2.0"

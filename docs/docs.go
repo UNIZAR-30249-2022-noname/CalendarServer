@@ -335,31 +335,23 @@ var doc = `{
                     },
                     {
                         "type": "integer",
-                        "description": "initial hour",
-                        "name": "initH",
-                        "in": "query",
-                        "required": true
+                        "name": "hour",
+                        "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "initial minute",
-                        "name": "initM",
-                        "in": "query",
-                        "required": true
+                        "name": "min",
+                        "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "end hour",
-                        "name": "endH",
-                        "in": "query",
-                        "required": true
+                        "name": "hour",
+                        "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "end minute",
-                        "name": "endM",
-                        "in": "query",
-                        "required": true
+                        "name": "min",
+                        "in": "query"
                     },
                     {
                         "type": "string",
@@ -409,31 +401,23 @@ var doc = `{
                     },
                     {
                         "type": "integer",
-                        "description": "initial hour",
-                        "name": "initH",
-                        "in": "query",
-                        "required": true
+                        "name": "hour",
+                        "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "initial minute",
-                        "name": "initM",
-                        "in": "query",
-                        "required": true
+                        "name": "min",
+                        "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "end hour",
-                        "name": "endH",
-                        "in": "query",
-                        "required": true
+                        "name": "hour",
+                        "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "end minute",
-                        "name": "endM",
-                        "in": "query",
-                        "required": true
+                        "name": "min",
+                        "in": "query"
                     },
                     {
                         "description": "dates of reserve",
