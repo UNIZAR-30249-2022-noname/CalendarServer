@@ -59,15 +59,15 @@ type Space struct {
 
 type Reserve struct {
 	Space Space
-	Init Hour
-	End Hour
+	Init  Hour
+	End   Hour
 }
 
 type ReserveBatch struct {
 	Spaces []Space
-	Init Hour
-	End Hour
-	Dates []string
+	Init   Hour
+	End    Hour
+	Dates  []string
 }
 
 func NewHour(h, m int) Hour {
@@ -168,4 +168,11 @@ func (e Entry) IsValid() error {
 type User struct {
 	Name       string `json:"name"`
 	Privileges string `json:"privileges"`
+}
+
+type SpaceFilterParams struct {
+	Capacity int
+}
+
+type Spaces struct {
 }
