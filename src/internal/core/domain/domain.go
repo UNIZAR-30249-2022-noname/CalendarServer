@@ -60,14 +60,16 @@ type Space struct {
 type Reserve struct {
 	Space Space
 	Init  Hour
-	End   Hour
+	Date string
+	Person string
 }
 
 type ReserveBatch struct {
 	Spaces []Space
 	Init   Hour
-	End    Hour
+	End	   Hour
 	Dates  []string
+	Person string
 }
 
 func NewHour(h, m int) Hour {

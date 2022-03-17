@@ -19,6 +19,7 @@ import (
 //@Param init query domain.Hour true "initial hour"
 //@Param end query domain.Hour true "end hour"
 //@Param date query string true "date of reserve"
+//@Param person query string true "person that reserves"
 //@Success 200 {object} string
 // @Failure 400,404 {object} ErrorHttp
 //@Router /reserve/ [get]
@@ -35,7 +36,8 @@ func (hdl *HTTPHandler) Reserve(c *gin.Context) {
 	json.Unmarshal(endJSON, &end)
 
 	date := c.Query("date")
-	lastId, err := hdl.Spaces.Reserve(sp ,init , end, date)
+	person := c.Query("person")
+	lastId, err := hdl.Spaces.Reserve(sp ,init , end, date, person)
 	
 	if err == nil {
 		c.JSON(http.StatusOK, lastId)
@@ -54,6 +56,7 @@ func (hdl *HTTPHandler) Reserve(c *gin.Context) {
 //@Param init query domain.Hour true "initial hour"
 //@Param end query domain.Hour true "end hour"
 //@Param dates body []string true "dates of reserve"
+//@Param person query string true "person that reserves"
 //@Success 200 {object} string
 // @Failure 400,404 {object} ErrorHttp
 //@Router /reserveBatch/ [get]
@@ -71,7 +74,8 @@ func (hdl *HTTPHandler) ReserveBatch(c *gin.Context) {
 
 	dates := []string{}
 	c.BindJSON(&dates)
-	lastId, err := hdl.Spaces.ReserveBatch(spaces,init,end,dates)
+	person := c.Query("person")
+	lastId, err := hdl.Spaces.ReserveBatch(spaces,init,end,dates,person)
 	
 	if err == nil {
 		c.JSON(http.StatusOK, lastId)

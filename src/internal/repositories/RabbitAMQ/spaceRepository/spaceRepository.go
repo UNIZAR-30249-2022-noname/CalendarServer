@@ -19,12 +19,12 @@ func New(ch *amqp.Channel) *SpaceRepository {
 }
 
 //TODO Este sobra
-func (repo *SpaceRepository) Reserve(sp domain.Space, init, end domain.Hour, date string) (string, error) {
+func (repo *SpaceRepository) Reserve(sp domain.Space, init domain.Hour, date, person string) (string, error) {
 	err := connect.PrepareChannel(repo.ch, constants.RESERVE)
 	if err != nil {
 		return "-1", err
 	}
-	msg, err := json.Marshal(domain.Reserve{Space: sp, Init: init, End: end})
+	msg, err := json.Marshal(domain.Reserve{Space: sp, Init: init, Date: date, Person: person})
 	if err != nil {
 		return "-1", err
 	}
@@ -42,9 +42,9 @@ func (repo *SpaceRepository) Reserve(sp domain.Space, init, end domain.Hour, dat
 }
 
 
-func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domain.Hour, dates []string) (string, error) {
+func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domain.Hour, dates []string, person string) (string, error) {
 
-	msg, err := json.Marshal(domain.ReserveBatch{Spaces: spaces, Init: init, End: end, Dates: dates})
+	msg, err := json.Marshal(domain.ReserveBatch{Spaces: spaces, Init: init, End: end, Dates: dates, Person: person})
 	if err != nil {
 		return "-1", err
 	}
@@ -74,6 +74,7 @@ func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domai
 	if err != nil {
 		return "-1", err
 	}
+	
 	
 	lastId := "-1"
 	for resp := range msgs {

@@ -12,12 +12,12 @@ func New() *SpaceRepository {
 }
 
 //TODO Este sobra
-func (repo *SpaceRepository) Reserve(sp domain.Space, init, end domain.Hour, date string) (string, error) {
+func (repo *SpaceRepository) Reserve(sp domain.Space, init, end domain.Hour, date, person string) (string, error) {
 
 	return "1", nil
 }
 
-func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domain.Hour, dates []string) (string, error) {
+func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domain.Hour, dates []string, person string) (string, error) {
 
 	return "1", nil
 }
