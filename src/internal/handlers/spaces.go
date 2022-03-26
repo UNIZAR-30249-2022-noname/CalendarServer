@@ -136,9 +136,9 @@ func (hdl *HTTPHandler) RequestInfoSlots(c *gin.Context) {
 	if( name != "" && date != ""){
 		fmt.Println(name + " " + date)
 		c.JSON(http.StatusOK, allInfo)
-	}
+	} else {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
-	
+	}
 }
 
 //Reserve is the handler for reserving one space
