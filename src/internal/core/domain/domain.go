@@ -186,3 +186,22 @@ type Spaces struct {
 	Building string `json:"building"`
 	Kind     string `json:"kind"`
 }
+
+type InfoSlots struct {
+	Hour 	 int    `json:"hour"`
+	Occupied bool	`json:"occupied"`
+	Person 	 string `json:"person"`
+}
+type SlotData struct {
+	Name 	 	string `json:"name"`
+	Capacity 	int	   `json:"capacity"`
+	Description string `json:"description"`
+	Building 	string `json:"building"`
+	Floor 		string `json:"floor"`
+}
+  
+type AllInfoSlot struct {
+	SlotData  SlotData    `json:"slotData"`
+	InfoSlots []InfoSlots `json:"infoSlots"`
+}
+  

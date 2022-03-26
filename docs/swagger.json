@@ -302,6 +302,50 @@
                 }
             }
         },
+        "/requestInfoSlots/": {
+            "get": {
+                "description": "Request the info of a space and its occupation",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "space name or id",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "date to request",
+                        "name": "date",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AllInfoSlot"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            }
+        },
         "/reserve/": {
             "get": {
                 "description": "Reserve Space a day from an initial hour to an end hour",
@@ -338,6 +382,13 @@
                         "type": "string",
                         "description": "date of reserve",
                         "name": "date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "person that reserves",
+                        "name": "person",
                         "in": "query",
                         "required": true
                     }
@@ -411,6 +462,13 @@
                                 "type": "string"
                             }
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "person that reserves",
+                        "name": "person",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -522,6 +580,20 @@
         }
     },
     "definitions": {
+        "domain.AllInfoSlot": {
+            "type": "object",
+            "properties": {
+                "infoSlots": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.InfoSlots"
+                    }
+                },
+                "slotData": {
+                    "$ref": "#/definitions/domain.SlotData"
+                }
+            }
+        },
         "domain.AvailableHours": {
             "type": "object",
             "properties": {
@@ -553,6 +625,40 @@
                     "items": {
                         "$ref": "#/definitions/domain.YearDescription"
                     }
+                }
+            }
+        },
+        "domain.InfoSlots": {
+            "type": "object",
+            "properties": {
+                "hour": {
+                    "type": "integer"
+                },
+                "occupied": {
+                    "type": "boolean"
+                },
+                "person": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.SlotData": {
+            "type": "object",
+            "properties": {
+                "building": {
+                    "type": "string"
+                },
+                "capacity": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "floor": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },

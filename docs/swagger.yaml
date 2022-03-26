@@ -1,4 +1,13 @@
 definitions:
+  domain.AllInfoSlot:
+    properties:
+      infoSlots:
+        items:
+          $ref: '#/definitions/domain.InfoSlots'
+        type: array
+      slotData:
+        $ref: '#/definitions/domain.SlotData'
+    type: object
   domain.AvailableHours:
     properties:
       maxHours:
@@ -20,6 +29,28 @@ definitions:
         items:
           $ref: '#/definitions/domain.YearDescription'
         type: array
+    type: object
+  domain.InfoSlots:
+    properties:
+      hour:
+        type: integer
+      occupied:
+        type: boolean
+      person:
+        type: string
+    type: object
+  domain.SlotData:
+    properties:
+      building:
+        type: string
+      capacity:
+        type: integer
+      description:
+        type: string
+      floor:
+        type: string
+      name:
+        type: string
     type: object
   domain.Space:
     properties:
@@ -276,6 +307,35 @@ paths:
       responses:
         "200":
           description: 'Returns "pong" '
+  /requestInfoSlots/:
+    get:
+      description: Request the info of a space and its occupation
+      parameters:
+      - description: space name or id
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: date to request
+        in: query
+        name: date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.AllInfoSlot'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
   /reserve/:
     get:
       description: Reserve Space a day from an initial hour to an end hour
@@ -298,6 +358,11 @@ paths:
       - description: date of reserve
         in: query
         name: date
+        required: true
+        type: string
+      - description: person that reserves
+        in: query
+        name: person
         required: true
         type: string
       produces:
@@ -345,6 +410,11 @@ paths:
           items:
             type: string
           type: array
+      - description: person that reserves
+        in: query
+        name: person
+        required: true
+        type: string
       produces:
       - application/json
       responses:

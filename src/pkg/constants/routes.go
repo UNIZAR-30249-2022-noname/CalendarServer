@@ -12,4 +12,5 @@ const (
 	RESERVE_SPACE              = "/reserve"
 	RESERVE_BATCH              = "/reserveBatch"
 	FILTER_SPACES              = "/filterSlots"
+	REQUEST_INFO_SLOTS         = "/requestInfoSlots"
 )
