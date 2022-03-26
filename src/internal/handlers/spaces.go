@@ -67,6 +67,7 @@ func (hdl *HTTPHandler) RequestInfoSlots(c *gin.Context) {
 		Description: "Lorem ipsum no leas mas porque esto es dummy text",
 		Building: "Ada",
 		Floor: "baja",
+		Type: "aula",
   	};
   
     is := []domain.InfoSlots{

@@ -198,6 +198,7 @@ type SlotData struct {
 	Description string `json:"description"`
 	Building 	string `json:"building"`
 	Floor 		string `json:"floor"`
+	Type		string `json:"type"`
 }
   
 type AllInfoSlot struct {
