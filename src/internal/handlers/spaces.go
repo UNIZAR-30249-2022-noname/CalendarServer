@@ -15,29 +15,33 @@ import (
 //@Description Reserve Space a day from an initial hour to an end hour
 //@Tag Users
 //@Produce json
-//@Param spaceId query domain.Space true "space id"
-//@Param init query domain.Hour true "initial hour"
-//@Param end query domain.Hour true "end hour"
+//@Param space query string true "space id"
+//@Param hour query int true "initial hour"
 //@Param date query string true "date of reserve"
 //@Param person query string true "person that reserves"
 //@Success 200 {object} string
 // @Failure 400,404 {object} ErrorHttp
 //@Router /reserve/ [get]
 func (hdl *HTTPHandler) Reserve(c *gin.Context) {
-	id := c.Query("spaceId")
+	id := c.Query("space")
 	sp := domain.Space{Id: id}
 
-	init := domain.Hour{}
-	initJSON := []byte(c.Query("init"))
-	json.Unmarshal(initJSON, &init)
+	initString := c.Query("hour")
+	initInt, _ := strconv.Atoi(initString)
 
-	end := domain.Hour{}
-	endJSON := []byte(c.Query("end"))
-	json.Unmarshal(endJSON, &end)
+	init := domain.Hour{
+		Hour: initInt,
+		Min: 0,
+	}
+
+	end := domain.Hour{
+		Hour: initInt+1,
+		Min: 0,
+	}
 
 	date := c.Query("date")
 	person := c.Query("person")
-	lastId, err := hdl.Spaces.Reserve(sp ,init , end, date, person)
+	lastId, err := hdl.Spaces.Reserve(sp, init, end, date, person)
 	
 	if err == nil {
 		c.JSON(http.StatusOK, lastId)

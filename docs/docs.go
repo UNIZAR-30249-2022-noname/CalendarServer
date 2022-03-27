@@ -374,28 +374,17 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "name": "id",
-                        "in": "query"
+                        "description": "space id",
+                        "name": "space",
+                        "in": "query",
+                        "required": true
                     },
                     {
                         "type": "integer",
+                        "description": "initial hour",
                         "name": "hour",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "min",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "hour",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "min",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     },
                     {
                         "type": "string",

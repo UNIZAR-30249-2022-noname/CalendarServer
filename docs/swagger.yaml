@@ -342,20 +342,15 @@ paths:
     get:
       description: Reserve Space a day from an initial hour to an end hour
       parameters:
-      - in: query
-        name: id
+      - description: space id
+        in: query
+        name: space
+        required: true
         type: string
-      - in: query
+      - description: initial hour
+        in: query
         name: hour
-        type: integer
-      - in: query
-        name: min
-        type: integer
-      - in: query
-        name: hour
-        type: integer
-      - in: query
-        name: min
+        required: true
         type: integer
       - description: date of reserve
         in: query
