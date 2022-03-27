@@ -200,6 +200,11 @@ type SlotData struct {
 	Floor 		string `json:"floor"`
 	Type		string `json:"type"`
 }
+
+type ReqInfoSlot struct {
+	Name string `json:"name"`
+	Date string `json:"date"`
+}
   
 type AllInfoSlot struct {
 	SlotData  SlotData    `json:"slotData"`

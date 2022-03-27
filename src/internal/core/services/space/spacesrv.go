@@ -13,6 +13,10 @@ func New(spaceRepository ports.SpaceRepository) *SpaceServiceImp {
 	return &SpaceServiceImp{spaceRepository: spaceRepository}
 }
 
+func (svc *SpaceServiceImp) RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error) {
+	return svc.spaceRepository.RequestInfoSlots(req)
+}
+
 func (svc *SpaceServiceImp) Reserve(sp domain.Space, init, end domain.Hour, date, person string) (string, error) {
 	return svc.spaceRepository.Reserve(sp, init, end, date, person)
 }

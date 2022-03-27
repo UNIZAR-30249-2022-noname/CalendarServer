@@ -61,80 +61,9 @@ func (hdl *HTTPHandler) RequestInfoSlots(c *gin.Context) {
 	name := c.Query("name")
 	date := c.Query("date")
 
-	sd := domain.SlotData{
-		Name: "A1",
-		Capacity: 5,
-		Description: "Lorem ipsum no leas mas porque esto es dummy text",
-		Building: "Ada",
-		Floor: "baja",
-		Type: "aula",
-  	};
-  
-    is := []domain.InfoSlots{
-		{
-		Hour: 8,
-		Occupied: false,
-		},
-		{
-			Hour: 8,
-			Occupied: true,
-			Person: "Urrikote",
-		},
-		{
-			Hour: 10,
-			Occupied: false,
-		},
-		{
-			Hour: 11,
-			Occupied: false,
-		},
-		{
-			Hour: 12,
-			Occupied: true,
-			Person: "Urrikyu",
-		},
-		{
-			Hour: 13,
-			Occupied: false,
-		},
-		{
-			Hour: 14,
-			Occupied: false,
-		},
-		{
-			Hour: 15,
-			Occupied: true,
-			Person: "Urriuuuu",
-		},
-		{
-			Hour: 16,
-			Occupied: false,
-		},
-		{
-			Hour: 17,
-			Occupied: false,
-		},
-		{
-			Hour: 8,
-			Occupied: true,
-			Person: "Urrikoncio",
-		},
-		{
-			Hour: 19,
-			Occupied: false,
-		},
-		{
-			Hour: 20,
-			Occupied: false,
-		},
-	}
+	allInfo, err := hdl.Spaces.RequestInfoSlots(domain.ReqInfoSlot{Name: name, Date: date})
 
-	allInfo := domain.AllInfoSlot{
-		SlotData: sd,
-		InfoSlots: is,
-	}
-
-	if( name != "" && date != ""){
+	if( name != "" && date != "" && err != nil){
 		fmt.Println(name + " " + date)
 		c.JSON(http.StatusOK, allInfo)
 	} else {

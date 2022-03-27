@@ -11,7 +11,87 @@ func New() *SpaceRepository {
 	return &SpaceRepository{}
 }
 
-//TODO Este sobra
+
+
+func (repo *SpaceRepository) RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error) {
+
+		sd := domain.SlotData{
+			Name: "A1",
+			Capacity: 5,
+			Description: "Lorem ipsum no leas mas porque esto es dummy text",
+			Building: "Ada",
+			Floor: "baja",
+			Type: "aula",
+		  };
+
+		  
+		  is := []domain.InfoSlots{
+			{
+			Hour: 8,
+			Occupied: false,
+			},
+			{
+				Hour: 9,
+				Occupied: true,
+				Person: "Urrikote",
+			},
+			{
+				Hour: 10,
+				Occupied: false,
+			},
+			{
+				Hour: 11,
+				Occupied: false,
+			},
+			{
+				Hour: 12,
+				Occupied: true,
+				Person: "Urrikyu",
+			},
+			{
+				Hour: 13,
+				Occupied: false,
+			},
+			{
+				Hour: 14,
+				Occupied: false,
+			},
+			{
+				Hour: 15,
+				Occupied: true,
+				Person: "Urriuuuu",
+			},
+			{
+				Hour: 16,
+				Occupied: false,
+			},
+			{
+				Hour: 17,
+				Occupied: false,
+			},
+			{
+				Hour: 8,
+				Occupied: true,
+				Person: "Urrikoncio",
+			},
+			{
+				Hour: 19,
+				Occupied: false,
+			},
+			{
+				Hour: 20,
+				Occupied: false,
+			},
+		}
+	
+		allInfo := domain.AllInfoSlot{
+			SlotData: sd,
+			InfoSlots: is,
+		}
+
+	return allInfo, nil
+}
+
 func (repo *SpaceRepository) Reserve(sp domain.Space, init, end domain.Hour, date, person string) (string, error) {
 
 	return "1", nil
