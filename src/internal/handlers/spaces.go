@@ -62,8 +62,7 @@ func (hdl *HTTPHandler) RequestInfoSlots(c *gin.Context) {
 	date := c.Query("date")
 
 	allInfo, err := hdl.Spaces.RequestInfoSlots(domain.ReqInfoSlot{Name: name, Date: date})
-
-	if( name != "" && date != "" && err != nil){
+	if(err == nil){
 		fmt.Println(name + " " + date)
 		c.JSON(http.StatusOK, allInfo)
 	} else {

@@ -14,7 +14,6 @@ func New() *SpaceRepository {
 
 
 func (repo *SpaceRepository) RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error) {
-
 		sd := domain.SlotData{
 			Name: "A1",
 			Capacity: 5,

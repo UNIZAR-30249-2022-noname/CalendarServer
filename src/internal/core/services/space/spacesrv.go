@@ -3,6 +3,7 @@ package space
 import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/ports"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 )
 
 type SpaceServiceImp struct {
@@ -14,7 +15,10 @@ func New(spaceRepository ports.SpaceRepository) *SpaceServiceImp {
 }
 
 func (svc *SpaceServiceImp) RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error) {
-	return svc.spaceRepository.RequestInfoSlots(req)
+	if(req.Name != "" && req.Date != ""){
+		return svc.spaceRepository.RequestInfoSlots(req)
+	} 
+	return domain.AllInfoSlot{}, apperrors.ErrInvalidInput
 }
 
 func (svc *SpaceServiceImp) Reserve(sp domain.Space, init, end domain.Hour, date, person string) (string, error) {
