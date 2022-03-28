@@ -1,6 +1,8 @@
 package spacerepositoryrabbitamq
 
 import (
+	"encoding/json"
+
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	rabbitamqRepository "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
@@ -21,13 +23,13 @@ func New(ch *amqp.Channel) (*SpaceRepository, error) {
 }
 
 func (repo *SpaceRepository) RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error) {
-
-	allInfo, err := repo.RCPcallJSON(constants.REQ_INFO_SLOT, req)
+	var allInfo domain.AllInfoSlot
+	allInfoJSON, err := repo.RCPcallJSON(constants.REQ_INFO_SLOT, req)
 	if err != nil {
 		return domain.AllInfoSlot{}, err
 	}
-
-	return allInfo.(domain.AllInfoSlot), nil
+	json.Unmarshal(allInfoJSON, &allInfo)
+	return allInfo, nil
 
 }
 

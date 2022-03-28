@@ -10,43 +10,55 @@ import (
 )
 
 type Repository struct {
-	ch *amqp.Channel
+	ch      *amqp.Channel
+	replies chan amqp.Delivery
 }
 
 func New(ch *amqp.Channel, queues []string) (*Repository, error) {
-	rp := Repository{ch: ch}
+	rp := Repository{ch: ch, replies: make(chan amqp.Delivery, 100)}
 	for _, queue := range queues {
+		//crear cola de peticiones
 		err := connect.PrepareChannel(rp.ch, queue)
-		err = connect.PrepareChannel(rp.ch, queue+constants.REPPLY_EXTENSION)
 		if err != nil {
 			return &Repository{}, err
 		}
+		//crear cola de respuestas
+		name_queue_reply := queue + constants.REPPLY_EXTENSION
+		err = connect.PrepareChannel(rp.ch, name_queue_reply)
+		if err != nil {
+			return &Repository{}, err
+		}
+
+		//canal por el que se recibe la respuesta
+		msgs, err := rp.ch.Consume(
+			name_queue_reply, // queue
+			"",               // consumer
+			false,            // auto-ack
+			false,            // exclusive
+			false,            // no-local
+			false,            // no-wait
+			nil,              // args
+		)
+		go func() {
+			for resp := range msgs {
+				rp.replies <- resp
+			}
+
+		}()
 
 	}
 	return &rp, nil
 
 }
 
-func (rp *Repository) RCPcallJSON(queue string, msg interface{}) (interface{}, error) {
-
-	//canal por el que se recibe la respuesta
-	msgs, err := rp.ch.Consume(
-		constants.BATCH_REPLY, // queue
-		"",                    // consumer
-		false,                 // auto-ack
-		false,                 // exclusive
-		false,                 // no-local
-		false,                 // no-wait
-		nil,                   // args
-	)
-
+func (rp *Repository) RCPcallJSON(queue string, msg interface{}) ([]byte, error) {
+	//TODO garantizar exclusiçon mutua
 	msgJSON, err := json.Marshal(msg)
 	if err != nil {
 		return nil, err
 	}
 	corrId := auxFuncs.RandomString(10)
 
-	var result interface{}
 	//enviar la petición
 	err = rp.ch.Publish(
 		"",    // exchange
@@ -59,14 +71,14 @@ func (rp *Repository) RCPcallJSON(queue string, msg interface{}) (interface{}, e
 			Body:          msgJSON,
 			ReplyTo:       queue + constants.REPPLY_EXTENSION,
 		})
-
-	for resp := range msgs {
+	var data []byte
+	for resp := range rp.replies {
 		if corrId == resp.CorrelationId {
-			if err == nil {
-				json.Unmarshal(resp.Body, result)
-			}
+			data = resp.Body
 			break
+		} else {
+			rp.replies <- resp
 		}
 	}
-	return result, err
+	return data, err
 }
