@@ -34,8 +34,14 @@ func (repo *SpaceRepository) RequestInfoSlots(req domain.ReqInfoSlot) (domain.Al
 }
 
 func (repo *SpaceRepository) Reserve(space domain.Space, init, end domain.Hour, date, person string) (string, error) {
+	var reserveId string
+	reserveIdJSON, err := repo.RCPcallJSON(constants.REQUEST)
+	if err != nil {
+		return "", err
+	}
+	json.Unmarshal(reserveIdJSON, &reserveId)
 
-	return "1", nil
+	return reserveId, nil
 }
 
 func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domain.Hour, dates []string, person string) (string, error) {
@@ -44,6 +50,12 @@ func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domai
 }
 
 func (repo *SpaceRepository) FilterBy(domain.SpaceFilterParams) ([]domain.Spaces, error) {
+	var spaces []domain.Spaces
+	spacesJSON, err := repo.RCPcallJSON(constants.REQUEST)
+	if err != nil {
+		return []domain.Spaces{}, err
+	}
+	json.Unmarshal(spacesJSON, &spaces)
 
-	return []domain.Spaces{}, nil
+	return spaces, nil
 }
