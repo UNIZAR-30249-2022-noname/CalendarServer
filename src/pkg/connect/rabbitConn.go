@@ -1,6 +1,7 @@
 package connect
 
 import (
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	"github.com/streadway/amqp"
 )
 
@@ -34,4 +35,27 @@ func (conn *Connection) NewChannel() (*amqp.Channel, error) {
 	conn.channels = append(conn.channels, ch)
 	return ch, err
 
+}
+
+func PrepareChannel(ch *amqp.Channel, qname string) (error){
+	_, err := ch.QueueDeclare(
+		qname, // name
+		false,       // durable
+		false,       // delete when unused
+		false,       // exclusive
+		false,       // no-wait
+		nil,         // arguments
+	)
+	if err != nil {
+		return apperrors.ErrConn
+	}
+	err = ch.Qos(
+		1,     // prefetch count
+		0,     // prefetch size
+		false, // global
+	)
+	if err != nil {
+		return apperrors.ErrConn
+	}
+	return nil
 }

@@ -1,9 +1,8 @@
 package monitoringrepositoryrabbitamq
 
 import (
-	"math/rand"
-
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/auxFuncs"
 	"github.com/streadway/amqp"
 )
 
@@ -43,18 +42,9 @@ func (repo *HorarioRepositorioRabbit) Ping() (bool, error) {
 		false,       // immediate
 		amqp.Publishing{
 			ContentType:   "text/plain",
-			CorrelationId: RandomString(10),
+			CorrelationId: auxFuncs.RandomString(10),
 			Body:          []byte("Hola, esto es una prueba, Guapo el que lo lea"),
 		})
 	return true, err
 }
 
-func RandomString(n int) string {
-	var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-
-	s := make([]rune, n)
-	for i := range s {
-		s[i] = letters[rand.Intn(len(letters))]
-	}
-	return string(s)
-}

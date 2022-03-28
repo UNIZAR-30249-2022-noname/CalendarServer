@@ -49,8 +49,27 @@ type DegreeSet struct {
 }
 
 type Hour struct {
-	Hour int
-	Min  int
+	Hour int `json:"hour"`
+	Min  int `json:"min"`
+}
+
+type Space struct {
+	Id string
+}
+
+type Reserve struct {
+	Space Space
+	Init  Hour
+	Date string
+	Person string
+}
+
+type ReserveBatch struct {
+	Spaces []Space
+	Init   Hour
+	End	   Hour
+	Dates  []string
+	Person string
 }
 
 func NewHour(h, m int) Hour {
@@ -152,3 +171,43 @@ type User struct {
 	Name       string `json:"name"`
 	Privileges string `json:"privileges"`
 }
+
+type SpaceFilterParams struct {
+	Capacity int    `json:"capacity"`
+	Day      string `json:"day"`
+	Hour     Hour   `json:"hour"`
+	Floor    string `json:"floor"`
+	Building string `json:"building"`
+}
+
+type Spaces struct {
+	Name     string `json:"name"`
+	Capacity int    `json:"capacity"`
+	Building string `json:"building"`
+	Kind     string `json:"kind"`
+}
+
+type InfoSlots struct {
+	Hour 	 int    `json:"hour"`
+	Occupied bool	`json:"occupied"`
+	Person 	 string `json:"person"`
+}
+type SlotData struct {
+	Name 	 	string `json:"name"`
+	Capacity 	int	   `json:"capacity"`
+	Description string `json:"description"`
+	Building 	string `json:"building"`
+	Floor 		string `json:"floor"`
+	Type		string `json:"type"`
+}
+
+type ReqInfoSlot struct {
+	Name string `json:"name"`
+	Date string `json:"date"`
+}
+  
+type AllInfoSlot struct {
+	SlotData  SlotData    `json:"slotData"`
+	InfoSlots []InfoSlots `json:"infoSlots"`
+}
+  

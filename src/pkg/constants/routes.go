@@ -8,5 +8,9 @@ const (
 	LIST_SCHEDULER_ENTRIES_URL = "/getEntries"
 	GENERATE_ICAL_URL          = "/getICS"
 	UPLOAD_DATA_DEGREES_URL    = "/updateByCSV"
-	LOGIN                      = "login"
+	LOGIN                      = "/login"
+	RESERVE_SPACE              = "/reserve"
+	RESERVE_BATCH              = "/reserveBatch"
+	FILTER_SPACES              = "/filterSlots"
+	REQUEST_INFO_SLOTS         = "/requestInfoSlots"
 )

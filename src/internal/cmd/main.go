@@ -3,10 +3,13 @@ package main
 import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/docs"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/monitoring"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/space"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/users"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
+	spacerepositorymemory "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/Memory/spaceRepository.go"
 	usersrepositorymemory "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/Memory/usersRepository"
 	monitoringrepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/monitoringRepository"
+
 	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/gin-contrib/cors"
@@ -29,11 +32,13 @@ func config() (handlers.HTTPHandler, error) {
 		//TODO
 	}
 	monitoringRepo := monitoringrepositoryrabbitamq.New(chMonitoring)
+	spaceRepo := spacerepositorymemory.New()
 	usersRepo := usersrepositorymemory.New()
 
 	return handlers.HTTPHandler{
 		Monitoring: monitoring.New(monitoringRepo),
 		Users:      users.New(usersRepo),
+		Spaces:     space.New(spaceRepo),
 	}, nil
 
 }
@@ -52,6 +57,10 @@ func SetupRouter() *gin.Engine {
 	}
 	r.GET(constants.PING_URL, handler.Ping)
 	r.GET(constants.LOGIN, handler.Login)
+	r.GET(constants.FILTER_SPACES, handler.FilterBy)
+	r.GET(constants.REQUEST_INFO_SLOTS, handler.RequestInfoSlots)
+	r.GET(constants.RESERVE_SPACE, handler.Reserve)
+	r.GET(constants.RESERVE_BATCH, handler.ReserveBatch)
 
 	return r
 }
