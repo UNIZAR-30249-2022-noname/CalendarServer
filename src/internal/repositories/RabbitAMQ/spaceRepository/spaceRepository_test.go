@@ -171,7 +171,7 @@ func TestReserve(t *testing.T) {
 }
 
 func TestReserveBatch(t *testing.T) {
-	//t.Skip() //remove for activating it
+	t.Skip() //remove for activating it
 	assert := assert.New(t)
 	a := time.Now().Local()
 	s := a.Format("2006-01-02")
