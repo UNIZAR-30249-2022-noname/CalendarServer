@@ -6,9 +6,9 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/space"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/users"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
-	spacerepositorymemory "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/Memory/spaceRepository.go"
 	usersrepositorymemory "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/Memory/usersRepository"
 	monitoringrepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/monitoringRepository"
+	spacerepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/spaceRepository"
 
 	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
@@ -32,7 +32,11 @@ func config() (handlers.HTTPHandler, error) {
 		//TODO
 	}
 	monitoringRepo := monitoringrepositoryrabbitamq.New(chMonitoring)
-	spaceRepo := spacerepositorymemory.New()
+	chSpaces, err := rabbitConn.NewChannel()
+	if err != nil {
+		//TODO
+	}
+	spaceRepo, _ := spacerepositoryrabbitamq.New(chSpaces)
 	usersRepo := usersrepositorymemory.New()
 
 	return handlers.HTTPHandler{
