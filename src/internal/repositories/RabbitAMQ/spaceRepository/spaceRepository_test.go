@@ -27,13 +27,13 @@ func TestRequestInfoSlots(t *testing.T) {
 
 	//Simulated server
 	msgs, _ := chReqInfo.Consume(
-		constants.REQ_INFO_SLOT, // queue
-		"",                      // consumer
-		false,                   // auto-ack
-		false,                   // exclusive
-		false,                   // no-local
-		false,                   // no-wait
-		nil,                     // args
+		constants.REQUEST, // queue
+		"",                // consumer
+		false,             // auto-ack
+		false,             // exclusive
+		false,             // no-local
+		false,             // no-wait
+		nil,               // args
 	)
 	myResponse := domain.AllInfoSlot{
 		SlotData: domain.SlotData{
@@ -62,10 +62,10 @@ func TestRequestInfoSlots(t *testing.T) {
 			corrId = resp.CorrelationId
 			response, _ := json.Marshal(myResponse)
 			chReqInfo.Publish(
-				"", // exchange
-				constants.REQ_INFO_SLOT+constants.REPPLY_EXTENSION, // routing key
-				false, // mandatory
-				false, // immediate
+				"",              // exchange
+				constants.REPLY, // routing key
+				false,           // mandatory
+				false,           // immediate
 				amqp.Publishing{
 					ContentType:   "application/json",
 					CorrelationId: corrId,
@@ -79,8 +79,8 @@ func TestRequestInfoSlots(t *testing.T) {
 	done, err := spaceRepo.RequestInfoSlots(data)
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.Equal(done, myResponse, "Should be positive")
-	chReqInfo.QueueDelete(constants.BATCH, true, false, true)
-	chReqInfo.QueueDelete(constants.BATCH_REPLY, true, false, true)
+	chReqInfo.QueueDelete(constants.REQUEST, true, false, true)
+	chReqInfo.QueueDelete(constants.REPLY, true, false, true)
 }
 
 func TestRequestInfoSlotsMultiple(t *testing.T) {
@@ -97,13 +97,13 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 
 	//Simulated server
 	msgs, _ := chReqInfo.Consume(
-		constants.REQ_INFO_SLOT, // queue
-		"",                      // consumer
-		false,                   // auto-ack
-		false,                   // exclusive
-		false,                   // no-local
-		false,                   // no-wait
-		nil,                     // args
+		constants.REQUEST, // queue
+		"",                // consumer
+		false,             // auto-ack
+		false,             // exclusive
+		false,             // no-local
+		false,             // no-wait
+		nil,               // args
 	)
 	myResponse := domain.AllInfoSlot{
 		SlotData: domain.SlotData{
@@ -132,10 +132,10 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 			corrId = resp.CorrelationId
 			response, _ := json.Marshal(myResponse)
 			chReqInfo.Publish(
-				"", // exchange
-				constants.REQ_INFO_SLOT+constants.REPPLY_EXTENSION, // routing key
-				false, // mandatory
-				false, // immediate
+				"",              // exchange
+				constants.REPLY, // routing key
+				false,           // mandatory
+				false,           // immediate
 				amqp.Publishing{
 					ContentType:   "application/json",
 					CorrelationId: corrId,
@@ -151,8 +151,8 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 	done, err = spaceRepo.RequestInfoSlots(data)
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.Equal(done, myResponse, "Should be positive")
-	chReqInfo.QueueDelete(constants.BATCH, true, false, true)
-	chReqInfo.QueueDelete(constants.BATCH_REPLY, true, false, true)
+	chReqInfo.QueueDelete(constants.REQUEST, true, false, true)
+	chReqInfo.QueueDelete(constants.REPLY, true, false, true)
 }
 func TestReserve(t *testing.T) {
 	//t.Skip() //remove for activating it
@@ -179,19 +179,19 @@ func TestReserveBatch(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chBatch, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chBatch, constants.BATCH)
+	err = connection.PrepareChannel(chBatch, constants.REQUEST)
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chBatch, constants.BATCH_REPLY)
+	err = connection.PrepareChannel(chBatch, constants.REPLY)
 	assert.Equal(err, nil, "Shouldn't be an error")
 	spaceRepo, err := spaceRepo.New(chBatch)
 	msgs, _ := chBatch.Consume(
-		constants.BATCH, // queue
-		"",              // consumer
-		false,           // auto-ack
-		false,           // exclusive
-		false,           // no-local
-		false,           // no-wait
-		nil,             // args
+		constants.REQUEST, // queue
+		"",                // consumer
+		false,             // auto-ack
+		false,             // exclusive
+		false,             // no-local
+		false,             // no-wait
+		nil,               // args
 	)
 	corrId := "-1"
 	go func() {
@@ -199,10 +199,10 @@ func TestReserveBatch(t *testing.T) {
 			corrId = resp.CorrelationId
 			response, _ := json.Marshal("1")
 			chBatch.Publish(
-				"",                    // exchange
-				constants.BATCH_REPLY, // routing key
-				false,                 // mandatory
-				false,                 // immediate
+				"",              // exchange
+				constants.REPLY, // routing key
+				false,           // mandatory
+				false,           // immediate
 				amqp.Publishing{
 					ContentType:   "application/json",
 					CorrelationId: corrId,
@@ -215,6 +215,6 @@ func TestReserveBatch(t *testing.T) {
 	done, err := spaceRepo.ReserveBatch([]domain.Space{}, domain.Hour{Hour: 12, Min: 30}, domain.Hour{Hour: 13, Min: 30}, []string{s}, "Iñigol")
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.NotEqual(done, "-1", "Should be positive")
-	chBatch.QueueDelete(constants.BATCH, true, false, true)
-	chBatch.QueueDelete(constants.BATCH_REPLY, true, false, true)
+	chBatch.QueueDelete(constants.REQUEST, true, false, true)
+	chBatch.QueueDelete(constants.REPLY, true, false, true)
 }

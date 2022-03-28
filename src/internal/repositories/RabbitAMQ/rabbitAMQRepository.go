@@ -22,36 +22,30 @@ func New(ch *amqp.Channel, queues []string) (*Repository, error) {
 		if err != nil {
 			return &Repository{}, err
 		}
-		//crear cola de respuestas
-		name_queue_reply := queue + constants.REPPLY_EXTENSION
-		err = connect.PrepareChannel(rp.ch, name_queue_reply)
-		if err != nil {
-			return &Repository{}, err
+	}
+	//canal por el que se recibe la respuesta
+	msgs, err := rp.ch.Consume(
+		constants.REPLY, // queue
+		"",              // consumer
+		false,           // auto-ack
+		false,           // exclusive
+		false,           // no-local
+		false,           // no-wait
+		nil,             // args
+	)
+	if err != nil {
+		return &Repository{}, err
+	}
+	go func() {
+		for resp := range msgs {
+			rp.replies <- resp
 		}
 
-		//canal por el que se recibe la respuesta
-		msgs, err := rp.ch.Consume(
-			name_queue_reply, // queue
-			"",               // consumer
-			false,            // auto-ack
-			false,            // exclusive
-			false,            // no-local
-			false,            // no-wait
-			nil,              // args
-		)
-		go func() {
-			for resp := range msgs {
-				rp.replies <- resp
-			}
-
-		}()
-
-	}
+	}()
 	return &rp, nil
-
 }
 
-func (rp *Repository) RCPcallJSON(queue string, msg interface{}) ([]byte, error) {
+func (rp *Repository) RCPcallJSON(msg interface{}) ([]byte, error) {
 	//TODO garantizar exclusiçon mutua
 	msgJSON, err := json.Marshal(msg)
 	if err != nil {
@@ -61,15 +55,15 @@ func (rp *Repository) RCPcallJSON(queue string, msg interface{}) ([]byte, error)
 
 	//enviar la petición
 	err = rp.ch.Publish(
-		"",    // exchange
-		queue, // routing key
-		false, // mandatory
-		false, // immediate
+		"",                // exchange
+		constants.REQUEST, // routing key
+		false,             // mandatory
+		false,             // immediate
 		amqp.Publishing{
 			ContentType:   "application/json",
 			CorrelationId: corrId,
 			Body:          msgJSON,
-			ReplyTo:       queue + constants.REPPLY_EXTENSION,
+			ReplyTo:       constants.REPLY,
 		})
 	var data []byte
 	for resp := range rp.replies {

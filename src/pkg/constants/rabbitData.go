@@ -6,9 +6,6 @@ const (
 )
 
 const (
-	REPPLY_EXTENSION = "_reply"
-	RESERVE          = "reserve_queue"
-	BATCH            = "reservebatch"
-	BATCH_REPLY      = "reservebatch_reply"
-	REQ_INFO_SLOT    = "request_info_slots"
+	REQUEST = "request"
+	REPLY   = "reply"
 )

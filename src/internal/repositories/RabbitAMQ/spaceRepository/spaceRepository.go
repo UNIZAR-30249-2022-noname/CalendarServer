@@ -14,7 +14,7 @@ type SpaceRepository struct {
 }
 
 func New(ch *amqp.Channel) (*SpaceRepository, error) {
-	queues := []string{constants.REQ_INFO_SLOT}
+	queues := []string{constants.REQUEST, constants.REPLY}
 	rp, err := rabbitamqRepository.New(ch, queues)
 	if err != nil {
 		return &SpaceRepository{}, err
@@ -24,7 +24,7 @@ func New(ch *amqp.Channel) (*SpaceRepository, error) {
 
 func (repo *SpaceRepository) RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error) {
 	var allInfo domain.AllInfoSlot
-	allInfoJSON, err := repo.RCPcallJSON(constants.REQ_INFO_SLOT, req)
+	allInfoJSON, err := repo.RCPcallJSON(constants.REQUEST)
 	if err != nil {
 		return domain.AllInfoSlot{}, err
 	}
