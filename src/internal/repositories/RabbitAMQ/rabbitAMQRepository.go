@@ -27,7 +27,7 @@ func New(ch *amqp.Channel, queues []string) (*Repository, error) {
 	msgs, err := rp.ch.Consume(
 		constants.REPLY, // queue
 		"",              // consumer
-		false,           // auto-ack
+		true,            // auto-ack
 		false,           // exclusive
 		false,           // no-local
 		false,           // no-wait

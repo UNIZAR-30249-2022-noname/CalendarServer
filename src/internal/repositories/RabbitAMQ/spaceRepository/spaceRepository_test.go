@@ -29,7 +29,7 @@ func TestRequestInfoSlots(t *testing.T) {
 	msgs, _ := chReqInfo.Consume(
 		constants.REQUEST, // queue
 		"",                // consumer
-		false,             // auto-ack
+		true,              // auto-ack
 		false,             // exclusive
 		false,             // no-local
 		false,             // no-wait
@@ -99,7 +99,7 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 	msgs, _ := chReqInfo.Consume(
 		constants.REQUEST, // queue
 		"",                // consumer
-		false,             // auto-ack
+		true,              // auto-ack
 		false,             // exclusive
 		false,             // no-local
 		false,             // no-wait
