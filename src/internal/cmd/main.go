@@ -32,12 +32,13 @@ func config() (handlers.HTTPHandler, error) {
 		//TODO
 	}
 	monitoringRepo := monitoringrepositoryrabbitamq.New(chMonitoring)
-	chSpaces, err := rabbitConn.NewChannel()
+	//TODO canal
+	_ , err = rabbitConn.NewChannel()
 	if err != nil {
 		//TODO
 	}
 	//spaceRepoAMQ, _ := spacerepositoryrabbitamq.New(chSpaces)
-	spaceRepo, _ := spacerepositorymemory.New(chSpaces)
+	spaceRepo := spacerepositorymemory.New()
 	usersRepo := usersrepositorymemory.New()
 
 	return handlers.HTTPHandler{
