@@ -24,7 +24,7 @@ func New(ch *amqp.Channel) (*SpaceRepository, error) {
 
 func (repo *SpaceRepository) RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error) {
 	var allInfo domain.AllInfoSlot
-	allInfoJSON, err := repo.RCPcallJSON(constants.REQUEST)
+	allInfoJSON, err := repo.RCPcallJSON(constants.REQUEST, "info")
 	if err != nil {
 		return domain.AllInfoSlot{}, err
 	}
@@ -36,7 +36,7 @@ func (repo *SpaceRepository) RequestInfoSlots(req domain.ReqInfoSlot) (domain.Al
 func (repo *SpaceRepository) Reserve(space domain.Space, init, end domain.Hour, date, person string) (string, error) {
 	var reserveId string
 	//fmt.Println("Me llaman aqui")
-	reserveIdJSON, err := repo.RCPcallJSON(constants.REQUEST)
+	reserveIdJSON, err := repo.RCPcallJSON(constants.REQUEST, "reserve")
 	if err != nil {
 		return "", err
 	}
@@ -52,7 +52,7 @@ func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domai
 
 func (repo *SpaceRepository) FilterBy(domain.SpaceFilterParams) ([]domain.Spaces, error) {
 	var spaces []domain.Spaces
-	spacesJSON, err := repo.RCPcallJSON(constants.REQUEST)
+	spacesJSON, err := repo.RCPcallJSON(constants.REQUEST, "filter")
 	if err != nil {
 		return []domain.Spaces{}, err
 	}

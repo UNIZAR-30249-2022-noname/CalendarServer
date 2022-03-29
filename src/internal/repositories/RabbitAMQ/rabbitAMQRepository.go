@@ -70,8 +70,8 @@ func New(ch *amqp.Channel, queues []string) (*Repository, error) {
 	return &rp, nil
 }
 
-func (rp *Repository) RCPcallJSON(msg interface{}) ([]byte, error) {
-	//TODO garantizar exclusiçon mutua
+func (rp *Repository) RCPcallJSON(msg interface{}, msgId string) ([]byte, error) {
+	//TODO garantizar exclusion mutua
 	message := NewMessageQueue("10:00", "realizar-reserva", "Sergio", "1234")
 	// TODO: check the error
 	bodyFake, err := message.Marshal()
@@ -92,6 +92,7 @@ func (rp *Repository) RCPcallJSON(msg interface{}) ([]byte, error) {
 			ContentType:   "application/json",
 			CorrelationId: corrId,
 			Body:          bodyFake,
+			MessageId: 	   msgId,
 			ReplyTo:       constants.REPLY,
 		})
 	var data []byte
