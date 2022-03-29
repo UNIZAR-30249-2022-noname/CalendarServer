@@ -10,9 +10,9 @@ var (
 	//ErrIllegalOperation is an error returned when the
 	//operation asked isn´t available
 	ErrIllegalOperation = errors.New("illegal_operation")
-  
+
 	//ErrSql is an error returned from repositorio
-	ErrSql         		= errors.New("sql")
+	ErrSql = errors.New("sql")
 	//ErrInvalidInput is an error returned when some function is called with
 	//incorrect arguments or not enought
 	ErrInvalidInput = errors.New("invalid_input")
@@ -32,5 +32,7 @@ var (
 
 	//ErrConnis an error returned when the connection to AMQP fails
 	ErrConn = errors.New("amqp_connection_error")
-  
+
+	//ErrorWrongResponse is returned when the server returned a wrong response
+	ErrorWrongResponse = errors.New("wrong response")
 )

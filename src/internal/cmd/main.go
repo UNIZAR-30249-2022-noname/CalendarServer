@@ -6,7 +6,7 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/space"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/users"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
-	spacerepositorymemory "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/Memory/spaceRepository.go"
+	spacerepositorymemory "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/Memory/spaceRepository"
 	usersrepositorymemory "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/Memory/usersRepository"
 	monitoringrepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/monitoringRepository"
 
@@ -32,6 +32,12 @@ func config() (handlers.HTTPHandler, error) {
 		//TODO
 	}
 	monitoringRepo := monitoringrepositoryrabbitamq.New(chMonitoring)
+	//TODO canal
+	_ , err = rabbitConn.NewChannel()
+	if err != nil {
+		//TODO
+	}
+	//spaceRepoAMQ, _ := spacerepositoryrabbitamq.New(chSpaces)
 	spaceRepo := spacerepositorymemory.New()
 	usersRepo := usersrepositorymemory.New()
 
