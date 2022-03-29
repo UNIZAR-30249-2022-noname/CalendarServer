@@ -163,15 +163,48 @@ func TestReserve(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReserve, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
+	err = connection.PrepareChannel(chReserve, constants.REQUEST)
+	assert.Equal(err, nil, "Shouldn't be an error")
+	err = connection.PrepareChannel(chReserve, constants.REPLY)
+	assert.Equal(err, nil, "Shouldn't be an error")
 	spaceRepo, _ := spaceRepo.New(chReserve)
+	msgs, _ := chReserve.Consume(
+		constants.REQUEST, // queue
+		"",                // consumer
+		false,             // auto-ack
+		false,             // exclusive
+		false,             // no-local
+		false,             // no-wait
+		nil,               // args
+	)
+	corrId := "-1"
+	go func() {
+		for resp := range msgs {
+			corrId = resp.CorrelationId
+			response, _ := json.Marshal("1")
+			chReserve.Publish(
+				"",              // exchange
+				constants.REPLY, // routing key
+				false,           // mandatory
+				false,           // immediate
+				amqp.Publishing{
+					ContentType:   "application/json",
+					CorrelationId: corrId,
+					Body:          response,
+				})
+			resp.Ack(false)
+		}
+	}()
+
 	done, err := spaceRepo.Reserve(domain.Space{}, domain.Hour{Hour: 12, Min: 30}, domain.Hour{Hour: 12, Min: 30}, s, "Iñigol")
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.Equal(done, "1", "Should be true")
-	//chReserve.QueueDelete(constants.RESERVE,true,false,true)
+	chReserve.QueueDelete(constants.REQUEST, true, false, true)
+	chReserve.QueueDelete(constants.REPLY, true, false, true)
 }
 
 func TestReserveBatch(t *testing.T) {
-	t.Skip() //remove for activating it
+	//t.Skip() //remove for activating it
 	assert := assert.New(t)
 	a := time.Now().Local()
 	s := a.Format("2006-01-02")
