@@ -35,8 +35,9 @@ func (repo *SpaceRepository) RequestInfoSlots(req domain.ReqInfoSlot) (domain.Al
 
 func (repo *SpaceRepository) Reserve(space domain.Space, init, end domain.Hour, date, person string) (string, error) {
 	var reserveId string
+	//fmt.Println("Me llaman aqui")
 	reserveIdJSON, err := repo.RCPcallJSON(constants.REQUEST)
-	if err != nil {
+	if err == nil {
 		return "", err
 	}
 	json.Unmarshal(reserveIdJSON, &reserveId)

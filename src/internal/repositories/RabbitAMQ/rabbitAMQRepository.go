@@ -2,6 +2,7 @@ package rabbitamqRepository
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/auxFuncs"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
@@ -9,6 +10,30 @@ import (
 	"github.com/streadway/amqp"
 )
 
+/**BASURA QUE HE CREADO PARA PROBAR HASTA LA LINEA 34*/
+type MessageQueue struct {
+	Body    string `json:"body"`
+	Pattern string `json:"pattern"`
+	Age     string `json:"age"`
+	Id      string `json:"id"`
+}
+
+func NewMessageQueue(body string, pattern string, age string, id string) *MessageQueue {
+	return &MessageQueue{
+		body, pattern, age, id,
+	}
+}
+
+func (m *MessageQueue) Marshal() ([]byte, error) {
+	bytes, err := json.Marshal(m)
+
+	if err != nil {
+		return nil, err
+	}
+	return bytes, err
+}
+
+/*------------------------------------------------------------------------------------------------------*/
 type Repository struct {
 	ch      *amqp.Channel
 	replies chan amqp.Delivery
@@ -47,9 +72,13 @@ func New(ch *amqp.Channel, queues []string) (*Repository, error) {
 
 func (rp *Repository) RCPcallJSON(msg interface{}) ([]byte, error) {
 	//TODO garantizar exclusiçon mutua
-	msgJSON, err := json.Marshal(msg)
+	message := NewMessageQueue("10:00", "realizar-reserva", "Sergio", "1234")
+	// TODO: check the error
+	bodyFake, err := message.Marshal()
+	//msgJSON, err := json.Marshal(msg)
 	if err != nil {
 		return nil, err
+
 	}
 	corrId := auxFuncs.RandomString(10)
 
@@ -62,11 +91,14 @@ func (rp *Repository) RCPcallJSON(msg interface{}) ([]byte, error) {
 		amqp.Publishing{
 			ContentType:   "application/json",
 			CorrelationId: corrId,
-			Body:          msgJSON,
+			Body:          bodyFake,
 			ReplyTo:       constants.REPLY,
 		})
 	var data []byte
 	for resp := range rp.replies {
+		fmt.Println(resp.Body)
+		myString := string(resp.Body[:])
+		fmt.Println(myString)
 		if corrId == resp.CorrelationId {
 			data = resp.Body
 			break
