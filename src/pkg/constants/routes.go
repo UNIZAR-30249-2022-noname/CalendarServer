@@ -13,4 +13,10 @@ const (
 	RESERVE_BATCH              = "/reserveBatch"
 	FILTER_SPACES              = "/filterSlots"
 	REQUEST_INFO_SLOTS         = "/requestInfoSlots"
+	CANCEL_RESERVE             = "/cancelReserve"
+	CREATE_ISSUE               = "/createIssue"
+	MODIFY_ISSUE               = "changeIssueState"
+	GET_ALL_ISSUES             = "/getAllIssue"
+	GET_RESERVES_USER          = "/getReservesPerOwner"
+	DELETE_ISSUE               = "/deleteIssue"
 )

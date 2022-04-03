@@ -58,16 +58,18 @@ type Space struct {
 }
 
 type Reserve struct {
-	Space Space
-	Init  Hour
-	Date string
-	Person string
+	Space     string `json:"slot"`
+	Day       string `json:"day"`
+	Event     string `json:"event"`
+	Scheduled []Hour `json:"scheduled"`
+	Owner     string `json:"owner"`
+	Key       string `json:"key"`
 }
 
 type ReserveBatch struct {
 	Spaces []Space
 	Init   Hour
-	End	   Hour
+	End    Hour
 	Dates  []string
 	Person string
 }
@@ -188,26 +190,34 @@ type Spaces struct {
 }
 
 type InfoSlots struct {
-	Hour 	 int    `json:"hour"`
-	Occupied bool	`json:"occupied"`
-	Person 	 string `json:"person"`
+	Hour     int    `json:"hour"`
+	Occupied bool   `json:"occupied"`
+	Person   string `json:"person"`
 }
 type SlotData struct {
-	Name 	 	string `json:"name"`
-	Capacity 	int	   `json:"capacity"`
+	Name        string `json:"name"`
+	Capacity    int    `json:"capacity"`
 	Description string `json:"description"`
-	Building 	string `json:"building"`
-	Floor 		string `json:"floor"`
-	Type		string `json:"type"`
+	Building    string `json:"building"`
+	Floor       string `json:"floor"`
+	Type        string `json:"type"`
 }
 
 type ReqInfoSlot struct {
 	Name string `json:"name"`
 	Date string `json:"date"`
 }
-  
+
 type AllInfoSlot struct {
 	SlotData  SlotData    `json:"slotData"`
 	InfoSlots []InfoSlots `json:"infoSlots"`
 }
-  
+
+type Issue struct {
+	Tags        []string `json:"tags"`
+	Title       string   `json:"title"`
+	Description string   `json:"decprition"`
+	Key         string   `json:"key"`
+	Space       string   `json:"slot"`
+	State       int      `json:"state"`
+}

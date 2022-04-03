@@ -31,18 +31,18 @@ func (hdl *HTTPHandler) Reserve(c *gin.Context) {
 
 	init := domain.Hour{
 		Hour: initInt,
-		Min: 0,
+		Min:  0,
 	}
 
 	end := domain.Hour{
-		Hour: initInt+1,
-		Min: 0,
+		Hour: initInt + 1,
+		Min:  0,
 	}
 
 	date := c.Query("date")
 	person := c.Query("person")
 	lastId, err := hdl.Spaces.Reserve(sp, init, end, date, person)
-	
+
 	if err == nil {
 		c.JSON(http.StatusOK, lastId)
 	} else {
@@ -66,7 +66,7 @@ func (hdl *HTTPHandler) RequestInfoSlots(c *gin.Context) {
 	date := c.Query("date")
 
 	allInfo, err := hdl.Spaces.RequestInfoSlots(domain.ReqInfoSlot{Name: name, Date: date})
-	if(err == nil){
+	if err == nil {
 		fmt.Println(name + " " + date)
 		c.JSON(http.StatusOK, allInfo)
 	} else {
@@ -102,8 +102,8 @@ func (hdl *HTTPHandler) ReserveBatch(c *gin.Context) {
 	dates := []string{}
 	c.BindJSON(&dates)
 	person := c.Query("person")
-	lastId, err := hdl.Spaces.ReserveBatch(spaces,init,end,dates,person)
-	
+	lastId, err := hdl.Spaces.ReserveBatch(spaces, init, end, dates, person)
+
 	if err == nil {
 		c.JSON(http.StatusOK, lastId)
 	} else {
@@ -141,10 +141,54 @@ func (hdl *HTTPHandler) FilterBy(c *gin.Context) {
 		Capacity: capacity,
 		Building: building,
 	}
-	credentials, err := hdl.Spaces.FilterBy(params)
+	spaces, err := hdl.Spaces.FilterBy(params)
 	if err == nil {
 
-		c.JSON(http.StatusOK, credentials)
+		c.JSON(http.StatusOK, spaces)
+	} else {
+		fmt.Println(err)
+		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
+	}
+
+}
+
+//CancelReserve is the handler for canceling a reserve
+//@Sumary Cancel reserve
+//@Description Cancel a reserve given a id
+//@Tag Reserves
+//@Produce string
+//@Param reserve query string  true "id of reserve"
+//@Success 200 {object} string
+//@Failure 400,404 {object} ErrorHttp
+//@Router /cancelReserve [get]
+func (hdl *HTTPHandler) CancelReserve(c *gin.Context) {
+	reserve := c.Query("reserve")
+	err := hdl.Spaces.CancelReserve(reserve)
+	if err == nil {
+
+		c.String(http.StatusOK, "Succes")
+	} else {
+		fmt.Println(err)
+		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
+	}
+
+}
+
+//GetReservesOwner is the handler for getting reserves per owner
+//@Sumary Get reserve
+//@Description Get s reserves per owner
+//@Tag Reserves
+//@Produce JSON
+//@Param name query string  true "iname of the owner"
+//@Success 200 {object} string
+//@Failure 400,404 {object} ErrorHttp
+//@Router /cancelReserve [get]
+func (hdl *HTTPHandler) GetReservesOwner(c *gin.Context) {
+	name := c.Query("name")
+	reserves, err := hdl.Spaces.GetReservesOwner(name)
+	if err == nil {
+
+		c.JSON(http.StatusOK, reserves)
 	} else {
 		fmt.Println(err)
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})

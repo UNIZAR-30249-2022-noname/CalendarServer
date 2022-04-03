@@ -2,10 +2,12 @@ package main
 
 import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/docs"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/issue"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/monitoring"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/space"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/users"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
+	issuerepositorymemory "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/Memory/IssueRepository"
 	spacerepositorymemory "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/Memory/spaceRepository"
 	usersrepositorymemory "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/Memory/usersRepository"
 	monitoringrepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/monitoringRepository"
@@ -33,18 +35,20 @@ func config() (handlers.HTTPHandler, error) {
 	}
 	monitoringRepo := monitoringrepositoryrabbitamq.New(chMonitoring)
 	//TODO canal
-	_ , err = rabbitConn.NewChannel()
+	_, err = rabbitConn.NewChannel()
 	if err != nil {
 		//TODO
 	}
 	//spaceRepoAMQ, _ := spacerepositoryrabbitamq.New(chSpaces)
 	spaceRepo := spacerepositorymemory.New()
 	usersRepo := usersrepositorymemory.New()
+	issuesRepo := issuerepositorymemory.New()
 
 	return handlers.HTTPHandler{
 		Monitoring: monitoring.New(monitoringRepo),
 		Users:      users.New(usersRepo),
 		Spaces:     space.New(spaceRepo),
+		Issues:     issue.New(issuesRepo),
 	}, nil
 
 }
@@ -67,6 +71,13 @@ func SetupRouter() *gin.Engine {
 	r.GET(constants.REQUEST_INFO_SLOTS, handler.RequestInfoSlots)
 	r.GET(constants.RESERVE_SPACE, handler.Reserve)
 	r.GET(constants.RESERVE_BATCH, handler.ReserveBatch)
+
+	r.GET(constants.CANCEL_RESERVE, handler.CancelReserve)
+	r.GET(constants.DELETE_ISSUE, handler.DeleteIssue)
+	r.POST(constants.CREATE_ISSUE, handler.CreateIssue)
+	r.GET(constants.MODIFY_ISSUE, handler.ChangeStateIssue)
+	r.GET(constants.GET_ALL_ISSUES, handler.GetAllIssues)
+	r.GET(constants.GET_RESERVES_USER, handler.GetReservesOwner)
 
 	return r
 }
