@@ -15,9 +15,9 @@ func New(spaceRepository ports.SpaceRepository) *SpaceServiceImp {
 }
 
 func (svc *SpaceServiceImp) RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error) {
-	if(req.Name != "" && req.Date != ""){
+	if req.Name != "" && req.Date != "" {
 		return svc.spaceRepository.RequestInfoSlots(req)
-	} 
+	}
 	return domain.AllInfoSlot{}, apperrors.ErrInvalidInput
 }
 
@@ -30,4 +30,16 @@ func (svc *SpaceServiceImp) ReserveBatch(spaces []domain.Space, init, end domain
 }
 func (svc *SpaceServiceImp) FilterBy(params domain.SpaceFilterParams) ([]domain.Spaces, error) {
 	return svc.spaceRepository.FilterBy(params)
+}
+
+func (svc *SpaceServiceImp) CancelReserve(key string) error {
+
+	return svc.spaceRepository.CancelReserve(key)
+
+}
+
+func (svc *SpaceServiceImp) GetReservesOwner(owner string) ([]domain.Reserve, error) {
+
+	return svc.spaceRepository.GetReservesOwner(owner)
+
 }

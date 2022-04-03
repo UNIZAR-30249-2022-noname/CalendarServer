@@ -308,3 +308,180 @@ func (mr *MockUsersRepositoryMockRecorder) GetCredentials(username interface{}) 
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCredentials", reflect.TypeOf((*MockUsersRepository)(nil).GetCredentials), username)
 }
+
+// MockSpaceRepository is a mock of SpaceRepository interface.
+type MockSpaceRepository struct {
+	ctrl     *gomock.Controller
+	recorder *MockSpaceRepositoryMockRecorder
+}
+
+// MockSpaceRepositoryMockRecorder is the mock recorder for MockSpaceRepository.
+type MockSpaceRepositoryMockRecorder struct {
+	mock *MockSpaceRepository
+}
+
+// NewMockSpaceRepository creates a new mock instance.
+func NewMockSpaceRepository(ctrl *gomock.Controller) *MockSpaceRepository {
+	mock := &MockSpaceRepository{ctrl: ctrl}
+	mock.recorder = &MockSpaceRepositoryMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockSpaceRepository) EXPECT() *MockSpaceRepositoryMockRecorder {
+	return m.recorder
+}
+
+// CancelReserve mocks base method.
+func (m *MockSpaceRepository) CancelReserve(key string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CancelReserve", key)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CancelReserve indicates an expected call of CancelReserve.
+func (mr *MockSpaceRepositoryMockRecorder) CancelReserve(key interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CancelReserve", reflect.TypeOf((*MockSpaceRepository)(nil).CancelReserve), key)
+}
+
+// FilterBy mocks base method.
+func (m *MockSpaceRepository) FilterBy(arg0 domain.SpaceFilterParams) ([]domain.Spaces, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FilterBy", arg0)
+	ret0, _ := ret[0].([]domain.Spaces)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FilterBy indicates an expected call of FilterBy.
+func (mr *MockSpaceRepositoryMockRecorder) FilterBy(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FilterBy", reflect.TypeOf((*MockSpaceRepository)(nil).FilterBy), arg0)
+}
+
+// RequestInfoSlots mocks base method.
+func (m *MockSpaceRepository) RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RequestInfoSlots", req)
+	ret0, _ := ret[0].(domain.AllInfoSlot)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// RequestInfoSlots indicates an expected call of RequestInfoSlots.
+func (mr *MockSpaceRepositoryMockRecorder) RequestInfoSlots(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RequestInfoSlots", reflect.TypeOf((*MockSpaceRepository)(nil).RequestInfoSlots), req)
+}
+
+// Reserve mocks base method.
+func (m *MockSpaceRepository) Reserve(sp domain.Space, init, end domain.Hour, date, person string) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Reserve", sp, init, end, date, person)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Reserve indicates an expected call of Reserve.
+func (mr *MockSpaceRepositoryMockRecorder) Reserve(sp, init, end, date, person interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Reserve", reflect.TypeOf((*MockSpaceRepository)(nil).Reserve), sp, init, end, date, person)
+}
+
+// ReserveBatch mocks base method.
+func (m *MockSpaceRepository) ReserveBatch(spaces []domain.Space, init, end domain.Hour, dates []string, person string) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ReserveBatch", spaces, init, end, dates, person)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReserveBatch indicates an expected call of ReserveBatch.
+func (mr *MockSpaceRepositoryMockRecorder) ReserveBatch(spaces, init, end, dates, person interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReserveBatch", reflect.TypeOf((*MockSpaceRepository)(nil).ReserveBatch), spaces, init, end, dates, person)
+}
+
+// MockIssueRepository is a mock of IssueRepository interface.
+type MockIssueRepository struct {
+	ctrl     *gomock.Controller
+	recorder *MockIssueRepositoryMockRecorder
+}
+
+// MockIssueRepositoryMockRecorder is the mock recorder for MockIssueRepository.
+type MockIssueRepositoryMockRecorder struct {
+	mock *MockIssueRepository
+}
+
+// NewMockIssueRepository creates a new mock instance.
+func NewMockIssueRepository(ctrl *gomock.Controller) *MockIssueRepository {
+	mock := &MockIssueRepository{ctrl: ctrl}
+	mock.recorder = &MockIssueRepositoryMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIssueRepository) EXPECT() *MockIssueRepositoryMockRecorder {
+	return m.recorder
+}
+
+// ChangeState mocks base method.
+func (m *MockIssueRepository) ChangeState(key string, state int) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ChangeState", key, state)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// ChangeState indicates an expected call of ChangeState.
+func (mr *MockIssueRepositoryMockRecorder) ChangeState(key, state interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangeState", reflect.TypeOf((*MockIssueRepository)(nil).ChangeState), key, state)
+}
+
+// Create mocks base method.
+func (m *MockIssueRepository) Create(issue domain.Issue) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Create", issue)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Create indicates an expected call of Create.
+func (mr *MockIssueRepositoryMockRecorder) Create(issue interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockIssueRepository)(nil).Create), issue)
+}
+
+// Delete mocks base method.
+func (m *MockIssueRepository) Delete(key string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", key)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockIssueRepositoryMockRecorder) Delete(key interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockIssueRepository)(nil).Delete), key)
+}
+
+// GetAll mocks base method.
+func (m *MockIssueRepository) GetAll() ([]domain.Issue, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAll")
+	ret0, _ := ret[0].([]domain.Issue)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAll indicates an expected call of GetAll.
+func (mr *MockIssueRepositoryMockRecorder) GetAll() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockIssueRepository)(nil).GetAll))
+}

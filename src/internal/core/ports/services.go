@@ -31,4 +31,13 @@ type SpacesService interface {
 	RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error)
 	Reserve(sp domain.Space, init, end domain.Hour, date, person string) (string, error)
 	ReserveBatch(spaces []domain.Space, init, end domain.Hour, dates []string, person string) (string, error)
+	CancelReserve(key string) error
+	GetReservesOwner(owner string) ([]domain.Reserve, error)
+}
+
+type IssueService interface {
+	GetAll() ([]domain.Issue, error)
+	Delete(key string) error
+	Create(issue domain.Issue) error
+	ChangeState(key string, state int) error
 }
