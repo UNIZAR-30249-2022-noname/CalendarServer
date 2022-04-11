@@ -24,7 +24,6 @@ import (
 //@Router /reserve/ [get]
 func (hdl *HTTPHandler) Reserve(c *gin.Context) {
 	id := c.Query("space")
-	sp := domain.Space{Id: id}
 
 	initString := c.Query("hour")
 	initInt, _ := strconv.Atoi(initString)
@@ -41,7 +40,7 @@ func (hdl *HTTPHandler) Reserve(c *gin.Context) {
 
 	date := c.Query("date")
 	person := c.Query("person")
-	lastId, err := hdl.Spaces.Reserve(sp, init, end, date, person)
+	lastId, err := hdl.Spaces.Reserve(id, init, end, date, person)
 
 	if err == nil {
 		c.JSON(http.StatusOK, lastId)

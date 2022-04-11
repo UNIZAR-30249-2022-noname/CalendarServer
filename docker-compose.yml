@@ -1,30 +1,49 @@
-version: "3.9"
-
 services:
-  db:
-    image: mysql:5.7
-    container_name: horarios_db
-    environment:
-      MYSQL_ROOT_PASSWORD: toor
-      MYSQL_DATABASE: app_db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: user
+  geoserver:
+    image: kartoza/geoserver:2.16.2
+    depends_on:
+      - postgis
     ports:
-      - "6033:3306"
+      - "8081:8080"
+    environment:
+      - "SAMPLE_DATA=true"
     volumes:
-      - dbdata:/var/lib/mysql
-      - ./dump:/docker-entrypoint-initdb.d
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: pma
-    links:
-      - horarios_db
-    environment:
-      PMA_HOST: horarios_db
-      PMA_PORT: 3306
-      PMA_ARBITRARY: 1
-    restart: always
+      - geoserverdata:/opt/geoserver/data_dir
+  postgis:
+    image: kartoza/postgis:9.6-2.4
     ports:
-      - 8081:80
+      - "25432:5432"
+    environment:
+      - "POSTGRES_USER=proyecto"
+      - "POSTGRES_PASS=proyectovm"
+      - "POSTGRES_DBNAME=proyectodb"
+      - "DEFAULT_ENCODING=UTF8"
+    volumes:
+      - dbdata:/var/lib/postgresql
+  gateway:
+    image: arejula27/calendarunizar
+    ports:
+      - "8080:8080"
+  client:
+    image: arejula27/calendarwebclientunizar
+    ports:
+      - "3000:3000"
+    #environment:
+    # - "REACT_APP_GATEWAY=gateway"
+  backend:
+    image: 1209200064/backend:latest
+    container_name: backend_lis
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "9090:80"
+    environment:
+      - "PGADMIN_DEFAULT_EMAIL=user@example.com"
+      - "PGADMIN_DEFAULT_PASSWORD=user"
+    depends_on:
+      - "postgis"
 volumes:
+  geoserverdata:
+    external: true
   dbdata:
+    external: true

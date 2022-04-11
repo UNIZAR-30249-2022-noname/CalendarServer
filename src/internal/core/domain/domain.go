@@ -53,12 +53,8 @@ type Hour struct {
 	Min  int `json:"min"`
 }
 
-type Space struct {
-	Id string
-}
-
 type Reserve struct {
-	Space     string `json:"slot"`
+	Space     string `json:"space"`
 	Day       string `json:"day"`
 	Event     string `json:"event"`
 	Scheduled []Hour `json:"scheduled"`
@@ -69,7 +65,6 @@ type Reserve struct {
 type ReserveBatch struct {
 	Spaces []Space
 	Init   Hour
-	End    Hour
 	Dates  []string
 	Person string
 }
@@ -182,11 +177,13 @@ type SpaceFilterParams struct {
 	Building string `json:"building"`
 }
 
-type Spaces struct {
+type Space struct {
 	Name     string `json:"name"`
 	Capacity int    `json:"capacity"`
 	Building string `json:"building"`
 	Kind     string `json:"kind"`
+	Floor    string `json:"floor"`
+	Description string `json:"description"`
 }
 
 type InfoSlots struct {
@@ -194,22 +191,14 @@ type InfoSlots struct {
 	Occupied bool   `json:"occupied"`
 	Person   string `json:"person"`
 }
-type SlotData struct {
-	Name        string `json:"name"`
-	Capacity    int    `json:"capacity"`
-	Description string `json:"description"`
-	Building    string `json:"building"`
-	Floor       string `json:"floor"`
-	Type        string `json:"type"`
-}
 
 type ReqInfoSlot struct {
-	Name string `json:"name"`
+	Name string `json:"id"` //TODO Cambiar json id en el front
 	Date string `json:"date"`
 }
 
 type AllInfoSlot struct {
-	SlotData  SlotData    `json:"slotData"`
+	SlotData  Space    `json:"slotData"`
 	InfoSlots []InfoSlots `json:"infoSlots"`
 }
 
@@ -218,7 +207,7 @@ type Issue struct {
 	Title       string   `json:"title"`
 	Description string   `json:"decprition"`
 	Key         string   `json:"key"`
-	Space       string   `json:"slot"`
+	Space       string   `json:"space"`
 	State       int      `json:"state"`
 }
 

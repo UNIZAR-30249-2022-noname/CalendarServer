@@ -88,12 +88,12 @@ func (repo *SpaceRepository) RequestInfoSlots(req domain.ReqInfoSlot) (domain.Al
 	return allInfo, nil
 }
 
-func (repo *SpaceRepository) Reserve(sp domain.Space, init, end domain.Hour, date, person string) (string, error) {
+func (repo *SpaceRepository) Reserve(sp string, init, end domain.Hour, date, person string) (string, error) {
 
 	return "1", nil
 }
 
-func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domain.Hour, dates []string, person string) (string, error) {
+func (repo *SpaceRepository) ReserveBatch(spaces []string, init, end domain.Hour, dates []string, person string) (string, error) {
 
 	return "1", nil
 }

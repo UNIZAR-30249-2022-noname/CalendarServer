@@ -33,7 +33,7 @@ func (repo *SpaceRepository) RequestInfoSlots(req domain.ReqInfoSlot) (domain.Al
 
 }
 
-func (repo *SpaceRepository) Reserve(space domain.Space, init, end domain.Hour, date, person string) (string, error) {
+func (repo *SpaceRepository) Reserve(space string, init, end domain.Hour, date, person string) (string, error) {
 	var reserveId string
 	//fmt.Println("Me llaman aqui")
 	reserveIdJSON, err := repo.RCPcallJSON(constants.REQUEST, "reserve")
@@ -45,7 +45,7 @@ func (repo *SpaceRepository) Reserve(space domain.Space, init, end domain.Hour, 
 	return reserveId, nil
 }
 
-func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domain.Hour, dates []string, person string) (string, error) {
+func (repo *SpaceRepository) ReserveBatch(spaces []string, init, end domain.Hour, dates []string, person string) (string, error) {
 
 	return "0", nil
 }
