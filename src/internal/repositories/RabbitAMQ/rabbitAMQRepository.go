@@ -11,9 +11,9 @@ import (
 )
 
 type messageQueue struct {
-	body    interface{} `json:"body"`
-	pattern string `json:"pattern"`
-	id      string `json:"id"`
+	Body    interface{} `json:"body"`
+	Pattern string `json:"pattern"`
+	Id      string `json:"id"`
 }
 
 /*------------------------------------------------------------------------------------------------------*/
@@ -56,7 +56,8 @@ func New(ch *amqp.Channel, queues []string) (*Repository, error) {
 func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, error) {
 	//TODO garantizar exclusion mutua
 	corrId := auxFuncs.RandomString(10)
-	msgJSON, err := json.Marshal(messageQueue{body: msg, pattern: pattern, id: corrId})
+	message := messageQueue{Body: &msg, Pattern: pattern, Id: corrId}
+	msgJSON, err := json.Marshal(message)
 	if err != nil {
 		return nil, err
 	}
