@@ -12,13 +12,13 @@ func New() *SpaceRepository {
 }
 
 func (repo *SpaceRepository) RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error) {
-	sd := domain.SlotData{
+	sd := domain.Space{
 		Name:        "A1",
 		Capacity:    5,
 		Description: "Lorem ipsum no leas mas porque esto es dummy text",
 		Building:    "Ada",
 		Floor:       "baja",
-		Type:        "aula",
+		Kind:        "aula",
 	}
 
 	is := []domain.InfoSlots{
@@ -98,9 +98,9 @@ func (repo *SpaceRepository) ReserveBatch(spaces []string, init, end domain.Hour
 	return "1", nil
 }
 
-func (repo *SpaceRepository) FilterBy(domain.SpaceFilterParams) ([]domain.Spaces, error) {
+func (repo *SpaceRepository) FilterBy(domain.SpaceFilterParams) ([]domain.Space, error) {
 
-	return []domain.Spaces{
+	return []domain.Space{
 		{
 			Name:     "A1",
 			Capacity: 20,

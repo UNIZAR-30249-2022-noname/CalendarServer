@@ -36,13 +36,13 @@ func TestRequestInfoSlots(t *testing.T) {
 		nil,               // args
 	)
 	myResponse := domain.AllInfoSlot{
-		SlotData: domain.SlotData{
+		SlotData: domain.Space{
 			Name:        "A1",
 			Capacity:    5,
 			Description: "Lorem ipsum no leas mas porque esto es dummy text",
 			Building:    "Ada",
 			Floor:       "baja",
-			Type:        "aula",
+			Kind:        "aula",
 		},
 		InfoSlots: []domain.InfoSlots{
 			{
@@ -106,13 +106,13 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 		nil,               // args
 	)
 	myResponse := domain.AllInfoSlot{
-		SlotData: domain.SlotData{
+		SlotData: domain.Space{
 			Name:        "A1",
 			Capacity:    5,
 			Description: "Lorem ipsum no leas mas porque esto es dummy text",
 			Building:    "Ada",
 			Floor:       "baja",
-			Type:        "aula",
+			Kind:        "aula",
 		},
 		InfoSlots: []domain.InfoSlots{
 			{
@@ -196,7 +196,7 @@ func TestReserve(t *testing.T) {
 		}
 	}()
 
-	done, err := spaceRepo.Reserve(domain.Space{}, domain.Hour{Hour: 12, Min: 30}, domain.Hour{Hour: 12, Min: 30}, s, "Iñigol")
+	done, err := spaceRepo.Reserve("", domain.Hour{Hour: 12, Min: 30}, domain.Hour{Hour: 12, Min: 30}, s, "Iñigol")
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.Equal(done, "1", "Should be true")
 	chReserve.QueueDelete(constants.REQUEST, true, false, true)
@@ -245,7 +245,7 @@ func TestReserveBatch(t *testing.T) {
 		}
 	}()
 
-	done, err := spaceRepo.ReserveBatch([]domain.Space{}, domain.Hour{Hour: 12, Min: 30}, domain.Hour{Hour: 13, Min: 30}, []string{s}, "Iñigol")
+	done, err := spaceRepo.ReserveBatch([]string{}, domain.Hour{Hour: 12, Min: 30}, domain.Hour{Hour: 13, Min: 30}, []string{s}, "Iñigol")
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.NotEqual(done, "-1", "Should be positive")
 	chBatch.QueueDelete(constants.REQUEST, true, false, true)

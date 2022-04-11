@@ -27,7 +27,7 @@ type UsersService interface {
 }
 
 type SpacesService interface {
-	FilterBy(domain.SpaceFilterParams) ([]domain.Spaces, error)
+	FilterBy(domain.SpaceFilterParams) ([]domain.Space, error)
 	RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error)
 	Reserve(sp string, init, end domain.Hour, date, person string) (string, error)
 	ReserveBatch(spaces []string, init, end domain.Hour, dates []string, person string) (string, error)

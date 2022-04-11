@@ -28,7 +28,7 @@ func (svc *SpaceServiceImp) Reserve(sp string, init, end domain.Hour, date, pers
 func (svc *SpaceServiceImp) ReserveBatch(spaces []string, init, end domain.Hour, dates []string, person string) (string, error) {
 	return svc.spaceRepository.ReserveBatch(spaces, init, end, dates, person)
 }
-func (svc *SpaceServiceImp) FilterBy(params domain.SpaceFilterParams) ([]domain.Spaces, error) {
+func (svc *SpaceServiceImp) FilterBy(params domain.SpaceFilterParams) ([]domain.Space, error) {
 	return svc.spaceRepository.FilterBy(params)
 }
 

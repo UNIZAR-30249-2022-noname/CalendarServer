@@ -78,7 +78,7 @@ func (hdl *HTTPHandler) RequestInfoSlots(c *gin.Context) {
 //@Description Reserve Space a day from an initial hour to an end hour
 //@Tag Users
 //@Produce json
-//@Param spaces body domain.Space true "space ids"
+//@Param spaces body []string true "space ids"
 //@Param init query domain.Hour true "initial hour"
 //@Param end query domain.Hour true "end hour"
 //@Param dates body []string true "dates of reserve"
@@ -87,7 +87,7 @@ func (hdl *HTTPHandler) RequestInfoSlots(c *gin.Context) {
 // @Failure 400,404 {object} ErrorHttp
 //@Router /reserveBatch/ [get]
 func (hdl *HTTPHandler) ReserveBatch(c *gin.Context) {
-	spaces := []domain.Space{}
+	spaces := []string{}
 	c.BindJSON(&spaces)
 
 	init := domain.Hour{}

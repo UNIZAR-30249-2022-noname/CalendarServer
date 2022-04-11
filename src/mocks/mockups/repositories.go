@@ -347,10 +347,10 @@ func (mr *MockSpaceRepositoryMockRecorder) CancelReserve(key interface{}) *gomoc
 }
 
 // FilterBy mocks base method.
-func (m *MockSpaceRepository) FilterBy(arg0 domain.SpaceFilterParams) ([]domain.Spaces, error) {
+func (m *MockSpaceRepository) FilterBy(arg0 domain.SpaceFilterParams) ([]domain.Space, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FilterBy", arg0)
-	ret0, _ := ret[0].([]domain.Spaces)
+	ret0, _ := ret[0].([]domain.Space)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

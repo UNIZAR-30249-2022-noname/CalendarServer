@@ -56,8 +56,7 @@ func New(ch *amqp.Channel, queues []string) (*Repository, error) {
 func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, error) {
 	//TODO garantizar exclusion mutua
 	corrId := auxFuncs.RandomString(10)
-	message := messageQueue{body: msg, pattern: pattern, id: corrId}
-	msgJSON, err := json.Marshal(message)
+	msgJSON, err := json.Marshal(messageQueue{body: msg, pattern: pattern, id: corrId})
 	if err != nil {
 		return nil, err
 	}
