@@ -221,3 +221,4 @@ type Issue struct {
 	Space       string   `json:"slot"`
 	State       int      `json:"state"`
 }
+
