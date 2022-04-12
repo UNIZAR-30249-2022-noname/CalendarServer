@@ -25,18 +25,10 @@ import (
 // @Failure 400,404 {object} ErrorHttp
 //@Router /reserve/ [get]
 func (hdl *HTTPHandler) Reserve(c *gin.Context) {
-	id := c.Query("slot")
-	date := c.Query("day")
-	person := c.Query("owner")
-	event := c.Query("event")
-	hours := []domain.Hour{}
-	c.BindJSON(&hours)
-	fmt.Println(hours) //TODO Haz que funcione esta shit iñigo
+	body := domain.Reserve{}
+	c.BindJSON(&body)
 
-	init := hours[0]
-	end := hours[1]
-	
-	lastId, err := hdl.Spaces.Reserve(id, init, end, date, person, event)
+	lastId, err := hdl.Spaces.Reserve(body.Space, body.Scheduled[0], body.Scheduled[1], body.Day, body.Owner, body.Event)
 
 	if err == nil {
 		c.JSON(http.StatusOK, lastId)
