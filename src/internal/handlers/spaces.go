@@ -26,20 +26,16 @@ import (
 //@Router /reserve/ [get]
 func (hdl *HTTPHandler) Reserve(c *gin.Context) {
 	id := c.Query("slot")
-	initString := c.Query("scheduled")
-	fmt.Println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEl id es: " + initString)
-
 	date := c.Query("day")
 	person := c.Query("owner")
 	event := c.Query("event")
 	hours := []domain.Hour{}
-	initJSON := []byte(c.Query("scheduled"))
-	json.Unmarshal(initJSON, &hours)
-	fmt.Println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEl id es: " + initString)
+	c.BindJSON(&hours)
+	fmt.Println(hours) //TODO Haz que funcione esta shit iñigo
 
 	init := hours[0]
-
 	end := hours[1]
+	
 	lastId, err := hdl.Spaces.Reserve(id, init, end, date, person, event)
 
 	if err == nil {
