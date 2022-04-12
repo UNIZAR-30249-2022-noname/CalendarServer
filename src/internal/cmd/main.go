@@ -69,7 +69,7 @@ func SetupRouter() *gin.Engine {
 	r.GET(constants.LOGIN, handler.Login)
 	r.GET(constants.FILTER_SPACES, handler.FilterBy)
 	r.GET(constants.REQUEST_INFO_SLOTS, handler.RequestInfoSlots)
-	r.GET(constants.RESERVE_SPACE, handler.Reserve)
+	r.POST(constants.RESERVE_SPACE, handler.Reserve)
 	r.GET(constants.RESERVE_BATCH, handler.ReserveBatch)
 
 	r.GET(constants.CANCEL_RESERVE, handler.CancelReserve)
