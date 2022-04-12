@@ -16,18 +16,22 @@ import (
 //@Description Reserve Space a day from an initial hour to an end hour
 //@Tag Users
 //@Produce json
-//@Param space query string true "space id"
-//@Param hour query int true "initial hour"
-//@Param date query string true "date of reserve"
-//@Param person query string true "person that reserves"
+//@Param slot query string true "space id"
+//@Param scheduled []domain.Hour int true "initial hour"
+//@Param day query string true "date of reserve"
+//@Param owner query string true "person that reserves"
+//@Param event query string true "event in the reserve"
 //@Success 200 {object} string
 // @Failure 400,404 {object} ErrorHttp
 //@Router /reserve/ [get]
 func (hdl *HTTPHandler) Reserve(c *gin.Context) {
-	id := c.Query("space")
-
+	id := c.Query("slot")
 	initString := c.Query("hour")
+	fmt.Println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEl id es: " + initString)
 	initInt, _ := strconv.Atoi(initString)
+	hours := []domain.Hour{}
+	initJSON := []byte(c.Query("scheduled"))
+	json.Unmarshal(initJSON, &hours)
 
 	init := domain.Hour{
 		Hour: initInt,
@@ -39,8 +43,10 @@ func (hdl *HTTPHandler) Reserve(c *gin.Context) {
 		Min:  0,
 	}
 
-	date := c.Query("date")
-	person := c.Query("person")
+	date := c.Query("day")
+	person := c.Query("owner")
+	event := c.Query("event")
+	fmt.Println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEl id es: " + event)
 	lastId, err := hdl.Spaces.Reserve(id, init, end, date, person)
 
 	if err == nil {
@@ -156,7 +162,7 @@ func (hdl *HTTPHandler) FilterBy(c *gin.Context) {
 //@Sumary Cancel reserve
 //@Description Cancel a reserve given a id
 //@Tag Reserves
-//@Produce string
+//@Produce text/plain
 //@Param reserve query string  true "id of reserve"
 //@Success 200 {object} string
 //@Failure 400,404 {object} ErrorHttp
@@ -178,7 +184,7 @@ func (hdl *HTTPHandler) CancelReserve(c *gin.Context) {
 //@Sumary Get reserve
 //@Description Get s reserves per owner
 //@Tag Reserves
-//@Produce JSON
+//@Produce json
 //@Param name query string  true "iname of the owner"
 //@Success 200 {object} string
 //@Failure 400,404 {object} ErrorHttp

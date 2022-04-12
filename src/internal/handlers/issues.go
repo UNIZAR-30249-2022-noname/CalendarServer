@@ -24,7 +24,7 @@ func (hdl *HTTPHandler) GetAllIssues(c *gin.Context) {
 //@Sumary Delete issue
 //@Description Delete a issue given a id
 //@Tag Issues
-//@Produce string
+//@Produce text/plain
 //@Param issue query string  true "id of issue"
 //@Success 200 {object} string
 //@Failure 400,404 {object} ErrorHttp
@@ -46,7 +46,7 @@ func (hdl *HTTPHandler) DeleteIssue(c *gin.Context) {
 //@Sumary Create issue
 //@Description Create  a issue
 //@Tag Issues
-//@Produce string
+//@Produce text/plain
 //@Param issue query string  true "id of issue"
 //@Success 200 {object} string
 //@Failure 400,404 {object} ErrorHttp
@@ -72,7 +72,7 @@ func (hdl *HTTPHandler) CreateIssue(c *gin.Context) {
 //@Sumary Change state  issue
 //@Description Create the state of a issue
 //@Tag Issues
-//@Produce string
+//@Produce text/plain
 //@Param issue query string  true "id of issue"
 //@Success 200 {object} string
 //@Failure 400,404 {object} ErrorHttp

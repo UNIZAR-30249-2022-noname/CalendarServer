@@ -6,7 +6,7 @@ definitions:
           $ref: '#/definitions/domain.InfoSlots'
         type: array
       slotData:
-        $ref: '#/definitions/domain.SlotData'
+        $ref: '#/definitions/domain.Space'
     type: object
   domain.AvailableHours:
     properties:
@@ -39,7 +39,7 @@ definitions:
       person:
         type: string
     type: object
-  domain.SlotData:
+  domain.Space:
     properties:
       building:
         type: string
@@ -49,14 +49,9 @@ definitions:
         type: string
       floor:
         type: string
+      kind:
+        type: string
       name:
-        type: string
-      type:
-        type: string
-    type: object
-  domain.Space:
-    properties:
-      id:
         type: string
     type: object
   domain.Subject:
@@ -141,6 +136,77 @@ paths:
             items:
               $ref: '#/definitions/domain.AvailableHours'
             type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+  /cancelReserve:
+    get:
+      description: Get s reserves per owner
+      parameters:
+      - description: iname of the owner
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+  /deleteIssue:
+    get:
+      description: Create the state of a issue
+      parameters:
+      - description: id of issue
+        in: query
+        name: issue
+        required: true
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+    post:
+      description: Create  a issue
+      parameters:
+      - description: id of issue
+        in: query
+        name: issue
+        required: true
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
         "400":
           description: Bad Request
           schema:
@@ -386,7 +452,9 @@ paths:
         name: spaces
         required: true
         schema:
-          $ref: '#/definitions/domain.Space'
+          items:
+            type: string
+          type: array
       - in: query
         name: hour
         type: integer

@@ -77,6 +77,115 @@ var doc = `{
                 }
             }
         },
+        "/cancelReserve": {
+            "get": {
+                "description": "Get s reserves per owner",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "iname of the owner",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            }
+        },
+        "/deleteIssue": {
+            "get": {
+                "description": "Create the state of a issue",
+                "produces": [
+                    "text/plain"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id of issue",
+                        "name": "issue",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create  a issue",
+                "produces": [
+                    "text/plain"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id of issue",
+                        "name": "issue",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            }
+        },
         "/filterSlots": {
             "get": {
                 "description": "Get spaces filtered by params",
@@ -436,7 +545,10 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Space"
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     },
                     {
@@ -598,7 +710,7 @@ var doc = `{
                     }
                 },
                 "slotData": {
-                    "$ref": "#/definitions/domain.SlotData"
+                    "$ref": "#/definitions/domain.Space"
                 }
             }
         },
@@ -650,7 +762,7 @@ var doc = `{
                 }
             }
         },
-        "domain.SlotData": {
+        "domain.Space": {
             "type": "object",
             "properties": {
                 "building": {
@@ -665,18 +777,10 @@ var doc = `{
                 "floor": {
                     "type": "string"
                 },
-                "name": {
+                "kind": {
                     "type": "string"
                 },
-                "type": {
-                    "type": "string"
-                }
-            }
-        },
-        "domain.Space": {
-            "type": "object",
-            "properties": {
-                "id": {
+                "name": {
                     "type": "string"
                 }
             }
