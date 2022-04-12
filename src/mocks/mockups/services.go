@@ -291,18 +291,18 @@ func (mr *MockSpacesServiceMockRecorder) RequestInfoSlots(req interface{}) *gomo
 }
 
 // Reserve mocks base method.
-func (m *MockSpacesService) Reserve(sp string, init, end domain.Hour, date, person string) (string, error) {
+func (m *MockSpacesService) Reserve(sp string, init, end domain.Hour, date, person, event string) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Reserve", sp, init, end, date, person)
+	ret := m.ctrl.Call(m, "Reserve", sp, init, end, date, person, event)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Reserve indicates an expected call of Reserve.
-func (mr *MockSpacesServiceMockRecorder) Reserve(sp, init, end, date, person interface{}) *gomock.Call {
+func (mr *MockSpacesServiceMockRecorder) Reserve(sp, init, end, date, person, event interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Reserve", reflect.TypeOf((*MockSpacesService)(nil).Reserve), sp, init, end, date, person)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Reserve", reflect.TypeOf((*MockSpacesService)(nil).Reserve), sp, init, end, date, person, event)
 }
 
 // ReserveBatch mocks base method.

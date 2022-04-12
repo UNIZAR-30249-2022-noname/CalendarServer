@@ -33,11 +33,11 @@ func (repo *SpaceRepository) RequestInfoSlots(req domain.ReqInfoSlot) (domain.Al
 
 }
 
-func (repo *SpaceRepository) Reserve(space string, init, end domain.Hour, date, person string) (string, error) {
+func (repo *SpaceRepository) Reserve(space string, init, end domain.Hour, date, person, event string) (string, error) {
 	var reserveId string
 	//TODO Añadir campo evento y KEY
 	reserveIdJSON, err := repo.RCPcallJSON(domain.Reserve{Space: space, Day: date, 
-		Event: "Evento", Scheduled: []domain.Hour{init,end}, Owner: person, Key: "0",}, constants.RESERVE)
+		Event: event, Scheduled: []domain.Hour{init,end}, Owner: person, Key: "0",}, constants.RESERVE)
 	if err != nil {
 		return "", err
 	}

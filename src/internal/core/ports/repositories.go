@@ -33,7 +33,7 @@ type UsersRepository interface {
 type SpaceRepository interface {
 	FilterBy(domain.SpaceFilterParams) ([]domain.Space, error)
 	RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error)
-	Reserve(sp string, init, end domain.Hour, date, person string) (string, error)
+	Reserve(sp string, init, end domain.Hour, date, person, event string) (string, error)
 	ReserveBatch(spaces []string, init, end domain.Hour, dates []string, person string) (string, error)
 	CancelReserve(key string) error
 	GetReservesOwner(owner string) ([]domain.Reserve, error)

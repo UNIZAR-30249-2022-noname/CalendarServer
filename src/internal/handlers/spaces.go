@@ -17,7 +17,7 @@ import (
 //@Tag Users
 //@Produce json
 //@Param slot query string true "space id"
-//@Param scheduled []domain.Hour int true "initial hour"
+//@Param scheduled body []domain.Hour true "initial hour"
 //@Param day query string true "date of reserve"
 //@Param owner query string true "person that reserves"
 //@Param event query string true "event in the reserve"
@@ -26,28 +26,21 @@ import (
 //@Router /reserve/ [get]
 func (hdl *HTTPHandler) Reserve(c *gin.Context) {
 	id := c.Query("slot")
-	initString := c.Query("hour")
+	initString := c.Query("scheduled")
 	fmt.Println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEl id es: " + initString)
-	initInt, _ := strconv.Atoi(initString)
-	hours := []domain.Hour{}
-	initJSON := []byte(c.Query("scheduled"))
-	json.Unmarshal(initJSON, &hours)
-
-	init := domain.Hour{
-		Hour: initInt,
-		Min:  0,
-	}
-
-	end := domain.Hour{
-		Hour: initInt + 1,
-		Min:  0,
-	}
 
 	date := c.Query("day")
 	person := c.Query("owner")
 	event := c.Query("event")
-	fmt.Println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEl id es: " + event)
-	lastId, err := hdl.Spaces.Reserve(id, init, end, date, person)
+	hours := []domain.Hour{}
+	initJSON := []byte(c.Query("scheduled"))
+	json.Unmarshal(initJSON, &hours)
+	fmt.Println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEl id es: " + initString)
+
+	init := hours[0]
+
+	end := hours[1]
+	lastId, err := hdl.Spaces.Reserve(id, init, end, date, person, event)
 
 	if err == nil {
 		c.JSON(http.StatusOK, lastId)

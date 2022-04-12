@@ -30,6 +30,13 @@ definitions:
           $ref: '#/definitions/domain.YearDescription'
         type: array
     type: object
+  domain.Hour:
+    properties:
+      hour:
+        type: integer
+      min:
+        type: integer
+    type: object
   domain.InfoSlots:
     properties:
       hour:
@@ -410,22 +417,30 @@ paths:
       parameters:
       - description: space id
         in: query
-        name: space
+        name: slot
         required: true
         type: string
       - description: initial hour
-        in: query
-        name: hour
+        in: body
+        name: scheduled
         required: true
-        type: integer
+        schema:
+          items:
+            $ref: '#/definitions/domain.Hour'
+          type: array
       - description: date of reserve
         in: query
-        name: date
+        name: day
         required: true
         type: string
       - description: person that reserves
         in: query
-        name: person
+        name: owner
+        required: true
+        type: string
+      - description: event in the reserve
+        in: query
+        name: event
         required: true
         type: string
       produces:

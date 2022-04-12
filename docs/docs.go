@@ -484,28 +484,40 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "space id",
-                        "name": "space",
+                        "name": "slot",
                         "in": "query",
                         "required": true
                     },
                     {
-                        "type": "integer",
                         "description": "initial hour",
-                        "name": "hour",
-                        "in": "query",
-                        "required": true
+                        "name": "scheduled",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Hour"
+                            }
+                        }
                     },
                     {
                         "type": "string",
                         "description": "date of reserve",
-                        "name": "date",
+                        "name": "day",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "person that reserves",
-                        "name": "person",
+                        "name": "owner",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "event in the reserve",
+                        "name": "event",
                         "in": "query",
                         "required": true
                     }
@@ -745,6 +757,17 @@ var doc = `{
                     "items": {
                         "$ref": "#/definitions/domain.YearDescription"
                     }
+                }
+            }
+        },
+        "domain.Hour": {
+            "type": "object",
+            "properties": {
+                "hour": {
+                    "type": "integer"
+                },
+                "min": {
+                    "type": "integer"
                 }
             }
         },

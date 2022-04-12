@@ -196,7 +196,7 @@ func TestReserve(t *testing.T) {
 		}
 	}()
 
-	done, err := spaceRepo.Reserve("", domain.Hour{Hour: 12, Min: 30}, domain.Hour{Hour: 12, Min: 30}, s, "Iñigol")
+	done, err := spaceRepo.Reserve("", domain.Hour{Hour: 12, Min: 30}, domain.Hour{Hour: 12, Min: 30}, s, "Iñigol", "")
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.Equal(done, "1", "Should be true")
 	chReserve.QueueDelete(constants.REQUEST, true, false, true)
