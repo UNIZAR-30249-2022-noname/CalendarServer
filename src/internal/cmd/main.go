@@ -83,7 +83,7 @@ func SetupRouter() *gin.Engine {
 }
 
 func main() {
-	// · Swagger ·
+	// · Swagger · //
 	docs.SwaggerInfo.Title = "API UNIZAR calendar and schedule"
 	docs.SwaggerInfo.Description = "This is API for managing and visulizating the calendar and schedule of Unizar."
 	docs.SwaggerInfo.Version = "1.0"
