@@ -14,12 +14,12 @@ const (
 	RESERVE_EDIT   = "editar-reserva"
 	RESERVE_CANCEL = "cancelar-reserva"
 	NEWISSUE       = "crear-incidencia"
+	GETISSUES      = "obtener-incidencias"
+	DELETEISSUE    = "eliminar-incidencia"
+	UPDATEISSUE    = "modificar-estado-incidencia"
 	REQINFOSLOT    = "obtener-informacion-espacio"
 )
 
 /*TODO
-Obtener todas las incidencias: 'obtener-incidencias'
-Eliminar una incidencia: 'eliminar-incidencia'
-Modificar estado incidencia: 'modificar-estado-incidencia'
 Obtener reservas por persona: 'obtener-reservas-por-persona'
 */
