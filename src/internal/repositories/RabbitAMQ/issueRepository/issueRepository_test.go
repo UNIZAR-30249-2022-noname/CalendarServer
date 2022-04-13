@@ -13,6 +13,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestDeleteQueueBeforeTest(t *testing.T) {
+	assert := assert.New(t)
+	rabbitConn, err := connection.New(constants.AMQPURL)
+	assert.Equal(err, nil, "Shouldn't be an error")
+	chReqInfo, err := rabbitConn.NewChannel()
+	chReqInfo.QueueDelete(constants.REQUEST, true, false, true)
+	chReqInfo.QueueDelete(constants.REPLY, true, false, true)
+}
+
 func TestGetAllIssues(t *testing.T) {
 	//t.Skip() //remove for activating it
 	assert := assert.New(t)
