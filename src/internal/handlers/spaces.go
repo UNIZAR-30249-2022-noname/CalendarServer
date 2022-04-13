@@ -10,7 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//TODO Cambiar el espacio por string en el front
 //Reserve is the handler for reserving one space
 //@Sumary Reserve Space
 //@Description Reserve Space a day from an initial hour to an end hour
