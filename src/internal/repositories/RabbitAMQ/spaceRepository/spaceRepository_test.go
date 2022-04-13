@@ -251,3 +251,57 @@ func TestReserveBatch(t *testing.T) {
 	chBatch.QueueDelete(constants.REQUEST, true, false, true)
 	chBatch.QueueDelete(constants.REPLY, true, false, true)
 }
+
+func TestFilterBy(t *testing.T) {
+	//t.Skip() //remove for activating it
+	assert := assert.New(t)
+	rabbitConn, err := connection.New(constants.AMQPURL)
+	assert.Equal(err, nil, "Shouldn't be an error")
+	chReserve, err := rabbitConn.NewChannel()
+	assert.Equal(err, nil, "Shouldn't be an error")
+	err = connection.PrepareChannel(chReserve, constants.REQUEST)
+	assert.Equal(err, nil, "Shouldn't be an error")
+	err = connection.PrepareChannel(chReserve, constants.REPLY)
+	assert.Equal(err, nil, "Shouldn't be an error")
+	spaceRepo, _ := spaceRepo.New(chReserve)
+	msgs, _ := chReserve.Consume(
+		constants.REQUEST, // queue
+		"",                // consumer
+		false,             // auto-ack
+		false,             // exclusive
+		false,             // no-local
+		false,             // no-wait
+		nil,               // args
+	)
+	messageSent := []domain.Space{
+		{
+			Name:     "A1",
+			Capacity: 20,
+			Building: "Ada",
+			Kind:     "aula",
+		},}
+	corrId := "-1"
+	go func() {
+		for resp := range msgs {
+			corrId = resp.CorrelationId
+			response, _ := json.Marshal(messageSent)
+			chReserve.Publish(
+				"",              // exchange
+				constants.REPLY, // routing key
+				false,           // mandatory
+				false,           // immediate
+				amqp.Publishing{
+					ContentType:   "application/json",
+					CorrelationId: corrId,
+					Body:          response,
+				})
+			resp.Ack(false)
+		}
+	}()
+
+	messageRecieved, err := spaceRepo.FilterBy(domain.SpaceFilterParams{Capacity: 5, Day: "2022-01-02", Hour: domain.Hour{Hour: 12, Min: 0},Floor: "1", Building: "Ada"})
+	assert.Equal(err, nil, "Shouldn't be an error")
+	assert.Equal(messageRecieved, messageSent, "Should be true")
+	chReserve.QueueDelete(constants.REQUEST, true, false, true)
+	chReserve.QueueDelete(constants.REPLY, true, false, true)
+}
