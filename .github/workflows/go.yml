@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GATEWAY_MODE: "test"
     steps:
       - uses: actions/checkout@v2
 
