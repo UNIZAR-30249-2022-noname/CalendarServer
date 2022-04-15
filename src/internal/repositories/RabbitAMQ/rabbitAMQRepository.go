@@ -10,27 +10,10 @@ import (
 	"github.com/streadway/amqp"
 )
 
-/**BASURA QUE HE CREADO PARA PROBAR HASTA LA LINEA 34*/
-type MessageQueue struct {
-	Body    string `json:"body"`
+type messageQueue struct {
+	Body    interface{} `json:"body"`
 	Pattern string `json:"pattern"`
-	Age     string `json:"age"`
 	Id      string `json:"id"`
-}
-
-func NewMessageQueue(body string, pattern string, age string, id string) *MessageQueue {
-	return &MessageQueue{
-		body, pattern, age, id,
-	}
-}
-
-func (m *MessageQueue) Marshal() ([]byte, error) {
-	bytes, err := json.Marshal(m)
-
-	if err != nil {
-		return nil, err
-	}
-	return bytes, err
 }
 
 /*------------------------------------------------------------------------------------------------------*/
@@ -70,17 +53,14 @@ func New(ch *amqp.Channel, queues []string) (*Repository, error) {
 	return &rp, nil
 }
 
-func (rp *Repository) RCPcallJSON(msg interface{}, msgId string) ([]byte, error) {
+func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, error) {
 	//TODO garantizar exclusion mutua
-	message := NewMessageQueue("10:00", "realizar-reserva", "Sergio", "1234")
-	// TODO: check the error
-	bodyFake, err := message.Marshal()
-	//msgJSON, err := json.Marshal(msg)
+	corrId := auxFuncs.RandomString(10)
+	message := messageQueue{Body: &msg, Pattern: pattern, Id: corrId}
+	msgJSON, err := json.Marshal(message)
 	if err != nil {
 		return nil, err
-
 	}
-	corrId := auxFuncs.RandomString(10)
 
 	//enviar la petición
 	err = rp.ch.Publish(
@@ -91,8 +71,7 @@ func (rp *Repository) RCPcallJSON(msg interface{}, msgId string) ([]byte, error)
 		amqp.Publishing{
 			ContentType:   "application/json",
 			CorrelationId: corrId,
-			Body:          bodyFake,
-			MessageId: 	   msgId,
+			Body:          msgJSON,
 			ReplyTo:       constants.REPLY,
 		})
 	var data []byte

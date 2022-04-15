@@ -15,33 +15,19 @@ import (
 //@Description Reserve Space a day from an initial hour to an end hour
 //@Tag Users
 //@Produce json
-//@Param space query string true "space id"
-//@Param hour query int true "initial hour"
-//@Param date query string true "date of reserve"
-//@Param person query string true "person that reserves"
+//@Param slot query string true "space id"
+//@Param scheduled body []domain.Hour true "initial hour"
+//@Param day query string true "date of reserve"
+//@Param owner query string true "person that reserves"
+//@Param event query string true "event in the reserve"
 //@Success 200 {object} string
 // @Failure 400,404 {object} ErrorHttp
 //@Router /reserve/ [get]
 func (hdl *HTTPHandler) Reserve(c *gin.Context) {
-	id := c.Query("space")
-	sp := domain.Space{Id: id}
+	body := domain.Reserve{}
+	c.BindJSON(&body)
 
-	initString := c.Query("hour")
-	initInt, _ := strconv.Atoi(initString)
-
-	init := domain.Hour{
-		Hour: initInt,
-		Min:  0,
-	}
-
-	end := domain.Hour{
-		Hour: initInt + 1,
-		Min:  0,
-	}
-
-	date := c.Query("date")
-	person := c.Query("person")
-	lastId, err := hdl.Spaces.Reserve(sp, init, end, date, person)
+	lastId, err := hdl.Spaces.Reserve(body.Space, body.Scheduled[0], body.Scheduled[1], body.Day, body.Owner, body.Event)
 
 	if err == nil {
 		c.JSON(http.StatusOK, lastId)
@@ -79,7 +65,7 @@ func (hdl *HTTPHandler) RequestInfoSlots(c *gin.Context) {
 //@Description Reserve Space a day from an initial hour to an end hour
 //@Tag Users
 //@Produce json
-//@Param spaces body domain.Space true "space ids"
+//@Param spaces body []string true "space ids"
 //@Param init query domain.Hour true "initial hour"
 //@Param end query domain.Hour true "end hour"
 //@Param dates body []string true "dates of reserve"
@@ -88,7 +74,7 @@ func (hdl *HTTPHandler) RequestInfoSlots(c *gin.Context) {
 // @Failure 400,404 {object} ErrorHttp
 //@Router /reserveBatch/ [get]
 func (hdl *HTTPHandler) ReserveBatch(c *gin.Context) {
-	spaces := []domain.Space{}
+	spaces := []string{}
 	c.BindJSON(&spaces)
 
 	init := domain.Hour{}
@@ -156,7 +142,7 @@ func (hdl *HTTPHandler) FilterBy(c *gin.Context) {
 //@Sumary Cancel reserve
 //@Description Cancel a reserve given a id
 //@Tag Reserves
-//@Produce string
+//@Produce text/plain
 //@Param reserve query string  true "id of reserve"
 //@Success 200 {object} string
 //@Failure 400,404 {object} ErrorHttp
@@ -178,7 +164,7 @@ func (hdl *HTTPHandler) CancelReserve(c *gin.Context) {
 //@Sumary Get reserve
 //@Description Get s reserves per owner
 //@Tag Reserves
-//@Produce JSON
+//@Produce json
 //@Param name query string  true "iname of the owner"
 //@Success 200 {object} string
 //@Failure 400,404 {object} ErrorHttp

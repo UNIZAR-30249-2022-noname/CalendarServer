@@ -24,7 +24,7 @@ func New(ch *amqp.Channel) (*SpaceRepository, error) {
 
 func (repo *SpaceRepository) RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error) {
 	var allInfo domain.AllInfoSlot
-	allInfoJSON, err := repo.RCPcallJSON(constants.REQUEST, "info")
+	allInfoJSON, err := repo.RCPcallJSON(req, constants.REQINFOSLOT)
 	if err != nil {
 		return domain.AllInfoSlot{}, err
 	}
@@ -33,10 +33,11 @@ func (repo *SpaceRepository) RequestInfoSlots(req domain.ReqInfoSlot) (domain.Al
 
 }
 
-func (repo *SpaceRepository) Reserve(space domain.Space, init, end domain.Hour, date, person string) (string, error) {
+func (repo *SpaceRepository) Reserve(space string, init, end domain.Hour, date, person, event string) (string, error) {
 	var reserveId string
-	//fmt.Println("Me llaman aqui")
-	reserveIdJSON, err := repo.RCPcallJSON(constants.REQUEST, "reserve")
+	//TODO Añadir campo evento y KEY
+	reserveIdJSON, err := repo.RCPcallJSON(domain.Reserve{Space: space, Day: date, 
+		Event: event, Scheduled: []domain.Hour{init,end}, Owner: person, Key: "0",}, constants.RESERVE)
 	if err != nil {
 		return "", err
 	}
@@ -45,18 +46,36 @@ func (repo *SpaceRepository) Reserve(space domain.Space, init, end domain.Hour, 
 	return reserveId, nil
 }
 
-func (repo *SpaceRepository) ReserveBatch(spaces []domain.Space, init, end domain.Hour, dates []string, person string) (string, error) {
+func (repo *SpaceRepository) ReserveBatch(spaces []string, init, end domain.Hour, dates []string, person string) (string, error) {
 
 	return "0", nil
 }
 
-func (repo *SpaceRepository) FilterBy(domain.SpaceFilterParams) ([]domain.Spaces, error) {
-	var spaces []domain.Spaces
-	spacesJSON, err := repo.RCPcallJSON(constants.REQUEST, "filter")
+func (repo *SpaceRepository) FilterBy(spaceParams domain.SpaceFilterParams) ([]domain.Space, error) {
+	var spaces []domain.Space
+	spacesJSON, err := repo.RCPcallJSON(spaceParams, constants.SPFILTER)
 	if err != nil {
-		return []domain.Spaces{}, err
+		return []domain.Space{}, err
 	}
 	json.Unmarshal(spacesJSON, &spaces)
 
 	return spaces, nil
 }
+
+//TODO 
+/*
+func (repo *SpaceRepository) UploadSpaces() (string, error) {
+	message := "hola"
+	messageUploadSpace := &domain.MessageQueueUploadSpace{
+		Pattern:   "importar-espacios",
+		Id:        auxFuncs.RandomString(5),
+		Fichero: message,
+	}
+	_, err := repo.RCPcallJSON(messageUploadSpace, messageUploadSpace.Id)
+	if err != nil {
+		return "", err
+	}
+
+	return message, nil
+}
+*/

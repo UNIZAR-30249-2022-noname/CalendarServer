@@ -6,6 +6,20 @@ const (
 )
 
 const (
-	REQUEST = "request"
-	REPLY   = "reply"
+	REQUEST        = "request"
+	REPLY          = "reply"
+	RESERVE        = "realizar-reserva"
+	IMPORT         = "importar-espacios"
+	SPFILTER       = "filtrar-espacios"
+	RESERVE_EDIT   = "editar-reserva"
+	RESERVE_CANCEL = "cancelar-reserva"
+	NEWISSUE       = "crear-incidencia"
+	GETISSUES      = "obtener-incidencias"
+	DELETEISSUE    = "eliminar-incidencia"
+	UPDATEISSUE    = "modificar-estado-incidencia"
+	REQINFOSLOT    = "obtener-informacion-espacio"
 )
+
+/*TODO
+Obtener reservas por persona: 'obtener-reservas-por-persona'
+*/
