@@ -3,6 +3,7 @@ package rabbitamqRepository
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/auxFuncs"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
@@ -10,10 +11,15 @@ import (
 	"github.com/streadway/amqp"
 )
 
+const (
+	ENV_MODE     = "GATEWAY_MODE"
+	testExtesion = "_test"
+)
+
 type messageQueue struct {
 	Body    interface{} `json:"body"`
-	Pattern string `json:"pattern"`
-	Id      string `json:"id"`
+	Pattern string      `json:"pattern"`
+	Id      string      `json:"id"`
 }
 
 /*------------------------------------------------------------------------------------------------------*/
@@ -23,7 +29,9 @@ type Repository struct {
 }
 
 func New(ch *amqp.Channel, queues []string) (*Repository, error) {
+
 	rp := Repository{ch: ch, replies: make(chan amqp.Delivery, 100)}
+	checkMode(queues)
 	for _, queue := range queues {
 		//crear cola de peticiones
 		err := connect.PrepareChannel(rp.ch, queue)
@@ -51,6 +59,15 @@ func New(ch *amqp.Channel, queues []string) (*Repository, error) {
 
 	}()
 	return &rp, nil
+}
+
+func checkMode(queues []string) {
+	if os.Getenv(ENV_MODE) == constants.TEST_MODE {
+		for i := 0; i < len(queues); i++ {
+			queues[i] += testExtesion
+		}
+	}
+
 }
 
 func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, error) {
