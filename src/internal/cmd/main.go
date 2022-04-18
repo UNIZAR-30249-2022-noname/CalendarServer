@@ -7,10 +7,10 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/space"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/users"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
-	issuerepositorymemory "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/Memory/IssueRepository"
-	spacerepositorymemory "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/Memory/spaceRepository"
 	usersrepositorymemory "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/Memory/usersRepository"
+	issuerepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/issueRepository"
 	monitoringrepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/monitoringRepository"
+	spacerepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/spaceRepository"
 
 	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
@@ -27,22 +27,32 @@ func config() (handlers.HTTPHandler, error) {
 	var err error
 	rabbitConn, err = connection.New(constants.AMQPURL)
 	if err != nil {
-		//TODO
+		panic(err)
 	}
 	chMonitoring, err := rabbitConn.NewChannel()
 	if err != nil {
-		//TODO
+		panic(err)
 	}
 	monitoringRepo := monitoringrepositoryrabbitamq.New(chMonitoring)
 	//TODO canal
-	_, err = rabbitConn.NewChannel()
+	chSpace, err := rabbitConn.NewChannel()
 	if err != nil {
 		//TODO
 	}
 	//spaceRepoAMQ, _ := spacerepositoryrabbitamq.New(chSpaces)
-	spaceRepo := spacerepositorymemory.New()
+	spaceRepo, err := spacerepositoryrabbitamq.New(chSpace)
+	if err != nil {
+		//TODO
+	}
 	usersRepo := usersrepositorymemory.New()
-	issuesRepo := issuerepositorymemory.New()
+	chIssues, err := rabbitConn.NewChannel()
+	if err != nil {
+		//TODO
+	}
+	issuesRepo, err := issuerepositoryrabbitamq.New(chIssues)
+	if err != nil {
+		//TODO
+	}
 
 	return handlers.HTTPHandler{
 		Monitoring: monitoring.New(monitoringRepo),

@@ -5,6 +5,7 @@ import (
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	rabbitamqRepository "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/streadway/amqp"
 )
@@ -36,8 +37,8 @@ func (repo *SpaceRepository) RequestInfoSlots(req domain.ReqInfoSlot) (domain.Al
 func (repo *SpaceRepository) Reserve(space string, init, end domain.Hour, date, person, event string) (string, error) {
 	var reserveId string
 	//TODO Añadir campo evento y KEY
-	reserveIdJSON, err := repo.RCPcallJSON(domain.Reserve{Space: space, Day: date, 
-		Event: event, Scheduled: []domain.Hour{init,end}, Owner: person, Key: "0",}, constants.RESERVE)
+	reserveIdJSON, err := repo.RCPcallJSON(domain.Reserve{Space: space, Day: date,
+		Event: event, Scheduled: []domain.Hour{init, end}, Owner: person, Key: "0"}, constants.RESERVE)
 	if err != nil {
 		return "", err
 	}
@@ -62,7 +63,15 @@ func (repo *SpaceRepository) FilterBy(spaceParams domain.SpaceFilterParams) ([]d
 	return spaces, nil
 }
 
-//TODO 
+func (repo *SpaceRepository) CancelReserve(key string) error {
+	return apperrors.ErrToDo
+}
+
+func (repo *SpaceRepository) GetReservesOwner(owner string) ([]domain.Reserve, error) {
+	return []domain.Reserve{}, apperrors.ErrToDo
+}
+
+//TODO
 /*
 func (repo *SpaceRepository) UploadSpaces() (string, error) {
 	message := "hola"
