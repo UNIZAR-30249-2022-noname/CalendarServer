@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/auxFuncs"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
@@ -12,8 +13,13 @@ import (
 
 type messageQueue struct {
 	Body    interface{} `json:"body"`
-	Pattern string `json:"pattern"`
-	Id      string `json:"id"`
+	Pattern string      `json:"pattern"`
+	Id      string      `json:"id"`
+}
+type errorMessageQueue struct {
+	Err        string `json:"err"`
+	Message    string `json:"message"`
+	IsDisposed bool   `json:"isDisposed"`
 }
 
 /*------------------------------------------------------------------------------------------------------*/
@@ -85,6 +91,11 @@ func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, erro
 		} else {
 			rp.replies <- resp
 		}
+	}
+	errorMsg := errorMessageQueue{}
+	json.Unmarshal(data, &errorMsg)
+	if errorMsg.Err != "" {
+		return nil, apperrors.ErrInternal
 	}
 	return data, err
 }
