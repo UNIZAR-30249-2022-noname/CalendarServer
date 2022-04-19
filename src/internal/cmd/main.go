@@ -63,12 +63,19 @@ func config() (handlers.HTTPHandler, error) {
 
 }
 
+func CorsConfig() gin.HandlerFunc {
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AllowHeaders = append(config.AllowHeaders, "X-Requested-With") 
+	return cors.New(config)
+}
+
 //SetupRouter is a func which bind each uri with a handler function
 func SetupRouter() *gin.Engine {
 
 	r := gin.Default()
 
-	r.Use(cors.Default())
+	r.Use(CorsConfig())
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	handler, err := config()
