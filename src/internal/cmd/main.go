@@ -5,12 +5,14 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/issue"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/monitoring"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/space"
+	uploaddata "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/uploadData"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/users"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
 	usersrepositorymemory "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/Memory/usersRepository"
 	issuerepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/issueRepository"
 	monitoringrepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/monitoringRepository"
 	spacerepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/spaceRepository"
+	uploadDatarepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/uploadDataRepository"
 
 	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
@@ -53,12 +55,18 @@ func config() (handlers.HTTPHandler, error) {
 	if err != nil {
 		//TODO
 	}
+	chUploadData, err := rabbitConn.NewChannel()
+	uploadDataRepo, err := uploadDatarepositoryrabbitamq.New(chUploadData)
+	if err != nil {
+		//TODO
+	}
 
 	return handlers.HTTPHandler{
 		Monitoring: monitoring.New(monitoringRepo),
 		Users:      users.New(usersRepo),
 		Spaces:     space.New(spaceRepo),
 		Issues:     issue.New(issuesRepo),
+		UploadData: uploaddata.New(uploadDataRepo),
 	}, nil
 
 }
