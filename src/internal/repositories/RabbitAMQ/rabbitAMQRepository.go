@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/auxFuncs"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
@@ -12,18 +13,23 @@ import (
 
 type messageQueue struct {
 	Body    interface{} `json:"body"`
-	Pattern string `json:"pattern"`
-	Id      string `json:"id"`
+	Pattern string      `json:"pattern"`
+	Id      string      `json:"id"`
+}
+type errorMessageQueue struct {
+	Err        string `json:"err"`
+	Message    string `json:"message"`
+	IsDisposed bool   `json:"isDisposed"`
 }
 
 /*------------------------------------------------------------------------------------------------------*/
 type Repository struct {
-	ch      *amqp.Channel
-	replies chan amqp.Delivery
+	ch   *amqp.Channel
+	msgs *<-chan amqp.Delivery
 }
 
 func New(ch *amqp.Channel, queues []string) (*Repository, error) {
-	rp := Repository{ch: ch, replies: make(chan amqp.Delivery, 100)}
+	rp := Repository{ch: ch}
 	for _, queue := range queues {
 		//crear cola de peticiones
 		err := connect.PrepareChannel(rp.ch, queue)
@@ -31,25 +37,23 @@ func New(ch *amqp.Channel, queues []string) (*Repository, error) {
 			return &Repository{}, err
 		}
 	}
+
 	//canal por el que se recibe la respuesta
 	msgs, err := rp.ch.Consume(
 		constants.REPLY, // queue
 		"",              // consumer
-		true,            // auto-ack
+		false,           // auto-ack
 		false,           // exclusive
 		false,           // no-local
 		false,           // no-wait
 		nil,             // args
 	)
+	rp.msgs = &msgs
+
 	if err != nil {
 		return &Repository{}, err
 	}
-	go func() {
-		for resp := range msgs {
-			rp.replies <- resp
-		}
 
-	}()
 	return &rp, nil
 }
 
@@ -75,16 +79,20 @@ func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, erro
 			ReplyTo:       constants.REPLY,
 		})
 	var data []byte
-	for resp := range rp.replies {
+	for resp := range *rp.msgs {
 		fmt.Println(resp.Body)
 		myString := string(resp.Body[:])
 		fmt.Println(myString)
 		if corrId == resp.CorrelationId {
 			data = resp.Body
+			resp.Ack(false)
 			break
-		} else {
-			rp.replies <- resp
 		}
+	}
+	errorMsg := errorMessageQueue{}
+	json.Unmarshal(data, &errorMsg)
+	if errorMsg.Err != "" {
+		return nil, apperrors.ErrInternal
 	}
 	return data, err
 }
