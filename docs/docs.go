@@ -633,11 +633,13 @@ var doc = `{
                 ],
                 "parameters": [
                     {
-                        "type": "file",
-                        "description": "csv file",
+                        "description": "csv",
                         "name": "csv",
-                        "in": "formData",
-                        "required": true
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
