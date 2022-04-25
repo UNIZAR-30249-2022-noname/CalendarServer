@@ -16,10 +16,8 @@ import (
 func TestDeleteQueueBeforeTest(t *testing.T) {
 	assert := assert.New(t)
 	rabbitConn, err := connection.New(constants.AMQPURL)
+	rabbitConn.PurgeAll()
 	assert.Equal(err, nil, "Shouldn't be an error")
-	chReqInfo, err := rabbitConn.NewChannel()
-	chReqInfo.QueueDelete(constants.REQUEST, true, false, true)
-	chReqInfo.QueueDelete(constants.REPLY, true, false, true)
 }
 
 func TestRequestInfoSlots(t *testing.T) {
@@ -29,6 +27,7 @@ func TestRequestInfoSlots(t *testing.T) {
 	s := a.Format("2006-01-02")
 	data := domain.ReqInfoSlot{Name: "A1", Date: s}
 	rabbitConn, err := connection.New(constants.AMQPURL)
+	rabbitConn.PurgeAll()
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReqInfo, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
@@ -88,8 +87,6 @@ func TestRequestInfoSlots(t *testing.T) {
 	done, err := spaceRepo.RequestInfoSlots(data)
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.Equal(done, myResponse, "Should be positive")
-	chReqInfo.QueueDelete(constants.REQUEST, true, false, true)
-	chReqInfo.QueueDelete(constants.REPLY, true, false, true)
 }
 
 func TestRequestInfoSlotsMultiple(t *testing.T) {
@@ -99,6 +96,7 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 	s := a.Format("2006-01-02")
 	data := domain.ReqInfoSlot{Name: "A1", Date: s}
 	rabbitConn, err := connection.New(constants.AMQPURL)
+	rabbitConn.PurgeAll()
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReqInfo, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
@@ -160,8 +158,6 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 	done, err = spaceRepo.RequestInfoSlots(data)
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.Equal(done, myResponse, "Should be positive")
-	chReqInfo.QueueDelete(constants.REQUEST, true, false, true)
-	chReqInfo.QueueDelete(constants.REPLY, true, false, true)
 }
 func TestReserve(t *testing.T) {
 	//t.Skip() //remove for activating it
@@ -169,6 +165,7 @@ func TestReserve(t *testing.T) {
 	a := time.Now().Local()
 	s := a.Format("2006-01-02")
 	rabbitConn, err := connection.New(constants.AMQPURL)
+	rabbitConn.PurgeAll()
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReserve, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
@@ -208,8 +205,6 @@ func TestReserve(t *testing.T) {
 	done, err := spaceRepo.Reserve("", domain.Hour{Hour: 12, Min: 30}, domain.Hour{Hour: 12, Min: 30}, s, "Iñigol", "")
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.Equal(done, "1", "Should be true")
-	chReserve.QueueDelete(constants.REQUEST, true, false, true)
-	chReserve.QueueDelete(constants.REPLY, true, false, true)
 }
 
 func TestReserveBatch(t *testing.T) {
@@ -218,6 +213,7 @@ func TestReserveBatch(t *testing.T) {
 	a := time.Now().Local()
 	s := a.Format("2006-01-02")
 	rabbitConn, err := connection.New(constants.AMQPURL)
+	rabbitConn.PurgeAll()
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chBatch, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
@@ -257,14 +253,13 @@ func TestReserveBatch(t *testing.T) {
 	done, err := spaceRepo.ReserveBatch([]string{}, domain.Hour{Hour: 12, Min: 30}, domain.Hour{Hour: 13, Min: 30}, []string{s}, "Iñigol")
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.NotEqual(done, "-1", "Should be positive")
-	chBatch.QueueDelete(constants.REQUEST, true, false, true)
-	chBatch.QueueDelete(constants.REPLY, true, false, true)
 }
 
 func TestFilterBy(t *testing.T) {
 	//t.Skip() //remove for activating it
 	assert := assert.New(t)
 	rabbitConn, err := connection.New(constants.AMQPURL)
+	rabbitConn.PurgeAll()
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReserve, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
@@ -311,6 +306,4 @@ func TestFilterBy(t *testing.T) {
 	messageRecieved, err := spaceRepo.FilterBy(domain.SpaceFilterParams{Capacity: 5, Day: "2022-01-02", Hour: domain.Hour{Hour: 12, Min: 0},Floor: "1", Building: "Ada"})
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.Equal(messageRecieved, messageSent, "Should be true")
-	chReserve.QueueDelete(constants.REQUEST, true, false, true)
-	chReserve.QueueDelete(constants.REPLY, true, false, true)
 }
