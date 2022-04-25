@@ -6,6 +6,7 @@ const (
 )
 
 const (
+	PING           = "ping"
 	REQUEST        = "request"
 	REPLY          = "reply"
 	RESERVE        = "realizar-reserva"
