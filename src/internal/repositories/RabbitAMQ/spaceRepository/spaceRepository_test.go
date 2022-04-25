@@ -162,6 +162,7 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 	}
 	corrId := "-1"
 	go func() {
+		i := 0
 		for resp := range msgs {
 			corrId = resp.CorrelationId
 			response, _ := json.Marshal(myResponse)
@@ -176,7 +177,10 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 					Body:          response,
 				})
 			//resp.Ack(false)
+			i++
+			if (i>=3){
 			break
+			}
 		}
 	}()
 
