@@ -71,10 +71,10 @@ func (conn *Connection) PurgeAll() (error) {
 			queues[i] += "_test"
 		}
 	}
-	nrep, error := ch.QueuePurge(queues[0], true)
+	nrep, error := ch.QueuePurge(queues[0], false)
 	if nrep < 0 {
 		return error
 	}
-	_, error = ch.QueuePurge(queues[1], true)
+	_, error = ch.QueuePurge(queues[1], false)
 	return error
 }
