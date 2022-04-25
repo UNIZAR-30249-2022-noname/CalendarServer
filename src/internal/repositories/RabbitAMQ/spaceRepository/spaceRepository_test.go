@@ -30,7 +30,6 @@ func checkMode(queues []string) {
 func TestDeleteQueueBeforeTest(t *testing.T) {
 	assert := assert.New(t)
 	rabbitConn, err := connection.New(constants.AMQPURL)
-	rabbitConn.PurgeAll()
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReqInfo, err := rabbitConn.NewChannel()
 	chReqInfo.QueueDelete(constants.REQUEST, true, false, true)
@@ -38,7 +37,7 @@ func TestDeleteQueueBeforeTest(t *testing.T) {
 }
 
 func TestRequestInfoSlots(t *testing.T) {
-	t.Skip() //remove for activating it
+	//t.Skip() //remove for activating it
 	queues := []string{constants.REQUEST, constants.REPLY}
 	checkMode(queues)
 	assert := assert.New(t)
@@ -101,7 +100,8 @@ func TestRequestInfoSlots(t *testing.T) {
 					CorrelationId: corrId,
 					Body:          response,
 				})
-				resp.Ack(false)
+				//resp.Ack(false)
+				break
 		}
 	}()
 
@@ -176,6 +176,7 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 					Body:          response,
 				})
 			resp.Ack(false)
+			break
 		}
 	}()
 
@@ -228,6 +229,7 @@ func TestReserve(t *testing.T) {
 					Body:          response,
 				})
 			resp.Ack(false)
+			break
 		}
 	}()
 
@@ -278,6 +280,7 @@ func TestReserveBatch(t *testing.T) {
 					Body:          response,
 				})
 			resp.Ack(false)
+			break
 		}
 	}()
 
@@ -333,6 +336,7 @@ func TestFilterBy(t *testing.T) {
 					Body:          response,
 				})
 			resp.Ack(false)
+			break
 		}
 	}()
 
