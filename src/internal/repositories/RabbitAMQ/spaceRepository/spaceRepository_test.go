@@ -34,7 +34,6 @@ func TestDeleteQueueBeforeTest(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 }
 
-/*
 func TestRequestInfoSlots(t *testing.T) {
 	//t.Skip() //remove for activating it
 	queues := []string{constants.REQUEST, constants.REPLY}
@@ -178,8 +177,6 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.Equal(done, myResponse, "Should be positive")
 }
-*/
-
 func TestReserve(t *testing.T) {
 	//t.Skip() //remove for activating it
 	queues := []string{constants.REQUEST, constants.REPLY}
