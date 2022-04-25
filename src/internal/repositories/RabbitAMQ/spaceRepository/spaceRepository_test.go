@@ -47,7 +47,7 @@ func TestRequestInfoSlots(t *testing.T) {
 		SlotData: domain.Space{
 			Name:        "A1",
 			Capacity:    5,
-			Description: "Lorem ipsum no leas mas porque esto es dummy text",
+			Description: "Lorem ipsum no leas mas porque esto es dummy text requestinfoslots",
 			Building:    "Ada",
 			Floor:       "baja",
 			Kind:        "aula",
@@ -79,7 +79,7 @@ func TestRequestInfoSlots(t *testing.T) {
 					CorrelationId: corrId,
 					Body:          response,
 				})
-			//resp.Ack(false)
+				resp.Ack(false)
 		}
 	}()
 
@@ -116,7 +116,7 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 		SlotData: domain.Space{
 			Name:        "A1",
 			Capacity:    5,
-			Description: "Lorem ipsum no leas mas porque esto es dummy text",
+			Description: "Lorem ipsum no leas mas porque esto es dummy text multiple",
 			Building:    "Ada",
 			Floor:       "baja",
 			Kind:        "aula",
@@ -148,7 +148,7 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 					CorrelationId: corrId,
 					Body:          response,
 				})
-			//resp.Ack(false)
+			resp.Ack(false)
 		}
 	}()
 
