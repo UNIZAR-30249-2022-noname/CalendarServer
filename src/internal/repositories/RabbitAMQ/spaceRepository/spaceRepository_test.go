@@ -112,7 +112,7 @@ func TestRequestInfoSlots(t *testing.T) {
 }
 
 func TestRequestInfoSlotsMultiple(t *testing.T) {
-	//t.Skip() //remove for activating it
+	t.Skip() //remove for activating it
 	queues := []string{constants.REQUEST, constants.REPLY}
 	checkMode(queues)
 	assert := assert.New(t)
@@ -178,7 +178,7 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 				})
 			//resp.Ack(false)
 			i++
-			if (i>=3){
+			if (i>3){
 			break
 			}
 		}
