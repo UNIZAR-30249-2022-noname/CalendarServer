@@ -23,7 +23,7 @@ func TestDeleteQueueBeforeTest(t *testing.T) {
 }
 
 func TestGetAllIssues(t *testing.T) {
-	t.Skip() //remove for activating it
+	//t.Skip() //remove for activating it
 	assert := assert.New(t)
 	rabbitConn, err := connection.New(constants.AMQPURL)
 	assert.Equal(err, nil, "Shouldn't be an error")

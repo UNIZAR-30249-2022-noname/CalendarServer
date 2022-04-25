@@ -187,7 +187,7 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 	assert.Equal(done, myResponse, "Should be positive")
 }
 func TestReserve(t *testing.T) {
-//	t.Skip() //remove for activating it
+	t.Skip() //remove for activating it
 	queues := []string{constants.REQUEST, constants.REPLY}
 	checkMode(queues)
 	assert := assert.New(t)
