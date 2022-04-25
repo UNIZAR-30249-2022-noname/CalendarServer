@@ -23,7 +23,7 @@ func TestDeleteQueueBeforeTest(t *testing.T) {
 }
 
 func TestGetAllIssues(t *testing.T) {
-	//t.Skip() //remove for activating it
+	t.Skip() //remove for activating it
 	assert := assert.New(t)
 	rabbitConn, err := connection.New(constants.AMQPURL)
 	assert.Equal(err, nil, "Shouldn't be an error")
@@ -89,7 +89,7 @@ func TestGetAllIssues(t *testing.T) {
 
 
 func TestDeleteIssue(t *testing.T) {
-	//t.Skip() //remove for activating it
+	t.Skip() //remove for activating it
 	assert := assert.New(t)
 	rabbitConn, err := connection.New(constants.AMQPURL)
 	assert.Equal(err, nil, "Shouldn't be an error")
@@ -144,7 +144,7 @@ func TestDeleteIssue(t *testing.T) {
 }
 
 func TestCreateIssue(t *testing.T) {
-	//t.Skip() //remove for activating it
+	t.Skip() //remove for activating it
 	assert := assert.New(t)
 	rabbitConn, err := connection.New(constants.AMQPURL)
 	assert.Equal(err, nil, "Shouldn't be an error")
@@ -209,7 +209,7 @@ func TestCreateIssue(t *testing.T) {
 }
 
 func TestChangeState(t *testing.T) {
-	//t.Skip() //remove for activating it
+	t.Skip() //remove for activating it
 	assert := assert.New(t)
 	rabbitConn, err := connection.New(constants.AMQPURL)
 	assert.Equal(err, nil, "Shouldn't be an error")
