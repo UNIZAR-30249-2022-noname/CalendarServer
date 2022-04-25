@@ -2,6 +2,7 @@ package spacerepositoryrabbitamq_test
 
 import (
 	"encoding/json"
+	"os"
 	"testing"
 	"time"
 
@@ -13,6 +14,19 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const (
+	ENV_MODE     = "GATEWAY_MODE"
+	testExtesion = "_test"
+)
+
+func checkMode(queues []string) {
+	if os.Getenv(ENV_MODE) == constants.TEST_MODE {
+		for i := 0; i < len(queues); i++ {
+			queues[i] += testExtesion
+		}
+	}
+}
+
 func TestDeleteQueueBeforeTest(t *testing.T) {
 	assert := assert.New(t)
 	rabbitConn, err := connection.New(constants.AMQPURL)
@@ -22,6 +36,8 @@ func TestDeleteQueueBeforeTest(t *testing.T) {
 
 func TestRequestInfoSlots(t *testing.T) {
 	//t.Skip() //remove for activating it
+	queues := []string{constants.REQUEST, constants.REPLY}
+	checkMode(queues)
 	assert := assert.New(t)
 	a := time.Now().Local()
 	s := a.Format("2006-01-02")
@@ -35,7 +51,7 @@ func TestRequestInfoSlots(t *testing.T) {
 
 	//Simulated server
 	msgs, _ := chReqInfo.Consume(
-		constants.REQUEST, // queue
+		queues[0], // queue
 		"",                // consumer
 		true,              // auto-ack
 		false,             // exclusive
@@ -71,7 +87,7 @@ func TestRequestInfoSlots(t *testing.T) {
 			response, _ := json.Marshal(myResponse)
 			chReqInfo.Publish(
 				"",              // exchange
-				constants.REPLY, // routing key
+				queues[1], // routing key
 				false,           // mandatory
 				false,           // immediate
 				amqp.Publishing{
@@ -91,6 +107,8 @@ func TestRequestInfoSlots(t *testing.T) {
 
 func TestRequestInfoSlotsMultiple(t *testing.T) {
 	//t.Skip() //remove for activating it
+	queues := []string{constants.REQUEST, constants.REPLY}
+	checkMode(queues)
 	assert := assert.New(t)
 	a := time.Now().Local()
 	s := a.Format("2006-01-02")
@@ -104,7 +122,7 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 
 	//Simulated server
 	msgs, _ := chReqInfo.Consume(
-		constants.REQUEST, // queue
+		queues[0], // queue
 		"",                // consumer
 		true,              // auto-ack
 		false,             // exclusive
@@ -140,7 +158,7 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 			response, _ := json.Marshal(myResponse)
 			chReqInfo.Publish(
 				"",              // exchange
-				constants.REPLY, // routing key
+				queues[1], // routing key
 				false,           // mandatory
 				false,           // immediate
 				amqp.Publishing{
@@ -161,6 +179,8 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 }
 func TestReserve(t *testing.T) {
 	//t.Skip() //remove for activating it
+	queues := []string{constants.REQUEST, constants.REPLY}
+	checkMode(queues)
 	assert := assert.New(t)
 	a := time.Now().Local()
 	s := a.Format("2006-01-02")
@@ -169,13 +189,13 @@ func TestReserve(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReserve, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, constants.REQUEST)
+	err = connection.PrepareChannel(chReserve, queues[0])
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, constants.REPLY)
+	err = connection.PrepareChannel(chReserve, queues[1])
 	assert.Equal(err, nil, "Shouldn't be an error")
 	spaceRepo, _ := spaceRepo.New(chReserve)
 	msgs, _ := chReserve.Consume(
-		constants.REQUEST, // queue
+		queues[0], // queue
 		"",                // consumer
 		false,             // auto-ack
 		false,             // exclusive
@@ -190,7 +210,7 @@ func TestReserve(t *testing.T) {
 			response, _ := json.Marshal("1")
 			chReserve.Publish(
 				"",              // exchange
-				constants.REPLY, // routing key
+				queues[1], // routing key
 				false,           // mandatory
 				false,           // immediate
 				amqp.Publishing{
@@ -209,6 +229,8 @@ func TestReserve(t *testing.T) {
 
 func TestReserveBatch(t *testing.T) {
 	//t.Skip() //remove for activating it
+	queues := []string{constants.REQUEST, constants.REPLY}
+	checkMode(queues)
 	assert := assert.New(t)
 	a := time.Now().Local()
 	s := a.Format("2006-01-02")
@@ -217,13 +239,13 @@ func TestReserveBatch(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chBatch, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chBatch, constants.REQUEST)
+	err = connection.PrepareChannel(chBatch, queues[0])
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chBatch, constants.REPLY)
+	err = connection.PrepareChannel(chBatch, queues[1])
 	assert.Equal(err, nil, "Shouldn't be an error")
 	spaceRepo, err := spaceRepo.New(chBatch)
 	msgs, _ := chBatch.Consume(
-		constants.REQUEST, // queue
+		queues[0], // queue
 		"",                // consumer
 		false,             // auto-ack
 		false,             // exclusive
@@ -238,7 +260,7 @@ func TestReserveBatch(t *testing.T) {
 			response, _ := json.Marshal("1")
 			chBatch.Publish(
 				"",              // exchange
-				constants.REPLY, // routing key
+				queues[1], // routing key
 				false,           // mandatory
 				false,           // immediate
 				amqp.Publishing{
@@ -256,20 +278,22 @@ func TestReserveBatch(t *testing.T) {
 }
 
 func TestFilterBy(t *testing.T) {
-	//t.Skip() //remove for activating it
+	//t.Skip() //remove for activating itç
+	queues := []string{constants.REQUEST, constants.REPLY}
+	checkMode(queues)
 	assert := assert.New(t)
 	rabbitConn, err := connection.New(constants.AMQPURL)
 	rabbitConn.PurgeAll()
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReserve, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, constants.REQUEST)
+	err = connection.PrepareChannel(chReserve, queues[0])
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, constants.REPLY)
+	err = connection.PrepareChannel(chReserve, queues[1])
 	assert.Equal(err, nil, "Shouldn't be an error")
 	spaceRepo, _ := spaceRepo.New(chReserve)
 	msgs, _ := chReserve.Consume(
-		constants.REQUEST, // queue
+		queues[0], // queue
 		"",                // consumer
 		false,             // auto-ack
 		false,             // exclusive
@@ -291,7 +315,7 @@ func TestFilterBy(t *testing.T) {
 			response, _ := json.Marshal(messageSent)
 			chReserve.Publish(
 				"",              // exchange
-				constants.REPLY, // routing key
+				queues[1], // routing key
 				false,           // mandatory
 				false,           // immediate
 				amqp.Publishing{
