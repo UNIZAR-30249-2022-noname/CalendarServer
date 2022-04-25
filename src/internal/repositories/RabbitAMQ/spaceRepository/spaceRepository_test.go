@@ -32,6 +32,9 @@ func TestDeleteQueueBeforeTest(t *testing.T) {
 	rabbitConn, err := connection.New(constants.AMQPURL)
 	rabbitConn.PurgeAll()
 	assert.Equal(err, nil, "Shouldn't be an error")
+	chReqInfo, err := rabbitConn.NewChannel()
+	chReqInfo.QueueDelete(constants.REQUEST, true, false, true)
+	chReqInfo.QueueDelete(constants.REPLY, true, false, true)
 }
 
 func TestRequestInfoSlots(t *testing.T) {
@@ -47,6 +50,9 @@ func TestRequestInfoSlots(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReqInfo, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
+	err = connection.PrepareChannel(chReqInfo, queues[0])
+	assert.Equal(err, nil, "Shouldn't be an error")
+	err = connection.PrepareChannel(chReqInfo, queues[1])
 	spaceRepo, err := spaceRepo.New(chReqInfo)
 
 	//Simulated server
@@ -118,6 +124,9 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReqInfo, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
+	err = connection.PrepareChannel(chReqInfo, queues[0])
+	assert.Equal(err, nil, "Shouldn't be an error")
+	err = connection.PrepareChannel(chReqInfo, queues[1])
 	spaceRepo, err := spaceRepo.New(chReqInfo)
 
 	//Simulated server
