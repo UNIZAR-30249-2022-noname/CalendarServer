@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 
@@ -94,4 +95,23 @@ func (hdl *HTTPHandler) ChangeStateIssue(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
 	}
 
+}
+
+//DownloadIssues is the handler for downloading the issues
+//@Sumary Change state  issue
+//@Description Create the state of a issue
+//@Tag Issues
+//@Produce text/plain
+//@Success 200 {object} []byte
+//@Failure 400,404 {object} ErrorHttp
+//@Router /downloadIssues [get]
+func (hdl *HTTPHandler) DownloadIssues(c *gin.Context) {
+	byteFile, err := ioutil.ReadFile("C:/Users/Equipo/Desktop/LIS/Gateway/src/internal/handlers/prueba/file.pdf")
+	
+	fmt.Print("AAAAAAAAAAAAAaa" + string(byteFile))
+	if err == nil {
+		c.JSON(http.StatusOK, byteFile)
+	} else {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: err.Error()})
+	}
 }
