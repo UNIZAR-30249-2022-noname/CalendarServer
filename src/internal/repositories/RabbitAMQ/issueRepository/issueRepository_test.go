@@ -76,6 +76,7 @@ func TestGetAllIssues(t *testing.T) {
 					Body:          response,
 				})
 			resp.Ack(false)
+			break
 		}
 	}()
 
@@ -128,6 +129,9 @@ func TestDeleteIssue(t *testing.T) {
 				})
 			resp.Ack(false)
 			i++
+			if i>=2 {
+			break
+			}
 		}
 	}()
 
@@ -180,6 +184,9 @@ func TestCreateIssue(t *testing.T) {
 				})
 			resp.Ack(false)
 			i++
+			if i>=2 {
+				break
+				}
 		}
 	}()
 	
@@ -242,6 +249,9 @@ func TestChangeState(t *testing.T) {
 				})
 			resp.Ack(false)
 			i++
+			if i>=2 {
+				break
+				}
 		}
 	}()
 	

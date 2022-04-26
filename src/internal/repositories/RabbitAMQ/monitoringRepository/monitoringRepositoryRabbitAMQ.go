@@ -1,50 +1,29 @@
 package monitoringrepositoryrabbitamq
 
 import (
-	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
-	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/auxFuncs"
+	rabbitamqRepository "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/streadway/amqp"
 )
 
-type HorarioRepositorioRabbit struct {
-	ch *amqp.Channel
+type MonitoringRepositorioRabbit struct {
+	*rabbitamqRepository.Repository
 }
 
-func New(ch *amqp.Channel) *HorarioRepositorioRabbit {
-	return &HorarioRepositorioRabbit{ch}
-}
-
-func (repo *HorarioRepositorioRabbit) Ping() (bool, error) {
-	q, err := repo.ch.QueueDeclare(
-		"rpc_queue", // name
-		false,       // durable
-		false,       // delete when unused
-		false,       // exclusive
-		false,       // no-wait
-		nil,         // arguments
-	)
-	_ = q
+func New(ch *amqp.Channel) *MonitoringRepositorioRabbit {
+	queues := []string{constants.REQUEST, constants.REPLY}
+	rp, err := rabbitamqRepository.New(ch, queues)
 	if err != nil {
-		return false, apperrors.ErrConn
+		return nil
 	}
-	err = repo.ch.Qos(
-		1,     // prefetch count
-		0,     // prefetch size
-		false, // global
-	)
-	if err != nil {
-		return false, apperrors.ErrConn
-	}
-	err = repo.ch.Publish(
-		"",          // exchange
-		"rpc_queue", // routing key
-		false,       // mandatory
-		false,       // immediate
-		amqp.Publishing{
-			ContentType:   "text/plain",
-			CorrelationId: auxFuncs.RandomString(10),
-			Body:          []byte("Hola, esto es una prueba, Guapo el que lo lea"),
-		})
-	return true, err
+	return &MonitoringRepositorioRabbit{rp}
 }
 
+func (repo *MonitoringRepositorioRabbit) Ping() (bool, error) {
+	_, err := repo.RCPcallJSON("", constants.PING)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}

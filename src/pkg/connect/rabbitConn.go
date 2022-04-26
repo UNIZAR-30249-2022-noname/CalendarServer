@@ -1,7 +1,10 @@
 package connect
 
 import (
+	"os"
+
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/streadway/amqp"
 )
 
@@ -58,4 +61,20 @@ func PrepareChannel(ch *amqp.Channel, qname string) (error){
 		return apperrors.ErrConn
 	}
 	return nil
+}
+
+func (conn *Connection) PurgeAll() (error) {
+	ch, _ := conn.NewChannel()
+	queues := []string{constants.REQUEST, constants.REPLY}
+	if os.Getenv("GATEWAY_MODE") == constants.TEST_MODE {
+		for i := 0; i < len(queues); i++ {
+			queues[i] += "_test"
+		}
+	}
+	nrep, error := ch.QueuePurge(queues[0], false)
+	if nrep < 0 {
+		return error
+	}
+	_, error = ch.QueuePurge(queues[1], false)
+	return error
 }

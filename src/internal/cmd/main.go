@@ -29,6 +29,10 @@ func config() (handlers.HTTPHandler, error) {
 	if err != nil {
 		panic(err)
 	}
+	rabbitConn.PurgeAll()
+	if err != nil {
+		panic(err)
+	}
 	chMonitoring, err := rabbitConn.NewChannel()
 	if err != nil {
 		panic(err)
