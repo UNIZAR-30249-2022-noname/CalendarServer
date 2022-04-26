@@ -110,7 +110,8 @@ func (hdl *HTTPHandler) DownloadIssues(c *gin.Context) {
 	
 	fmt.Print("AAAAAAAAAAAAAaa" + string(byteFile))
 	if err == nil {
-		c.JSON(http.StatusOK, byteFile)
+		c.Header("Content-Disposition", "attachment; filename=file-name.pdf")
+		c.Data(http.StatusOK, "application/octet-stream", byteFile)
 	} else {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: err.Error()})
 	}
