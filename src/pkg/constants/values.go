@@ -15,3 +15,7 @@ const (
 	SATURDAY  = 5
 	SUNDAY    = 6
 )
+
+const (
+	TEST_MODE = "test"
+)
