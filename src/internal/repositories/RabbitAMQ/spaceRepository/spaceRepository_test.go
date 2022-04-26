@@ -37,7 +37,7 @@ func TestDeleteQueueBeforeTest(t *testing.T) {
 }
 
 func TestRequestInfoSlots(t *testing.T) {
-	//t.Skip() //remove for activating it
+	t.Skip() //remove for activating it
 	queues := []string{constants.REQUEST, constants.REPLY}
 	checkMode(queues)
 	assert := assert.New(t)
@@ -112,7 +112,7 @@ func TestRequestInfoSlots(t *testing.T) {
 }
 
 func TestRequestInfoSlotsMultiple(t *testing.T) {
-	//t.Skip() //remove for activating it
+	t.Skip() //remove for activating it
 	queues := []string{constants.REQUEST, constants.REPLY}
 	checkMode(queues)
 	assert := assert.New(t)
@@ -192,7 +192,7 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 	assert.Equal(done, myResponse, "Should be positive")
 }
 func TestReserve(t *testing.T) {
-	//t.Skip() //remove for activating it
+	t.Skip() //remove for activating it
 	queues := []string{constants.REQUEST, constants.REPLY}
 	checkMode(queues)
 	assert := assert.New(t)
@@ -243,7 +243,7 @@ func TestReserve(t *testing.T) {
 }
 
 func TestReserveBatch(t *testing.T) {
-	//t.Skip() //remove for activating it
+	t.Skip() //remove for activating it
 	queues := []string{constants.REQUEST, constants.REPLY}
 	checkMode(queues)
 	assert := assert.New(t)
@@ -294,7 +294,7 @@ func TestReserveBatch(t *testing.T) {
 }
 
 func TestFilterBy(t *testing.T) {
-	//t.Skip() //remove for activating itç
+	t.Skip() //remove for activating itç
 	queues := []string{constants.REQUEST, constants.REPLY}
 	checkMode(queues)
 	assert := assert.New(t)
