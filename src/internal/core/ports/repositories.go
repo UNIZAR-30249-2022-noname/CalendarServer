@@ -10,7 +10,7 @@ type SchedulerRepository interface {
 	DeleteEntry(req domain.Entry) error
 	ListAllDegrees() ([]domain.DegreeDescription, error)
 	DeleteAllEntries(terna domain.DegreeSet) error
-	GetEntries(domain.DegreeSet) ([]domain.Entry, error)
+	GetEntries(req domain.DegreeSet) ([]domain.Entry, error)
 }
 
 type UploadDataRepository interface {

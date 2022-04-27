@@ -21,6 +21,10 @@ const (
 	REQINFOSLOT       = "obtener-informacion-espacio"
 	GETAVAILABLEHOURS = "obtener-horas disponibles"
 	UPDATESCHEDULER   = "actualizar-calendario"
+	DELETEENTRY       = "eliminar-entrada"
+	LISTALLDEGREES    = "listar-titulaciones"
+	DELETEALLENTRIES  = "eliminar-todas-las-eentradas"
+	GETENTRIES        = "obtener-entradas"
 )
 
 /*TODO

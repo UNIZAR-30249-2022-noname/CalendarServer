@@ -52,7 +52,33 @@ func (repo *SchedulerRepository) UpdateScheduler(entries []domain.Entry, terna d
 	return reply.id, nil
 
 }
-func (repo *SchedulerRepository) DeleteEntry(domain.Entry) error                      {}
-func (repo *SchedulerRepository) ListAllDegrees() ([]domain.DegreeDescription, error) {}
-func (repo *SchedulerRepository) DeleteAllEntries(terna domain.DegreeSet) error       {}
-func (repo *SchedulerRepository) GetEntries(domain.DegreeSet) ([]domain.Entry, error) {}
+func (repo *SchedulerRepository) DeleteEntry(req domain.Entry) error {
+	_, err := repo.RCPcallJSON(req, constants.DELETEENTRY)
+	return err
+
+}
+func (repo *SchedulerRepository) ListAllDegrees() ([]domain.DegreeDescription, error) {
+	var degrees = []domain.DegreeDescription{}
+	availableHoursJSON, err := repo.RCPcallJSON(nil, constants.LISTALLDEGREES)
+	if err != nil {
+		return []domain.DegreeDescription{}, err
+	}
+	json.Unmarshal(availableHoursJSON, &degrees)
+	return degrees, nil
+
+}
+func (repo *SchedulerRepository) DeleteAllEntries(terna domain.DegreeSet) error {
+	_, err := repo.RCPcallJSON(terna, constants.DELETEALLENTRIES)
+	return err
+}
+func (repo *SchedulerRepository) GetEntries(req domain.DegreeSet) ([]domain.Entry, error) {
+
+	var entries = []domain.Entry{}
+	availableHoursJSON, err := repo.RCPcallJSON(req, constants.GETENTRIES)
+	if err != nil {
+		return []domain.Entry{}, err
+	}
+	json.Unmarshal(availableHoursJSON, &entries)
+	return entries, nil
+
+}
