@@ -5,9 +5,9 @@ import "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 //SchedulerRepository is the interface which provide access to all
 //scheduler data related
 type SchedulerRepository interface {
-	GetAvailableHours(domain.DegreeSet) ([]domain.AvailableHours, error)
-	CreateNewEntry(domain.Entry) error
-	DeleteEntry(domain.Entry) error
+	GetAvailableHours(req domain.DegreeSet) ([]domain.AvailableHours, error)
+	UpdateScheduler(entries []domain.Entry, terna domain.DegreeSet) (string, error)
+	DeleteEntry(req domain.Entry) error
 	ListAllDegrees() ([]domain.DegreeDescription, error)
 	DeleteAllEntries(terna domain.DegreeSet) error
 	GetEntries(domain.DegreeSet) ([]domain.Entry, error)
