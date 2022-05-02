@@ -19,7 +19,7 @@ const (
 	DELETEISSUE       = "eliminar-incidencia"
 	UPDATEISSUE       = "modificar-estado-incidencia"
 	REQINFOSLOT       = "obtener-informacion-espacio"
-	GETAVAILABLEHOURS = "obtener-horas disponibles"
+	GETAVAILABLEHOURS = "obtener-horas-disponibles"
 	UPDATESCHEDULER   = "actualizar-calendario"
 	DELETEENTRY       = "eliminar-entrada"
 	LISTALLDEGREES    = "listar-titulaciones"
