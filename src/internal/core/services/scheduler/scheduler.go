@@ -1,4 +1,4 @@
-package horariosrv
+package scheduler
 
 import (
 	"time"
