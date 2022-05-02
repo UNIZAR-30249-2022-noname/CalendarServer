@@ -28,6 +28,12 @@ type errorMessageQueue struct {
 	IsDisposed bool   `json:"isDisposed"`
 }
 
+type dataMessageQueue struct {
+	Response struct {
+		Result []byte `json:"resultado"`
+	} `json:"response"`
+}
+
 /*------------------------------------------------------------------------------------------------------*/
 type Repository struct {
 	ch   *amqp.Channel
@@ -111,5 +117,12 @@ func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, erro
 	if errorMsg.Err != "" {
 		return nil, apperrors.ErrInternal
 	}
-	return data, err
+
+	reply := dataMessageQueue{}
+	json.Unmarshal(data, &reply)
+	if errorMsg.Err != "" {
+		return nil, apperrors.ErrInternal
+	}
+
+	return reply.Response.Result, err
 }
