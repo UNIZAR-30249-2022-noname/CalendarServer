@@ -6,9 +6,11 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/monitoring"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/scheduler"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/space"
+	uploaddata "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/uploadData"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/users"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/handlers"
 	usersrepositorymemory "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/Memory/usersRepository"
+	uploadDatarepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/UploadDataRepository"
 	issuerepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/issueRepository"
 	monitoringrepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/monitoringRepository"
 	schedulerrepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/schedulerRepository"
@@ -59,6 +61,11 @@ func config() (handlers.HTTPHandler, error) {
 	if err != nil {
 		//TODO
 	}
+	chUploadData, err := rabbitConn.NewChannel()
+	uploadDataRepo, err := uploadDatarepositoryrabbitamq.New(chUploadData)
+	if err != nil {
+		//TODO
+	}
 
 	chScheduler, err := rabbitConn.NewChannel()
 	if err != nil {
@@ -75,9 +82,17 @@ func config() (handlers.HTTPHandler, error) {
 		Users:      users.New(usersRepo),
 		Spaces:     space.New(spaceRepo),
 		Issues:     issue.New(issuesRepo),
+		UploadData: uploaddata.New(uploadDataRepo),
 		Scheduler:  scheduler.New(schedulerRepo),
 	}, nil
 
+}
+
+func CorsConfig() gin.HandlerFunc {
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AllowHeaders = append(config.AllowHeaders, "X-Requested-With") 
+	return cors.New(config)
 }
 
 //SetupRouter is a func which bind each uri with a handler function
@@ -85,7 +100,7 @@ func SetupRouter() *gin.Engine {
 
 	r := gin.Default()
 
-	r.Use(cors.Default())
+	r.Use(CorsConfig())
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	handler, err := config()
@@ -97,6 +112,7 @@ func SetupRouter() *gin.Engine {
 	r.GET(constants.FILTER_SPACES, handler.FilterBy)
 	r.GET(constants.REQUEST_INFO_SLOTS, handler.RequestInfoSlots)
 	r.POST(constants.RESERVE_SPACE, handler.Reserve)
+	r.POST(constants.UPLOAD_DATA_DEGREES_URL, handler.UpdateByCSV)
 	r.GET(constants.RESERVE_BATCH, handler.ReserveBatch)
 
 	r.GET(constants.CANCEL_RESERVE, handler.CancelReserve)

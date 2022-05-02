@@ -515,11 +515,12 @@ paths:
       description: The request will update the database creating degrees, subjects,
         years, groups and hours
       parameters:
-      - description: csv file
-        in: formData
+      - description: csv
+        in: body
         name: csv
         required: true
-        type: file
+        schema:
+          type: string
       produces:
       - application/json
       responses:
