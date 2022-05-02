@@ -45,7 +45,6 @@ func config() (handlers.HTTPHandler, error) {
 	if err != nil {
 		//TODO
 	}
-	//spaceRepoAMQ, _ := spacerepositoryrabbitamq.New(chSpaces)
 	spaceRepo, err := spacerepositoryrabbitamq.New(chSpace)
 	if err != nil {
 		//TODO

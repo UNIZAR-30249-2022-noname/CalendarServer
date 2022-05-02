@@ -2,7 +2,6 @@ package rabbitamqRepository
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
@@ -101,9 +100,6 @@ func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, erro
 	}
 
 	for resp := range msgs {
-		fmt.Println(resp.Body)
-		myString := string(resp.Body[:])
-		fmt.Println(myString)
 		if corrId == resp.CorrelationId {
 			data = resp.Body
 			resp.Ack(false)

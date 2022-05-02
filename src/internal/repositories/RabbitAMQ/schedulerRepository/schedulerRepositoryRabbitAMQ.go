@@ -23,13 +23,13 @@ func New(ch *amqp.Channel) (*SchedulerRepository, error) {
 }
 
 func (repo *SchedulerRepository) GetAvailableHours(req domain.DegreeSet) ([]domain.AvailableHours, error) {
-	var availableHours = []domain.AvailableHours{}
+	var reply rabbitamqRepository.DataMessageQueue[[]domain.AvailableHours]
 	availableHoursJSON, err := repo.RCPcallJSON(req, constants.GETAVAILABLEHOURS)
 	if err != nil {
 		return []domain.AvailableHours{}, err
 	}
-	json.Unmarshal(availableHoursJSON, &availableHours)
-	return availableHours, nil
+	json.Unmarshal(availableHoursJSON, &reply)
+	return reply.Response.Result, nil
 
 }
 func (repo *SchedulerRepository) UpdateScheduler(entries []domain.Entry, terna domain.DegreeSet) (string, error) {
@@ -41,15 +41,13 @@ func (repo *SchedulerRepository) UpdateScheduler(entries []domain.Entry, terna d
 		terna:   terna,
 	}
 
-	reply := struct {
-		id string
-	}{}
+	var reply rabbitamqRepository.DataMessageQueue[string]
 	availableHoursJSON, err := repo.RCPcallJSON(req, constants.UPDATESCHEDULER)
 	if err != nil {
 		return "", err
 	}
 	json.Unmarshal(availableHoursJSON, &reply)
-	return reply.id, nil
+	return reply.Response.Result, nil
 
 }
 func (repo *SchedulerRepository) DeleteEntry(req domain.Entry) error {
@@ -58,13 +56,13 @@ func (repo *SchedulerRepository) DeleteEntry(req domain.Entry) error {
 
 }
 func (repo *SchedulerRepository) ListAllDegrees() ([]domain.DegreeDescription, error) {
-	var degrees = []domain.DegreeDescription{}
+	var reply rabbitamqRepository.DataMessageQueue[[]domain.DegreeDescription]
 	availableHoursJSON, err := repo.RCPcallJSON(nil, constants.LISTALLDEGREES)
 	if err != nil {
 		return []domain.DegreeDescription{}, err
 	}
-	json.Unmarshal(availableHoursJSON, &degrees)
-	return degrees, nil
+	json.Unmarshal(availableHoursJSON, &reply)
+	return reply.Response.Result, nil
 
 }
 func (repo *SchedulerRepository) DeleteAllEntries(terna domain.DegreeSet) error {
@@ -73,12 +71,12 @@ func (repo *SchedulerRepository) DeleteAllEntries(terna domain.DegreeSet) error 
 }
 func (repo *SchedulerRepository) GetEntries(req domain.DegreeSet) ([]domain.Entry, error) {
 
-	var entries = []domain.Entry{}
+	var reply rabbitamqRepository.DataMessageQueue[[]domain.Entry]
 	availableHoursJSON, err := repo.RCPcallJSON(req, constants.GETENTRIES)
 	if err != nil {
 		return []domain.Entry{}, err
 	}
-	json.Unmarshal(availableHoursJSON, &entries)
-	return entries, nil
+	json.Unmarshal(availableHoursJSON, &reply)
+	return reply.Response.Result, nil
 
 }
