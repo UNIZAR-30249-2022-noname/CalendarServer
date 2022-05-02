@@ -4,17 +4,17 @@ import (
 	"encoding/json"
 
 	rabbitamqRepository "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ"
+	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
-	"github.com/streadway/amqp"
 )
 
 type UploadDataRepository struct {
 	*rabbitamqRepository.Repository
 }
 
-func New(ch *amqp.Channel) (*UploadDataRepository, error) {
+func New(rabbitConn connection.Connection) (*UploadDataRepository, error) {
 	queues := []string{constants.REQUEST, constants.REPLY}
-	rp, err := rabbitamqRepository.New(ch, queues)
+	rp, err := rabbitamqRepository.New(rabbitConn, queues)
 	if err != nil {
 		return &UploadDataRepository{}, err
 	}

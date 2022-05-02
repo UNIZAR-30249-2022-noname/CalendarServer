@@ -6,17 +6,17 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	rabbitamqRepository "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
+	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
-	"github.com/streadway/amqp"
 )
 
 type IssueRepository struct {
 	*rabbitamqRepository.Repository
 }
 
-func New(ch *amqp.Channel) (*IssueRepository, error) {
+func New(rabbitConn connection.Connection) (*IssueRepository, error) {
 	queues := []string{constants.REQUEST, constants.REPLY}
-	rp, err := rabbitamqRepository.New(ch, queues)
+	rp, err := rabbitamqRepository.New(rabbitConn, queues)
 	if err != nil {
 		return &IssueRepository{}, err
 	}
