@@ -178,6 +178,7 @@ type SpaceFilterParams struct {
 }
 
 type Space struct {
+	Id 		 string `json:"id"`
 	Name     string `json:"name"`
 	Capacity int    `json:"capacity"`
 	Building string `json:"building"`

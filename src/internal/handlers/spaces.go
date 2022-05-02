@@ -42,15 +42,16 @@ func (hdl *HTTPHandler) Reserve(c *gin.Context) {
 //@Description Request the info of a space and its occupation
 //@Tag Users
 //@Produce json
-//@Param name query string true "space name or id"
+//@Param id query string true "space id"
 //@Param date query string true "date to request"
 //@Success 200 {object} domain.AllInfoSlot
 //@Failure 400,404 {object} ErrorHttp
 //@Router /requestInfoSlots/ [get]
 func (hdl *HTTPHandler) RequestInfoSlots(c *gin.Context) {
-	name := c.Query("name")
+	name := c.Query("id")
 	date := c.Query("date")
 
+	fmt.Println("id: " + name + " date: " + date)
 	allInfo, err := hdl.Spaces.RequestInfoSlots(domain.ReqInfoSlot{Name: name, Date: date})
 	if err == nil {
 		fmt.Println(name + " " + date)
