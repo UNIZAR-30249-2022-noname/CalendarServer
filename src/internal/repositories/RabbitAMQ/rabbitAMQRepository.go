@@ -28,16 +28,15 @@ type errorMessageQueue struct {
 	IsDisposed bool   `json:"isDisposed"`
 }
 
-type dataMessageQueue struct {
+type DataMessageQueue[T any] struct {
 	Response struct {
-		Result []byte `json:"resultado"`
+		Result T `json:"resultado"`
 	} `json:"response"`
 }
 
 /*------------------------------------------------------------------------------------------------------*/
 type Repository struct {
-	ch   *amqp.Channel
-	msgs *<-chan amqp.Delivery
+	ch *amqp.Channel
 }
 
 func New(ch *amqp.Channel, queues []string) (*Repository, error) {
@@ -50,22 +49,6 @@ func New(ch *amqp.Channel, queues []string) (*Repository, error) {
 		if err != nil {
 			return &Repository{}, err
 		}
-	}
-
-	//canal por el que se recibe la respuesta
-	msgs, err := rp.ch.Consume(
-		constants.REPLY, // queue
-		"",              // consumer
-		false,           // auto-ack
-		false,           // exclusive
-		false,           // no-local
-		false,           // no-wait
-		nil,             // args
-	)
-	rp.msgs = &msgs
-
-	if err != nil {
-		return &Repository{}, err
 	}
 
 	return &rp, nil
@@ -102,7 +85,22 @@ func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, erro
 			ReplyTo:       constants.REPLY,
 		})
 	var data []byte
-	for resp := range *rp.msgs {
+	//canal por el que se recibe la respuesta
+	msgs, err := rp.ch.Consume(
+		constants.REPLY, // queue
+		"",              // consumer
+		false,           // auto-ack
+		false,           // exclusive
+		false,           // no-local
+		false,           // no-wait
+		nil,             // args
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for resp := range msgs {
 		fmt.Println(resp.Body)
 		myString := string(resp.Body[:])
 		fmt.Println(myString)
@@ -118,11 +116,5 @@ func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, erro
 		return nil, apperrors.ErrInternal
 	}
 
-	reply := dataMessageQueue{}
-	json.Unmarshal(data, &reply)
-	if errorMsg.Err != "" {
-		return nil, apperrors.ErrInternal
-	}
-
-	return reply.Response.Result, err
+	return data, err
 }
