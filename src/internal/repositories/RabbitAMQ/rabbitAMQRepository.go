@@ -2,7 +2,6 @@ package rabbitamqRepository
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
@@ -28,10 +27,15 @@ type errorMessageQueue struct {
 	IsDisposed bool   `json:"isDisposed"`
 }
 
+type DataMessageQueue[T any] struct {
+	Response struct {
+		Result T `json:"resultado"`
+	} `json:"response"`
+}
+
 /*------------------------------------------------------------------------------------------------------*/
 type Repository struct {
-	ch   *amqp.Channel
-	msgs *<-chan amqp.Delivery
+	ch *amqp.Channel
 }
 
 func New(ch *amqp.Channel, queues []string) (*Repository, error) {
@@ -44,22 +48,6 @@ func New(ch *amqp.Channel, queues []string) (*Repository, error) {
 		if err != nil {
 			return &Repository{}, err
 		}
-	}
-
-	//canal por el que se recibe la respuesta
-	msgs, err := rp.ch.Consume(
-		constants.REPLY, // queue
-		"",              // consumer
-		false,           // auto-ack
-		false,           // exclusive
-		false,           // no-local
-		false,           // no-wait
-		nil,             // args
-	)
-	rp.msgs = &msgs
-
-	if err != nil {
-		return &Repository{}, err
 	}
 
 	return &rp, nil
@@ -96,10 +84,22 @@ func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, erro
 			ReplyTo:       constants.REPLY,
 		})
 	var data []byte
-	for resp := range *rp.msgs {
-		fmt.Println(resp.Body)
-		myString := string(resp.Body[:])
-		fmt.Println(myString)
+	//canal por el que se recibe la respuesta
+	msgs, err := rp.ch.Consume(
+		constants.REPLY, // queue
+		"",              // consumer
+		false,           // auto-ack
+		false,           // exclusive
+		false,           // no-local
+		false,           // no-wait
+		nil,             // args
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for resp := range msgs {
 		if corrId == resp.CorrelationId {
 			data = resp.Body
 			resp.Ack(false)
@@ -111,5 +111,6 @@ func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, erro
 	if errorMsg.Err != "" {
 		return nil, apperrors.ErrInternal
 	}
+
 	return data, err
 }

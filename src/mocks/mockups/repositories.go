@@ -34,20 +34,6 @@ func (m *MockSchedulerRepository) EXPECT() *MockSchedulerRepositoryMockRecorder 
 	return m.recorder
 }
 
-// CreateNewEntry mocks base method.
-func (m *MockSchedulerRepository) CreateNewEntry(arg0 domain.Entry) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateNewEntry", arg0)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// CreateNewEntry indicates an expected call of CreateNewEntry.
-func (mr *MockSchedulerRepositoryMockRecorder) CreateNewEntry(arg0 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNewEntry", reflect.TypeOf((*MockSchedulerRepository)(nil).CreateNewEntry), arg0)
-}
-
 // DeleteAllEntries mocks base method.
 func (m *MockSchedulerRepository) DeleteAllEntries(terna domain.DegreeSet) error {
 	m.ctrl.T.Helper()
@@ -63,47 +49,47 @@ func (mr *MockSchedulerRepositoryMockRecorder) DeleteAllEntries(terna interface{
 }
 
 // DeleteEntry mocks base method.
-func (m *MockSchedulerRepository) DeleteEntry(arg0 domain.Entry) error {
+func (m *MockSchedulerRepository) DeleteEntry(req domain.Entry) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteEntry", arg0)
+	ret := m.ctrl.Call(m, "DeleteEntry", req)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // DeleteEntry indicates an expected call of DeleteEntry.
-func (mr *MockSchedulerRepositoryMockRecorder) DeleteEntry(arg0 interface{}) *gomock.Call {
+func (mr *MockSchedulerRepositoryMockRecorder) DeleteEntry(req interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteEntry", reflect.TypeOf((*MockSchedulerRepository)(nil).DeleteEntry), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteEntry", reflect.TypeOf((*MockSchedulerRepository)(nil).DeleteEntry), req)
 }
 
 // GetAvailableHours mocks base method.
-func (m *MockSchedulerRepository) GetAvailableHours(arg0 domain.DegreeSet) ([]domain.AvailableHours, error) {
+func (m *MockSchedulerRepository) GetAvailableHours(req domain.DegreeSet) ([]domain.AvailableHours, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAvailableHours", arg0)
+	ret := m.ctrl.Call(m, "GetAvailableHours", req)
 	ret0, _ := ret[0].([]domain.AvailableHours)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetAvailableHours indicates an expected call of GetAvailableHours.
-func (mr *MockSchedulerRepositoryMockRecorder) GetAvailableHours(arg0 interface{}) *gomock.Call {
+func (mr *MockSchedulerRepositoryMockRecorder) GetAvailableHours(req interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAvailableHours", reflect.TypeOf((*MockSchedulerRepository)(nil).GetAvailableHours), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAvailableHours", reflect.TypeOf((*MockSchedulerRepository)(nil).GetAvailableHours), req)
 }
 
 // GetEntries mocks base method.
-func (m *MockSchedulerRepository) GetEntries(arg0 domain.DegreeSet) ([]domain.Entry, error) {
+func (m *MockSchedulerRepository) GetEntries(req domain.DegreeSet) ([]domain.Entry, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetEntries", arg0)
+	ret := m.ctrl.Call(m, "GetEntries", req)
 	ret0, _ := ret[0].([]domain.Entry)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetEntries indicates an expected call of GetEntries.
-func (mr *MockSchedulerRepositoryMockRecorder) GetEntries(arg0 interface{}) *gomock.Call {
+func (mr *MockSchedulerRepositoryMockRecorder) GetEntries(req interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetEntries", reflect.TypeOf((*MockSchedulerRepository)(nil).GetEntries), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetEntries", reflect.TypeOf((*MockSchedulerRepository)(nil).GetEntries), req)
 }
 
 // ListAllDegrees mocks base method.
@@ -119,6 +105,21 @@ func (m *MockSchedulerRepository) ListAllDegrees() ([]domain.DegreeDescription, 
 func (mr *MockSchedulerRepositoryMockRecorder) ListAllDegrees() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAllDegrees", reflect.TypeOf((*MockSchedulerRepository)(nil).ListAllDegrees))
+}
+
+// UpdateScheduler mocks base method.
+func (m *MockSchedulerRepository) UpdateScheduler(entries []domain.Entry, terna domain.DegreeSet) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateScheduler", entries, terna)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateScheduler indicates an expected call of UpdateScheduler.
+func (mr *MockSchedulerRepositoryMockRecorder) UpdateScheduler(entries, terna interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateScheduler", reflect.TypeOf((*MockSchedulerRepository)(nil).UpdateScheduler), entries, terna)
 }
 
 // MockUploadDataRepository is a mock of UploadDataRepository interface.
@@ -359,6 +360,21 @@ func (m *MockSpaceRepository) FilterBy(arg0 domain.SpaceFilterParams) ([]domain.
 func (mr *MockSpaceRepositoryMockRecorder) FilterBy(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FilterBy", reflect.TypeOf((*MockSpaceRepository)(nil).FilterBy), arg0)
+}
+
+// GetReservesOwner mocks base method.
+func (m *MockSpaceRepository) GetReservesOwner(owner string) ([]domain.Reserve, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetReservesOwner", owner)
+	ret0, _ := ret[0].([]domain.Reserve)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetReservesOwner indicates an expected call of GetReservesOwner.
+func (mr *MockSpaceRepositoryMockRecorder) GetReservesOwner(owner interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetReservesOwner", reflect.TypeOf((*MockSpaceRepository)(nil).GetReservesOwner), owner)
 }
 
 // RequestInfoSlots mocks base method.

@@ -4,6 +4,7 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/docs"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/issue"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/monitoring"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/scheduler"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/space"
 	uploaddata "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/uploadData"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/users"
@@ -12,6 +13,7 @@ import (
 	uploadDatarepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/UploadDataRepository"
 	issuerepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/issueRepository"
 	monitoringrepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/monitoringRepository"
+	schedulerrepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/schedulerRepository"
 	spacerepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/spaceRepository"
 
 	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
@@ -45,12 +47,12 @@ func config() (handlers.HTTPHandler, error) {
 	if err != nil {
 		//TODO
 	}
-	//spaceRepoAMQ, _ := spacerepositoryrabbitamq.New(chSpaces)
 	spaceRepo, err := spacerepositoryrabbitamq.New(chSpace)
 	if err != nil {
 		//TODO
 	}
 	usersRepo := usersrepositorymemory.New()
+
 	chIssues, err := rabbitConn.NewChannel()
 	if err != nil {
 		//TODO
@@ -65,12 +67,23 @@ func config() (handlers.HTTPHandler, error) {
 		//TODO
 	}
 
+	chScheduler, err := rabbitConn.NewChannel()
+	if err != nil {
+		//TODO
+	}
+	//spaceRepoAMQ, _ := spacerepositoryrabbitamq.New(chSpaces)
+	schedulerRepo, err := schedulerrepositoryrabbitamq.New(chScheduler)
+	if err != nil {
+		//TODO
+	}
+
 	return handlers.HTTPHandler{
 		Monitoring: monitoring.New(monitoringRepo),
 		Users:      users.New(usersRepo),
 		Spaces:     space.New(spaceRepo),
 		Issues:     issue.New(issuesRepo),
 		UploadData: uploaddata.New(uploadDataRepo),
+		Scheduler:  scheduler.New(schedulerRepo),
 	}, nil
 
 }
