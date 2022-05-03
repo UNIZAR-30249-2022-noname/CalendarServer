@@ -7,6 +7,7 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/auxFuncs"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
+	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 	"github.com/streadway/amqp"
 )
@@ -35,21 +36,21 @@ type DataMessageQueue[T any] struct {
 
 /*------------------------------------------------------------------------------------------------------*/
 type Repository struct {
-	ch *amqp.Channel
+	rabbitConn connection.Connection
 }
 
-func New(ch *amqp.Channel, queues []string) (*Repository, error) {
-
-	rp := Repository{ch: ch}
+func New(rabbitConn connection.Connection, queues []string) (*Repository, error) {
+	rp := Repository{rabbitConn: rabbitConn}
 	checkMode(queues)
+	ch, _ := rabbitConn.NewChannel()
+	defer ch.Close()
 	for _, queue := range queues {
 		//crear cola de peticiones
-		err := connect.PrepareChannel(rp.ch, queue)
+		err := connect.PrepareChannel(ch, queue)
 		if err != nil {
 			return &Repository{}, err
 		}
 	}
-
 	return &rp, nil
 }
 
@@ -64,6 +65,8 @@ func checkMode(queues []string) {
 
 func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, error) {
 	//TODO garantizar exclusion mutua
+	ch, _ := rp.rabbitConn.NewChannel()
+	defer ch.Close()
 	corrId := auxFuncs.RandomString(10)
 	message := messageQueue{Body: &msg, Pattern: pattern, Id: corrId}
 	msgJSON, err := json.Marshal(message)
@@ -72,7 +75,7 @@ func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, erro
 	}
 
 	//enviar la petición
-	err = rp.ch.Publish(
+	err = ch.Publish(
 		"",                // exchange
 		constants.REQUEST, // routing key
 		false,             // mandatory
@@ -85,7 +88,7 @@ func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, erro
 		})
 	var data []byte
 	//canal por el que se recibe la respuesta
-	msgs, err := rp.ch.Consume(
+	msgs, err := ch.Consume(
 		constants.REPLY, // queue
 		"",              // consumer
 		false,           // auto-ack
@@ -111,6 +114,5 @@ func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, erro
 	if errorMsg.Err != "" {
 		return nil, apperrors.ErrInternal
 	}
-
 	return data, err
 }

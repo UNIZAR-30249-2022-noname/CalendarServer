@@ -2,17 +2,17 @@ package monitoringrepositoryrabbitamq
 
 import (
 	rabbitamqRepository "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ"
+	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
-	"github.com/streadway/amqp"
 )
 
 type MonitoringRepositorioRabbit struct {
 	*rabbitamqRepository.Repository
 }
 
-func New(ch *amqp.Channel) *MonitoringRepositorioRabbit {
+func New(rabbitConn connection.Connection) *MonitoringRepositorioRabbit {
 	queues := []string{constants.REQUEST, constants.REPLY}
-	rp, err := rabbitamqRepository.New(ch, queues)
+	rp, err := rabbitamqRepository.New(rabbitConn, queues)
 	if err != nil {
 		return nil
 	}

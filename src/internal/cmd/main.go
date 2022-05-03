@@ -37,44 +37,26 @@ func config() (handlers.HTTPHandler, error) {
 	if err != nil {
 		panic(err)
 	}
-	chMonitoring, err := rabbitConn.NewChannel()
+	monitoringRepo := monitoringrepositoryrabbitamq.New(rabbitConn)
+
+	spaceRepo, err := spacerepositoryrabbitamq.New(rabbitConn)
 	if err != nil {
 		panic(err)
 	}
-	monitoringRepo := monitoringrepositoryrabbitamq.New(chMonitoring)
-	//TODO canal
-	chSpace, err := rabbitConn.NewChannel()
-	if err != nil {
-		//TODO
-	}
-	spaceRepo, err := spacerepositoryrabbitamq.New(chSpace)
-	if err != nil {
-		//TODO
-	}
 	usersRepo := usersrepositorymemory.New()
 
-	chIssues, err := rabbitConn.NewChannel()
+	issuesRepo, err := issuerepositoryrabbitamq.New(rabbitConn)
 	if err != nil {
-		//TODO
+		panic(err)
 	}
-	issuesRepo, err := issuerepositoryrabbitamq.New(chIssues)
+	uploadDataRepo, err := uploadDatarepositoryrabbitamq.New(rabbitConn)
 	if err != nil {
-		//TODO
-	}
-	chUploadData, err := rabbitConn.NewChannel()
-	uploadDataRepo, err := uploadDatarepositoryrabbitamq.New(chUploadData)
-	if err != nil {
-		//TODO
-	}
-
-	chScheduler, err := rabbitConn.NewChannel()
-	if err != nil {
-		//TODO
+		panic(err)
 	}
 	//spaceRepoAMQ, _ := spacerepositoryrabbitamq.New(chSpaces)
-	schedulerRepo, err := schedulerrepositoryrabbitamq.New(chScheduler)
+	schedulerRepo, err := schedulerrepositoryrabbitamq.New(rabbitConn)
 	if err != nil {
-		//TODO
+		panic(err)
 	}
 
 	return handlers.HTTPHandler{
