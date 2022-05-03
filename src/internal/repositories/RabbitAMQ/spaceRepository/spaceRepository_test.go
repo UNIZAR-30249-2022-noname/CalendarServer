@@ -49,10 +49,7 @@ func TestRequestInfoSlots(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReqInfo, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReqInfo, queues[0])
-	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReqInfo, queues[1])
-	spaceRepo, err := spaceRepo.New(chReqInfo)
+	spaceRepo, err := spaceRepo.New(rabbitConn)
 
 	//Simulated server
 	msgs, _ := chReqInfo.Consume(
@@ -123,11 +120,7 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 	rabbitConn.PurgeAll()
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReqInfo, err := rabbitConn.NewChannel()
-	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReqInfo, queues[0])
-	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReqInfo, queues[1])
-	spaceRepo, err := spaceRepo.New(chReqInfo)
+	spaceRepo, err := spaceRepo.New(rabbitConn)
 
 	//Simulated server
 	msgs, _ := chReqInfo.Consume(
@@ -203,11 +196,7 @@ func TestReserve(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReserve, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, queues[0])
-	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, queues[1])
-	assert.Equal(err, nil, "Shouldn't be an error")
-	spaceRepo, _ := spaceRepo.New(chReserve)
+	spaceRepo, _ := spaceRepo.New(rabbitConn)
 	msgs, _ := chReserve.Consume(
 		queues[0], // queue
 		"",                // consumer
@@ -254,11 +243,7 @@ func TestReserveBatch(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chBatch, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chBatch, queues[0])
-	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chBatch, queues[1])
-	assert.Equal(err, nil, "Shouldn't be an error")
-	spaceRepo, err := spaceRepo.New(chBatch)
+	spaceRepo, err := spaceRepo.New(rabbitConn)
 	msgs, _ := chBatch.Consume(
 		queues[0], // queue
 		"",                // consumer
@@ -303,11 +288,7 @@ func TestFilterBy(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReserve, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, queues[0])
-	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, queues[1])
-	assert.Equal(err, nil, "Shouldn't be an error")
-	spaceRepo, _ := spaceRepo.New(chReserve)
+	spaceRepo, _ := spaceRepo.New(rabbitConn)
 	msgs, _ := chReserve.Consume(
 		queues[0], // queue
 		"",                // consumer

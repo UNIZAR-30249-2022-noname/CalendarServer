@@ -30,11 +30,7 @@ func TestGetAllIssues(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReserve, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, constants.REQUEST)
-	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, constants.REPLY)
-	assert.Equal(err, nil, "Shouldn't be an error")
-	issueRepo, _ := issueRepo.New(chReserve)
+	issueRepo, _ := issueRepo.New(rabbitConn)
 	msgs, _ := chReserve.Consume(
 		constants.REQUEST, // queue
 		"",                // consumer
@@ -95,11 +91,7 @@ func TestDeleteIssue(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReserve, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, constants.REQUEST)
-	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, constants.REPLY)
-	assert.Equal(err, nil, "Shouldn't be an error")
-	issueRepo, _ := issueRepo.New(chReserve)
+	issueRepo, _ := issueRepo.New(rabbitConn)
 	msgs, _ := chReserve.Consume(
 		constants.REQUEST, // queue
 		"",                // consumer
@@ -151,12 +143,7 @@ func TestCreateIssue(t *testing.T) {
 	rabbitConn, err := connection.New(constants.AMQPURL)
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReserve, err := rabbitConn.NewChannel()
-	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, constants.REQUEST)
-	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, constants.REPLY)
-	assert.Equal(err, nil, "Shouldn't be an error")
-	issueRepo, _ := issueRepo.New(chReserve)
+	issueRepo, _ := issueRepo.New(rabbitConn)
 	msgs, _ := chReserve.Consume(
 		constants.REQUEST, // queue
 		"",                // consumer
@@ -219,11 +206,7 @@ func TestChangeState(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReserve, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, constants.REQUEST)
-	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, constants.REPLY)
-	assert.Equal(err, nil, "Shouldn't be an error")
-	issueRepo, _ := issueRepo.New(chReserve)
+	issueRepo, _ := issueRepo.New(rabbitConn)
 	msgs, _ := chReserve.Consume(
 		constants.REQUEST, // queue
 		"",                // consumer

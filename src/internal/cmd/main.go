@@ -41,22 +41,22 @@ func config() (handlers.HTTPHandler, error) {
 
 	spaceRepo, err := spacerepositoryrabbitamq.New(rabbitConn)
 	if err != nil {
-		//TODO
+		panic(err)
 	}
 	usersRepo := usersrepositorymemory.New()
 
 	issuesRepo, err := issuerepositoryrabbitamq.New(rabbitConn)
 	if err != nil {
-		//TODO
+		panic(err)
 	}
 	uploadDataRepo, err := uploadDatarepositoryrabbitamq.New(rabbitConn)
 	if err != nil {
-		//TODO
+		panic(err)
 	}
 	//spaceRepoAMQ, _ := spacerepositoryrabbitamq.New(chSpaces)
 	schedulerRepo, err := schedulerrepositoryrabbitamq.New(rabbitConn)
 	if err != nil {
-		//TODO
+		panic(err)
 	}
 
 	return handlers.HTTPHandler{
