@@ -43,6 +43,7 @@ func New(rabbitConn connection.Connection, queues []string) (*Repository, error)
 	rp := Repository{rabbitConn: rabbitConn}
 	checkMode(queues)
 	ch, _ := rabbitConn.NewChannel()
+	defer ch.Close()
 	for _, queue := range queues {
 		//crear cola de peticiones
 		err := connect.PrepareChannel(ch, queue)
@@ -50,7 +51,6 @@ func New(rabbitConn connection.Connection, queues []string) (*Repository, error)
 			return &Repository{}, err
 		}
 	}
-	ch.Close()
 	return &rp, nil
 }
 
@@ -66,6 +66,7 @@ func checkMode(queues []string) {
 func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, error) {
 	//TODO garantizar exclusion mutua
 	ch, _ := rp.rabbitConn.NewChannel()
+	defer ch.Close()
 	corrId := auxFuncs.RandomString(10)
 	message := messageQueue{Body: &msg, Pattern: pattern, Id: corrId}
 	msgJSON, err := json.Marshal(message)
@@ -113,6 +114,5 @@ func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, erro
 	if errorMsg.Err != "" {
 		return nil, apperrors.ErrInternal
 	}
-	ch.Close()
 	return data, err
 }
