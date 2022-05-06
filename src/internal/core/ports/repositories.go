@@ -14,7 +14,8 @@ type SchedulerRepository interface {
 }
 
 type UploadDataRepository interface {
-	UpdateByCSV(csv string) (bool, error)
+	UpdateSpacesByCSV(req string) (bool, error)
+	UpdateDegreesByCSV(req string) (bool, error)
 }
 
 type MonitoringRepository interface {

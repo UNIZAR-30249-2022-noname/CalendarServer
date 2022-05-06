@@ -21,8 +21,19 @@ func New(rabbitConn connection.Connection) (*UploadDataRepository, error) {
 	return &UploadDataRepository{rp}, nil
 }
 
-func (repo *UploadDataRepository) UpdateByCSV(req string) (bool, error) {
+func (repo *UploadDataRepository) UpdateSpacesByCSV(req string) (bool, error) {
 	responseJSON, err := repo.RCPcallJSON(req, constants.IMPORT)
+	if err != nil {
+		return false, err
+	}
+	response := false
+	json.Unmarshal(responseJSON, &response)
+	return response, nil
+
+}
+
+func (repo *UploadDataRepository) UpdateDegreesByCSV(req string) (bool, error) {
+	responseJSON, err := repo.RCPcallJSON(req, constants.IMPORT_DEGREES)
 	if err != nil {
 		return false, err
 	}

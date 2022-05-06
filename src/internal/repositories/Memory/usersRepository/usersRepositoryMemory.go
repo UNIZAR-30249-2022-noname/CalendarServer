@@ -12,6 +12,10 @@ func (repo *UsersRepositoryMemory) GetCredentials(username string) (domain.User,
 	var privileges string
 	if username == "785370" {
 		privileges = "professor"
+	} else if username=="janitor" {
+		privileges = "janitor"
+	} else if username=="coordinator" {
+		privileges = "coordinator"
 	} else {
 		privileges = "none"
 	}
