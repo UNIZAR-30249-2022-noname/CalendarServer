@@ -9,6 +9,13 @@ import "github.com/gin-gonic/gin"
 //@Produce plain
 //@Success 200 "Returns "pong" "
 //@Router /ping/ [get]
-func Ping(c *gin.Context) {
-	c.String(200, "pong")
+func (hdl *HTTPHandler) Ping(c *gin.Context) {
+	payload := ""
+	res, err := hdl.Monitoring.Ping()
+	if !res {
+		payload = err.Error()
+	} else {
+		payload = "ame un kebab"
+	}
+	c.String(200, "pong "+payload)
 }

@@ -1,4 +1,13 @@
 definitions:
+  domain.AllInfoSlot:
+    properties:
+      infoSlots:
+        items:
+          $ref: '#/definitions/domain.InfoSlots'
+        type: array
+      slotData:
+        $ref: '#/definitions/domain.Space'
+    type: object
   domain.AvailableHours:
     properties:
       maxHours:
@@ -20,6 +29,37 @@ definitions:
         items:
           $ref: '#/definitions/domain.YearDescription'
         type: array
+    type: object
+  domain.Hour:
+    properties:
+      hour:
+        type: integer
+      min:
+        type: integer
+    type: object
+  domain.InfoSlots:
+    properties:
+      hour:
+        type: integer
+      occupied:
+        type: boolean
+      person:
+        type: string
+    type: object
+  domain.Space:
+    properties:
+      building:
+        type: string
+      capacity:
+        type: integer
+      description:
+        type: string
+      floor:
+        type: string
+      kind:
+        type: string
+      name:
+        type: string
     type: object
   domain.Subject:
     properties:
@@ -76,6 +116,154 @@ info:
   contact: {}
 paths:
   /availableHours/:
+    get:
+      description: List all the hours remaining for creaiting an entrie on the schedule
+      parameters:
+      - description: titulacion de las horas a obtener
+        in: query
+        name: titulacion
+        required: true
+        type: string
+      - description: curso de las horas a obtener
+        in: query
+        name: curso
+        required: true
+        type: integer
+      - description: grupo de las horas a obtener
+        in: query
+        name: grupo
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.AvailableHours'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+  /cancelReserve:
+    get:
+      description: Get s reserves per owner
+      parameters:
+      - description: iname of the owner
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+  /deleteIssue:
+    get:
+      description: Create the state of a issue
+      parameters:
+      - description: id of issue
+        in: query
+        name: issue
+        required: true
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+    post:
+      description: Create  a issue
+      parameters:
+      - description: id of issue
+        in: query
+        name: issue
+        required: true
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+  /filterSlots:
+    get:
+      description: Get spaces filtered by params
+      parameters:
+      - description: day of availability
+        in: query
+        name: day
+        type: string
+      - in: query
+        name: hour
+        type: integer
+      - in: query
+        name: min
+        type: integer
+      - description: floor where is the space
+        in: query
+        name: floor
+        type: string
+      - description: ' minimun capacity of the space'
+        in: query
+        name: capacity
+        type: integer
+      - description: building where is the space
+        in: query
+        name: building
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+  /getEntries/:
     get:
       description: List all the entries of the  schedule
       parameters:
@@ -162,6 +350,30 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/handlers.ErrorHttp'
+  /login/:
+    get:
+      description: Get credentials for doing task which requires certain privileges
+      parameters:
+      - description: name of the user
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
   /ping/:
     get:
       description: Response "pong" if the server is currrently available
@@ -170,16 +382,145 @@ paths:
       responses:
         "200":
           description: 'Returns "pong" '
+  /requestInfoSlots/:
+    get:
+      description: Request the info of a space and its occupation
+      parameters:
+      - description: space name or id
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: date to request
+        in: query
+        name: date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.AllInfoSlot'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+  /reserve/:
+    get:
+      description: Reserve Space a day from an initial hour to an end hour
+      parameters:
+      - description: space id
+        in: query
+        name: slot
+        required: true
+        type: string
+      - description: initial hour
+        in: body
+        name: scheduled
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/domain.Hour'
+          type: array
+      - description: date of reserve
+        in: query
+        name: day
+        required: true
+        type: string
+      - description: person that reserves
+        in: query
+        name: owner
+        required: true
+        type: string
+      - description: event in the reserve
+        in: query
+        name: event
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+  /reserveBatch/:
+    get:
+      description: Reserve Space a day from an initial hour to an end hour
+      parameters:
+      - description: space ids
+        in: body
+        name: spaces
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      - in: query
+        name: hour
+        type: integer
+      - in: query
+        name: min
+        type: integer
+      - in: query
+        name: hour
+        type: integer
+      - in: query
+        name: min
+        type: integer
+      - description: dates of reserve
+        in: body
+        name: dates
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      - description: person that reserves
+        in: query
+        name: person
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorHttp'
   /updateByCSV/:
     post:
       description: The request will update the database creating degrees, subjects,
         years, groups and hours
       parameters:
-      - description: csv file
-        in: formData
+      - description: csv
+        in: body
         name: csv
         required: true
-        type: file
+        schema:
+          type: string
       produces:
       - application/json
       responses:

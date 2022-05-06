@@ -6,6 +6,233 @@
     "paths": {
         "/availableHours/": {
             "get": {
+                "description": "List all the hours remaining for creaiting an entrie on the schedule",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "titulacion de las horas a obtener",
+                        "name": "titulacion",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "curso de las horas a obtener",
+                        "name": "curso",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "grupo de las horas a obtener",
+                        "name": "grupo",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.AvailableHours"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            }
+        },
+        "/cancelReserve": {
+            "get": {
+                "description": "Get s reserves per owner",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "iname of the owner",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            }
+        },
+        "/deleteIssue": {
+            "get": {
+                "description": "Create the state of a issue",
+                "produces": [
+                    "text/plain"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id of issue",
+                        "name": "issue",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create  a issue",
+                "produces": [
+                    "text/plain"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id of issue",
+                        "name": "issue",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            }
+        },
+        "/filterSlots": {
+            "get": {
+                "description": "Get spaces filtered by params",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "day of availability",
+                        "name": "day",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "hour",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "min",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "floor where is the space",
+                        "name": "floor",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": " minimun capacity of the space",
+                        "name": "capacity",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "building where is the space",
+                        "name": "building",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            }
+        },
+        "/getEntries/": {
+            "get": {
                 "description": "List all the entries of the  schedule",
                 "produces": [
                     "application/json"
@@ -134,6 +361,43 @@
                 }
             }
         },
+        "/login/": {
+            "get": {
+                "description": "Get credentials for doing task which requires certain privileges",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "name of the user",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            }
+        },
         "/ping/": {
             "get": {
                 "description": "Response \"pong\" if the server is currrently available",
@@ -147,6 +411,201 @@
                 }
             }
         },
+        "/requestInfoSlots/": {
+            "get": {
+                "description": "Request the info of a space and its occupation",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "space name or id",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "date to request",
+                        "name": "date",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AllInfoSlot"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            }
+        },
+        "/reserve/": {
+            "get": {
+                "description": "Reserve Space a day from an initial hour to an end hour",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "space id",
+                        "name": "slot",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "initial hour",
+                        "name": "scheduled",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Hour"
+                            }
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "date of reserve",
+                        "name": "day",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "person that reserves",
+                        "name": "owner",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "event in the reserve",
+                        "name": "event",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            }
+        },
+        "/reserveBatch/": {
+            "get": {
+                "description": "Reserve Space a day from an initial hour to an end hour",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "space ids",
+                        "name": "spaces",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "name": "hour",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "min",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "hour",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "min",
+                        "in": "query"
+                    },
+                    {
+                        "description": "dates of reserve",
+                        "name": "dates",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "person that reserves",
+                        "name": "person",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            }
+        },
         "/updateByCSV/": {
             "post": {
                 "description": "The request will update the database creating degrees, subjects, years, groups and hours",
@@ -155,11 +614,13 @@
                 ],
                 "parameters": [
                     {
-                        "type": "file",
-                        "description": "csv file",
+                        "description": "csv",
                         "name": "csv",
-                        "in": "formData",
-                        "required": true
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
@@ -234,6 +695,20 @@
         }
     },
     "definitions": {
+        "domain.AllInfoSlot": {
+            "type": "object",
+            "properties": {
+                "infoSlots": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.InfoSlots"
+                    }
+                },
+                "slotData": {
+                    "$ref": "#/definitions/domain.Space"
+                }
+            }
+        },
         "domain.AvailableHours": {
             "type": "object",
             "properties": {
@@ -265,6 +740,54 @@
                     "items": {
                         "$ref": "#/definitions/domain.YearDescription"
                     }
+                }
+            }
+        },
+        "domain.Hour": {
+            "type": "object",
+            "properties": {
+                "hour": {
+                    "type": "integer"
+                },
+                "min": {
+                    "type": "integer"
+                }
+            }
+        },
+        "domain.InfoSlots": {
+            "type": "object",
+            "properties": {
+                "hour": {
+                    "type": "integer"
+                },
+                "occupied": {
+                    "type": "boolean"
+                },
+                "person": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Space": {
+            "type": "object",
+            "properties": {
+                "building": {
+                    "type": "string"
+                },
+                "capacity": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "floor": {
+                    "type": "string"
+                },
+                "kind": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },

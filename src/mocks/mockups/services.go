@@ -109,31 +109,31 @@ func (mr *MockSchedulerServiceMockRecorder) UpdateScheduler(entries, terna inter
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateScheduler", reflect.TypeOf((*MockSchedulerService)(nil).UpdateScheduler), entries, terna)
 }
 
-// MockUploadDataservice is a mock of UploadDataservice interface.
-type MockUploadDataservice struct {
+// MockUploadDataService is a mock of UploadDataService interface.
+type MockUploadDataService struct {
 	ctrl     *gomock.Controller
-	recorder *MockUploadDataserviceMockRecorder
+	recorder *MockUploadDataServiceMockRecorder
 }
 
-// MockUploadDataserviceMockRecorder is the mock recorder for MockUploadDataservice.
-type MockUploadDataserviceMockRecorder struct {
-	mock *MockUploadDataservice
+// MockUploadDataServiceMockRecorder is the mock recorder for MockUploadDataService.
+type MockUploadDataServiceMockRecorder struct {
+	mock *MockUploadDataService
 }
 
-// NewMockUploadDataservice creates a new mock instance.
-func NewMockUploadDataservice(ctrl *gomock.Controller) *MockUploadDataservice {
-	mock := &MockUploadDataservice{ctrl: ctrl}
-	mock.recorder = &MockUploadDataserviceMockRecorder{mock}
+// NewMockUploadDataService creates a new mock instance.
+func NewMockUploadDataService(ctrl *gomock.Controller) *MockUploadDataService {
+	mock := &MockUploadDataService{ctrl: ctrl}
+	mock.recorder = &MockUploadDataServiceMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockUploadDataservice) EXPECT() *MockUploadDataserviceMockRecorder {
+func (m *MockUploadDataService) EXPECT() *MockUploadDataServiceMockRecorder {
 	return m.recorder
 }
 
 // UpdateByCSV mocks base method.
-func (m *MockUploadDataservice) UpdateByCSV(csv string) (bool, error) {
+func (m *MockUploadDataService) UpdateByCSV(csv string) (bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateByCSV", csv)
 	ret0, _ := ret[0].(bool)
@@ -142,7 +142,260 @@ func (m *MockUploadDataservice) UpdateByCSV(csv string) (bool, error) {
 }
 
 // UpdateByCSV indicates an expected call of UpdateByCSV.
-func (mr *MockUploadDataserviceMockRecorder) UpdateByCSV(csv interface{}) *gomock.Call {
+func (mr *MockUploadDataServiceMockRecorder) UpdateByCSV(csv interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateByCSV", reflect.TypeOf((*MockUploadDataservice)(nil).UpdateByCSV), csv)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateByCSV", reflect.TypeOf((*MockUploadDataService)(nil).UpdateByCSV), csv)
+}
+
+// MockMonitoringService is a mock of MonitoringService interface.
+type MockMonitoringService struct {
+	ctrl     *gomock.Controller
+	recorder *MockMonitoringServiceMockRecorder
+}
+
+// MockMonitoringServiceMockRecorder is the mock recorder for MockMonitoringService.
+type MockMonitoringServiceMockRecorder struct {
+	mock *MockMonitoringService
+}
+
+// NewMockMonitoringService creates a new mock instance.
+func NewMockMonitoringService(ctrl *gomock.Controller) *MockMonitoringService {
+	mock := &MockMonitoringService{ctrl: ctrl}
+	mock.recorder = &MockMonitoringServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockMonitoringService) EXPECT() *MockMonitoringServiceMockRecorder {
+	return m.recorder
+}
+
+// Ping mocks base method.
+func (m *MockMonitoringService) Ping() (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Ping")
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Ping indicates an expected call of Ping.
+func (mr *MockMonitoringServiceMockRecorder) Ping() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Ping", reflect.TypeOf((*MockMonitoringService)(nil).Ping))
+}
+
+// MockUsersService is a mock of UsersService interface.
+type MockUsersService struct {
+	ctrl     *gomock.Controller
+	recorder *MockUsersServiceMockRecorder
+}
+
+// MockUsersServiceMockRecorder is the mock recorder for MockUsersService.
+type MockUsersServiceMockRecorder struct {
+	mock *MockUsersService
+}
+
+// NewMockUsersService creates a new mock instance.
+func NewMockUsersService(ctrl *gomock.Controller) *MockUsersService {
+	mock := &MockUsersService{ctrl: ctrl}
+	mock.recorder = &MockUsersServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockUsersService) EXPECT() *MockUsersServiceMockRecorder {
+	return m.recorder
+}
+
+// GetCredentials mocks base method.
+func (m *MockUsersService) GetCredentials(username string) (domain.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetCredentials", username)
+	ret0, _ := ret[0].(domain.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetCredentials indicates an expected call of GetCredentials.
+func (mr *MockUsersServiceMockRecorder) GetCredentials(username interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCredentials", reflect.TypeOf((*MockUsersService)(nil).GetCredentials), username)
+}
+
+// MockSpacesService is a mock of SpacesService interface.
+type MockSpacesService struct {
+	ctrl     *gomock.Controller
+	recorder *MockSpacesServiceMockRecorder
+}
+
+// MockSpacesServiceMockRecorder is the mock recorder for MockSpacesService.
+type MockSpacesServiceMockRecorder struct {
+	mock *MockSpacesService
+}
+
+// NewMockSpacesService creates a new mock instance.
+func NewMockSpacesService(ctrl *gomock.Controller) *MockSpacesService {
+	mock := &MockSpacesService{ctrl: ctrl}
+	mock.recorder = &MockSpacesServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockSpacesService) EXPECT() *MockSpacesServiceMockRecorder {
+	return m.recorder
+}
+
+// CancelReserve mocks base method.
+func (m *MockSpacesService) CancelReserve(key string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CancelReserve", key)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CancelReserve indicates an expected call of CancelReserve.
+func (mr *MockSpacesServiceMockRecorder) CancelReserve(key interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CancelReserve", reflect.TypeOf((*MockSpacesService)(nil).CancelReserve), key)
+}
+
+// FilterBy mocks base method.
+func (m *MockSpacesService) FilterBy(arg0 domain.SpaceFilterParams) ([]domain.Space, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FilterBy", arg0)
+	ret0, _ := ret[0].([]domain.Space)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FilterBy indicates an expected call of FilterBy.
+func (mr *MockSpacesServiceMockRecorder) FilterBy(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FilterBy", reflect.TypeOf((*MockSpacesService)(nil).FilterBy), arg0)
+}
+
+// RequestInfoSlots mocks base method.
+func (m *MockSpacesService) RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RequestInfoSlots", req)
+	ret0, _ := ret[0].(domain.AllInfoSlot)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// RequestInfoSlots indicates an expected call of RequestInfoSlots.
+func (mr *MockSpacesServiceMockRecorder) RequestInfoSlots(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RequestInfoSlots", reflect.TypeOf((*MockSpacesService)(nil).RequestInfoSlots), req)
+}
+
+// Reserve mocks base method.
+func (m *MockSpacesService) Reserve(sp string, init, end domain.Hour, date, person, event string) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Reserve", sp, init, end, date, person, event)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Reserve indicates an expected call of Reserve.
+func (mr *MockSpacesServiceMockRecorder) Reserve(sp, init, end, date, person, event interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Reserve", reflect.TypeOf((*MockSpacesService)(nil).Reserve), sp, init, end, date, person, event)
+}
+
+// ReserveBatch mocks base method.
+func (m *MockSpacesService) ReserveBatch(spaces []string, init, end domain.Hour, dates []string, person string) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ReserveBatch", spaces, init, end, dates, person)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReserveBatch indicates an expected call of ReserveBatch.
+func (mr *MockSpacesServiceMockRecorder) ReserveBatch(spaces, init, end, dates, person interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReserveBatch", reflect.TypeOf((*MockSpacesService)(nil).ReserveBatch), spaces, init, end, dates, person)
+}
+
+// MockIssueService is a mock of IssueService interface.
+type MockIssueService struct {
+	ctrl     *gomock.Controller
+	recorder *MockIssueServiceMockRecorder
+}
+
+// MockIssueServiceMockRecorder is the mock recorder for MockIssueService.
+type MockIssueServiceMockRecorder struct {
+	mock *MockIssueService
+}
+
+// NewMockIssueService creates a new mock instance.
+func NewMockIssueService(ctrl *gomock.Controller) *MockIssueService {
+	mock := &MockIssueService{ctrl: ctrl}
+	mock.recorder = &MockIssueServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIssueService) EXPECT() *MockIssueServiceMockRecorder {
+	return m.recorder
+}
+
+// ChangeState mocks base method.
+func (m *MockIssueService) ChangeState(key string, state int) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ChangeState", key, state)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// ChangeState indicates an expected call of ChangeState.
+func (mr *MockIssueServiceMockRecorder) ChangeState(key, state interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangeState", reflect.TypeOf((*MockIssueService)(nil).ChangeState), key, state)
+}
+
+// Create mocks base method.
+func (m *MockIssueService) Create(issue domain.Issue) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Create", issue)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Create indicates an expected call of Create.
+func (mr *MockIssueServiceMockRecorder) Create(issue interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockIssueService)(nil).Create), issue)
+}
+
+// Delete mocks base method.
+func (m *MockIssueService) Delete(key string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", key)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockIssueServiceMockRecorder) Delete(key interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockIssueService)(nil).Delete), key)
+}
+
+// GetAll mocks base method.
+func (m *MockIssueService) GetAll() ([]domain.Issue, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAll")
+	ret0, _ := ret[0].([]domain.Issue)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAll indicates an expected call of GetAll.
+func (mr *MockIssueServiceMockRecorder) GetAll() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockIssueService)(nil).GetAll))
 }

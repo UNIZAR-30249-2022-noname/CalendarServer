@@ -49,8 +49,24 @@ type DegreeSet struct {
 }
 
 type Hour struct {
-	Hour int
-	Min  int
+	Hour int `json:"hour"`
+	Min  int `json:"min"`
+}
+
+type Reserve struct {
+	Space     string `json:"space"`
+	Day       string `json:"day"`
+	Event     string `json:"event"`
+	Scheduled []Hour `json:"scheduled"`
+	Owner     string `json:"owner"`
+	Key       string `json:"key"`
+}
+
+type ReserveBatch struct {
+	Spaces []Space
+	Init   Hour
+	Dates  []string
+	Person string
 }
 
 func NewHour(h, m int) Hour {
@@ -146,4 +162,52 @@ func (e Entry) IsValid() error {
 
 	}
 	return nil
+}
+
+type User struct {
+	Name       string `json:"name"`
+	Privileges string `json:"privileges"`
+}
+
+type SpaceFilterParams struct {
+	Capacity int    `json:"capacity"`
+	Day      string `json:"day"`
+	Hour     Hour   `json:"hour"`
+	Floor    string `json:"floor"`
+	Building string `json:"building"`
+}
+
+type Space struct {
+	Id          string `json:"id"`
+	Name        string `json:"name"`
+	Capacity    int    `json:"capacity"`
+	Building    string `json:"building"`
+	Kind        string `json:"kind"`
+	Floor       string `json:"floor"`
+	Description string `json:"description"`
+}
+
+type InfoSlots struct {
+	Hour     int    `json:"hour"`
+	Occupied bool   `json:"occupied"`
+	Person   string `json:"person"`
+}
+
+type ReqInfoSlot struct {
+	Id   string `json:"id"` //TODO Cambiar json id en el front
+	Date string `json:"date"`
+}
+
+type AllInfoSlot struct {
+	SlotData  Space       `json:"slotData"`
+	InfoSlots []InfoSlots `json:"infoSlots"`
+}
+
+type Issue struct {
+	Tags        []string `json:"tags"`
+	Title       string   `json:"title"`
+	Description string   `json:"description"`
+	Key         string   `json:"key"`
+	Space       string   `json:"space"`
+	State       int      `json:"state"`
 }

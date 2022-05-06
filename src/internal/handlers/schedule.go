@@ -32,7 +32,7 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 		Degree: titulacion,
 		Group:  grupo,
 	}
-	availableHours, err := hdl.horarioService.GetAvailableHours(terna)
+	availableHours, err := hdl.Scheduler.GetAvailableHours(terna)
 
 	if err == apperrors.ErrInvalidInput { //The set request wasn' correct
 
@@ -85,7 +85,7 @@ func (hdl *HTTPHandler) PostUpdateScheduler(c *gin.Context) {
 	listEntries := EntriesDTOtoDomain(body)
 
 	//Execute service
-	lastMod, err := hdl.horarioService.UpdateScheduler(listEntries, terna)
+	lastMod, err := hdl.Scheduler.UpdateScheduler(listEntries, terna)
 	if err == nil {
 		c.String(http.StatusOK, lastMod)
 
@@ -104,7 +104,7 @@ func (hdl *HTTPHandler) PostUpdateScheduler(c *gin.Context) {
 // @Failure 500 {object} ErrorHttp
 //@Router /listDegrees/ [get]
 func (hdl *HTTPHandler) ListDegrees(c *gin.Context) {
-	list, err := hdl.horarioService.ListAllDegrees()
+	list, err := hdl.Scheduler.ListAllDegrees()
 	if err == nil {
 		fmt.Println(list)
 		c.JSON(http.StatusOK, list)
@@ -134,7 +134,7 @@ func (hdl *HTTPHandler) GetEntries(c *gin.Context) {
 		Degree: titulacion,
 		Group:  grupo,
 	}
-	entries, err := hdl.horarioService.GetEntries(terna)
+	entries, err := hdl.Scheduler.GetEntries(terna)
 
 	if err == apperrors.ErrInvalidInput { //The set request wasn' correct
 
@@ -175,7 +175,7 @@ func (hdl *HTTPHandler) GetICS(c *gin.Context) {
 		Degree: titulacion,
 		Group:  grupo,
 	}
-	list, err := hdl.horarioService.GetICS(terna)
+	list, err := hdl.Scheduler.GetICS(terna)
 	if err == nil {
 		fmt.Println(list)
 		c.JSON(http.StatusOK, list)

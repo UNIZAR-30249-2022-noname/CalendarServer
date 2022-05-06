@@ -1,6 +1,6 @@
 module github.com/D-D-EINA-Calendar/CalendarServer
 
-go 1.17
+go 1.18
 
 require (
 	github.com/gin-gonic/gin v1.7.4
@@ -52,4 +52,6 @@ require (
 require (
 	github.com/arran4/golang-ical v0.0.0-20211212012649-32b67e209c4f
 	github.com/gin-contrib/cors v1.3.1
+	github.com/go-playground/assert v1.2.1
+	github.com/streadway/amqp v1.0.0
 )

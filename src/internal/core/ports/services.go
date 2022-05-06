@@ -14,6 +14,30 @@ type SchedulerService interface {
 	GetICS(terna domain.DegreeSet) (string, error)
 }
 
-type UploadDataservice interface {
+type UploadDataService interface {
 	UpdateByCSV(csv string) (bool, error)
+}
+
+type MonitoringService interface {
+	Ping() (bool, error)
+}
+
+type UsersService interface {
+	GetCredentials(username string) (domain.User, error)
+}
+
+type SpacesService interface {
+	FilterBy(domain.SpaceFilterParams) ([]domain.Space, error)
+	RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error)
+	Reserve(sp string, init, end domain.Hour, date, person, event string) (string, error)
+	ReserveBatch(spaces []string, init, end domain.Hour, dates []string, person string) (string, error)
+	CancelReserve(key string) error
+	GetReservesOwner(owner string) ([]domain.Reserve, error)
+}
+
+type IssueService interface {
+	GetAll() ([]domain.Issue, error)
+	Delete(key string) error
+	Create(issue domain.Issue) error
+	ChangeState(key string, state int) error
 }
