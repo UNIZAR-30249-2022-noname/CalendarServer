@@ -47,7 +47,7 @@ func (repo *IssueRepository) Delete(key string) error {
 }
 
 func (repo *IssueRepository) Create(issue domain.Issue) error {
-	responseJSON, err := repo.RCPcallJSON(issue, constants.CREATE_ISSUE)
+	responseJSON, err := repo.RCPcallJSON(issue, constants.NEWISSUE)
 	if err != nil {
 		return err
 	}
