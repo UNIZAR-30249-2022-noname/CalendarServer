@@ -206,7 +206,7 @@ type AllInfoSlot struct {
 type Issue struct {
 	Tags        []string `json:"tags"`
 	Title       string   `json:"title"`
-	Description string   `json:"decprition"`
+	Description string   `json:"description"`
 	Key         string   `json:"key"`
 	Space       string   `json:"space"`
 	State       int      `json:"state"`
