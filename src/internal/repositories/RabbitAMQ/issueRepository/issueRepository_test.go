@@ -260,11 +260,7 @@ func TestDownloadIssues(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	chReserve, err := rabbitConn.NewChannel()
 	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, constants.REQUEST)
-	assert.Equal(err, nil, "Shouldn't be an error")
-	err = connection.PrepareChannel(chReserve, constants.REPLY)
-	assert.Equal(err, nil, "Shouldn't be an error")
-	issueRepo, _ := issueRepo.New(chReserve)
+	issueRepo, _ := issueRepo.New(rabbitConn)
 	msgs, _ := chReserve.Consume(
 		constants.REQUEST, // queue
 		"",                // consumer
