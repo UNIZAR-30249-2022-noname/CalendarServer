@@ -15,7 +15,7 @@ func New(spaceRepository ports.SpaceRepository) *SpaceServiceImp {
 }
 
 func (svc *SpaceServiceImp) RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error) {
-	if req.Name != "" && req.Date != "" {
+	if req.Id != "" && req.Date != "" {
 		return svc.spaceRepository.RequestInfoSlots(req)
 	}
 	return domain.AllInfoSlot{}, apperrors.ErrInvalidInput

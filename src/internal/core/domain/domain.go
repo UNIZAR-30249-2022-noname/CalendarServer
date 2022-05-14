@@ -178,12 +178,12 @@ type SpaceFilterParams struct {
 }
 
 type Space struct {
-	Id 		 string `json:"id"`
-	Name     string `json:"name"`
-	Capacity int    `json:"capacity"`
-	Building string `json:"building"`
-	Kind     string `json:"kind"`
-	Floor    string `json:"floor"`
+	Id          string `json:"id"`
+	Name        string `json:"name"`
+	Capacity    int    `json:"capacity"`
+	Building    string `json:"building"`
+	Kind        string `json:"kind"`
+	Floor       string `json:"floor"`
 	Description string `json:"description"`
 }
 
@@ -194,21 +194,20 @@ type InfoSlots struct {
 }
 
 type ReqInfoSlot struct {
-	Name string `json:"id"` //TODO Cambiar json id en el front
+	Id   string `json:"id"` //TODO Cambiar json id en el front
 	Date string `json:"date"`
 }
 
 type AllInfoSlot struct {
-	SlotData  Space    `json:"slotData"`
+	SlotData  Space       `json:"slotData"`
 	InfoSlots []InfoSlots `json:"infoSlots"`
 }
 
 type Issue struct {
 	Tags        []string `json:"tags"`
 	Title       string   `json:"title"`
-	Description string   `json:"decprition"`
+	Description string   `json:"description"`
 	Key         string   `json:"key"`
 	Space       string   `json:"space"`
 	State       int      `json:"state"`
 }
-

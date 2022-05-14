@@ -43,7 +43,7 @@ func TestRequestInfoSlots(t *testing.T) {
 	assert := assert.New(t)
 	a := time.Now().Local()
 	s := a.Format("2006-01-02")
-	data := domain.ReqInfoSlot{Name: "A1", Date: s}
+	data := domain.ReqInfoSlot{Id: "A1", Date: s}
 	rabbitConn, err := connection.New(constants.AMQPURL)
 	rabbitConn.PurgeAll()
 	assert.Equal(err, nil, "Shouldn't be an error")
@@ -54,12 +54,12 @@ func TestRequestInfoSlots(t *testing.T) {
 	//Simulated server
 	msgs, _ := chReqInfo.Consume(
 		queues[0], // queue
-		"",                // consumer
-		true,              // auto-ack
-		false,             // exclusive
-		false,             // no-local
-		false,             // no-wait
-		nil,               // args
+		"",        // consumer
+		true,      // auto-ack
+		false,     // exclusive
+		false,     // no-local
+		false,     // no-wait
+		nil,       // args
 	)
 	myResponse := domain.AllInfoSlot{
 		SlotData: domain.Space{
@@ -88,17 +88,17 @@ func TestRequestInfoSlots(t *testing.T) {
 			corrId = resp.CorrelationId
 			response, _ := json.Marshal(myResponse)
 			chReqInfo.Publish(
-				"",              // exchange
+				"",        // exchange
 				queues[1], // routing key
-				false,           // mandatory
-				false,           // immediate
+				false,     // mandatory
+				false,     // immediate
 				amqp.Publishing{
 					ContentType:   "application/json",
 					CorrelationId: corrId,
 					Body:          response,
 				})
-				//resp.Ack(false)
-				break
+			//resp.Ack(false)
+			break
 		}
 	}()
 
@@ -115,7 +115,7 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 	assert := assert.New(t)
 	a := time.Now().Local()
 	s := a.Format("2006-01-02")
-	data := domain.ReqInfoSlot{Name: "A1", Date: s}
+	data := domain.ReqInfoSlot{Id: "A1", Date: s}
 	rabbitConn, err := connection.New(constants.AMQPURL)
 	rabbitConn.PurgeAll()
 	assert.Equal(err, nil, "Shouldn't be an error")
@@ -125,12 +125,12 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 	//Simulated server
 	msgs, _ := chReqInfo.Consume(
 		queues[0], // queue
-		"",                // consumer
-		true,              // auto-ack
-		false,             // exclusive
-		false,             // no-local
-		false,             // no-wait
-		nil,               // args
+		"",        // consumer
+		true,      // auto-ack
+		false,     // exclusive
+		false,     // no-local
+		false,     // no-wait
+		nil,       // args
 	)
 	myResponse := domain.AllInfoSlot{
 		SlotData: domain.Space{
@@ -160,10 +160,10 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 			corrId = resp.CorrelationId
 			response, _ := json.Marshal(myResponse)
 			chReqInfo.Publish(
-				"",              // exchange
+				"",        // exchange
 				queues[1], // routing key
-				false,           // mandatory
-				false,           // immediate
+				false,     // mandatory
+				false,     // immediate
 				amqp.Publishing{
 					ContentType:   "application/json",
 					CorrelationId: corrId,
@@ -171,8 +171,8 @@ func TestRequestInfoSlotsMultiple(t *testing.T) {
 				})
 			//resp.Ack(false)
 			i++
-			if (i>3){
-			break
+			if i > 3 {
+				break
 			}
 		}
 	}()
@@ -199,12 +199,12 @@ func TestReserve(t *testing.T) {
 	spaceRepo, _ := spaceRepo.New(rabbitConn)
 	msgs, _ := chReserve.Consume(
 		queues[0], // queue
-		"",                // consumer
-		false,             // auto-ack
-		false,             // exclusive
-		false,             // no-local
-		false,             // no-wait
-		nil,               // args
+		"",        // consumer
+		false,     // auto-ack
+		false,     // exclusive
+		false,     // no-local
+		false,     // no-wait
+		nil,       // args
 	)
 	corrId := "-1"
 	go func() {
@@ -212,10 +212,10 @@ func TestReserve(t *testing.T) {
 			corrId = resp.CorrelationId
 			response, _ := json.Marshal("1")
 			chReserve.Publish(
-				"",              // exchange
+				"",        // exchange
 				queues[1], // routing key
-				false,           // mandatory
-				false,           // immediate
+				false,     // mandatory
+				false,     // immediate
 				amqp.Publishing{
 					ContentType:   "application/json",
 					CorrelationId: corrId,
@@ -246,12 +246,12 @@ func TestReserveBatch(t *testing.T) {
 	spaceRepo, err := spaceRepo.New(rabbitConn)
 	msgs, _ := chBatch.Consume(
 		queues[0], // queue
-		"",                // consumer
-		false,             // auto-ack
-		false,             // exclusive
-		false,             // no-local
-		false,             // no-wait
-		nil,               // args
+		"",        // consumer
+		false,     // auto-ack
+		false,     // exclusive
+		false,     // no-local
+		false,     // no-wait
+		nil,       // args
 	)
 	corrId := "-1"
 	go func() {
@@ -259,10 +259,10 @@ func TestReserveBatch(t *testing.T) {
 			corrId = resp.CorrelationId
 			response, _ := json.Marshal("1")
 			chBatch.Publish(
-				"",              // exchange
+				"",        // exchange
 				queues[1], // routing key
-				false,           // mandatory
-				false,           // immediate
+				false,     // mandatory
+				false,     // immediate
 				amqp.Publishing{
 					ContentType:   "application/json",
 					CorrelationId: corrId,
@@ -291,12 +291,12 @@ func TestFilterBy(t *testing.T) {
 	spaceRepo, _ := spaceRepo.New(rabbitConn)
 	msgs, _ := chReserve.Consume(
 		queues[0], // queue
-		"",                // consumer
-		false,             // auto-ack
-		false,             // exclusive
-		false,             // no-local
-		false,             // no-wait
-		nil,               // args
+		"",        // consumer
+		false,     // auto-ack
+		false,     // exclusive
+		false,     // no-local
+		false,     // no-wait
+		nil,       // args
 	)
 	messageSent := []domain.Space{
 		{
@@ -304,17 +304,17 @@ func TestFilterBy(t *testing.T) {
 			Capacity: 20,
 			Building: "Ada",
 			Kind:     "aula",
-		},}
+		}}
 	corrId := "-1"
 	go func() {
 		for resp := range msgs {
 			corrId = resp.CorrelationId
 			response, _ := json.Marshal(messageSent)
 			chReserve.Publish(
-				"",              // exchange
+				"",        // exchange
 				queues[1], // routing key
-				false,           // mandatory
-				false,           // immediate
+				false,     // mandatory
+				false,     // immediate
 				amqp.Publishing{
 					ContentType:   "application/json",
 					CorrelationId: corrId,
@@ -325,7 +325,7 @@ func TestFilterBy(t *testing.T) {
 		}
 	}()
 
-	messageRecieved, err := spaceRepo.FilterBy(domain.SpaceFilterParams{Capacity: 5, Day: "2022-01-02", Hour: domain.Hour{Hour: 12, Min: 0},Floor: "1", Building: "Ada"})
+	messageRecieved, err := spaceRepo.FilterBy(domain.SpaceFilterParams{Capacity: 5, Day: "2022-01-02", Hour: domain.Hour{Hour: 12, Min: 0}, Floor: "1", Building: "Ada"})
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.Equal(messageRecieved, messageSent, "Should be true")
 }
