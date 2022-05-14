@@ -2,6 +2,7 @@ package issuerepositoryrabbitamq_test
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"testing"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
@@ -260,6 +261,55 @@ func TestChangeState(t *testing.T) {
 	assert.Equal(err, nil, "Shouldn't be an error")
 	err = issueRepo.ChangeState("2", 2)
 	assert.Equal(err, apperrors.ErrNotFound, "Shouldn't be an error")
+	chReserve.QueueDelete(constants.REQUEST, true, false, true)
+	chReserve.QueueDelete(constants.REPLY, true, false, true)
+}
+
+func TestDownloadIssues(t *testing.T) {
+	t.Skip() //remove for activating it
+	assert := assert.New(t)
+	rabbitConn, err := connection.New(constants.AMQPURL)
+	assert.Equal(err, nil, "Shouldn't be an error")
+	chReserve, err := rabbitConn.NewChannel()
+	assert.Equal(err, nil, "Shouldn't be an error")
+	err = connection.PrepareChannel(chReserve, constants.REQUEST)
+	assert.Equal(err, nil, "Shouldn't be an error")
+	err = connection.PrepareChannel(chReserve, constants.REPLY)
+	assert.Equal(err, nil, "Shouldn't be an error")
+	issueRepo, _ := issueRepo.New(chReserve)
+	msgs, _ := chReserve.Consume(
+		constants.REQUEST, // queue
+		"",                // consumer
+		false,             // auto-ack
+		false,             // exclusive
+		false,             // no-local
+		false,             // no-wait
+		nil,               // args
+	)
+	messageSent, _ := ioutil.ReadFile("C:/Users/Equipo/Desktop/LIS/Gateway/src/internal/handlers/prueba/file.pdf")
+	corrId := "-1"
+	go func() {
+		for resp := range msgs {
+			corrId = resp.CorrelationId
+			response, _ := json.Marshal(messageSent)
+			chReserve.Publish(
+				"",              // exchange
+				constants.REPLY, // routing key
+				false,           // mandatory
+				false,           // immediate
+				amqp.Publishing{
+					ContentType:   "application/json",
+					CorrelationId: corrId,
+					Body:          response,
+				})
+			resp.Ack(false)
+			break
+		}
+	}()
+
+	messageRecieved, err := issueRepo.DownloadIssues()
+	assert.Equal(err, nil, "Shouldn't be an error")
+	assert.Equal(messageRecieved, messageSent, "Should be true")
 	chReserve.QueueDelete(constants.REQUEST, true, false, true)
 	chReserve.QueueDelete(constants.REPLY, true, false, true)
 }

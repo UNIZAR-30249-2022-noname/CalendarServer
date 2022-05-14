@@ -35,3 +35,9 @@ func (svc *IssueServiceImp) ChangeState(key string, state int) error {
 	return svc.issueRepository.ChangeState(key, state)
 
 }
+
+func (svc *IssueServiceImp) DownloadIssues() ([]byte ,error) {
+
+	return svc.issueRepository.DownloadIssues()
+
+}

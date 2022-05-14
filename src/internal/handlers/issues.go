@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"strconv"
 
@@ -106,11 +105,10 @@ func (hdl *HTTPHandler) ChangeStateIssue(c *gin.Context) {
 //@Failure 400,404 {object} ErrorHttp
 //@Router /downloadIssues [get]
 func (hdl *HTTPHandler) DownloadIssues(c *gin.Context) {
-	byteFile, err := ioutil.ReadFile("C:/Users/Equipo/Desktop/LIS/Gateway/src/internal/handlers/prueba/file.pdf")
-	
-	fmt.Print("AAAAAAAAAAAAAaa" + string(byteFile))
+	//byteFile, err := ioutil.ReadFile("C:/Users/Equipo/Desktop/LIS/Gateway/src/internal/handlers/prueba/file.pdf")
+	byteFile, err := hdl.Issues.DownloadIssues()
 	if err == nil {
-		c.Header("Content-Disposition", "attachment; filename=file-name.pdf")
+		c.Header("Content-Disposition", "attachment; filename=incidencias.pdf")
 		c.Data(http.StatusOK, "application/octet-stream", byteFile)
 	} else {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: err.Error()})

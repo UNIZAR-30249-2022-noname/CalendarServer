@@ -74,3 +74,13 @@ func (repo *IssueRepository) ChangeState(key string, state int) error {
 	}
 	return nil
 }
+
+func (repo *IssueRepository) DownloadIssues() ([]byte ,error) {
+	var issuePdf []byte
+	allIssuesJSON, err := repo.RCPcallJSON("", constants.DOWNLOADISSUE)
+	if err != nil {
+		return nil, err
+	}
+	json.Unmarshal(allIssuesJSON, &issuePdf)
+	return issuePdf, nil
+}

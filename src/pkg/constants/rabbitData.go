@@ -18,6 +18,7 @@ const (
 	GETISSUES      = "obtener-incidencias"
 	DELETEISSUE    = "eliminar-incidencia"
 	UPDATEISSUE    = "modificar-estado-incidencia"
+	DOWNLOADISSUE  = ""
 	REQINFOSLOT    = "obtener-informacion-espacio"
 )
 
