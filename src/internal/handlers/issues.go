@@ -106,7 +106,8 @@ func (hdl *HTTPHandler) ChangeStateIssue(c *gin.Context) {
 //@Router /downloadIssues [get]
 func (hdl *HTTPHandler) DownloadIssues(c *gin.Context) {
 	//byteFile, err := ioutil.ReadFile("C:/Users/Equipo/Desktop/LIS/Gateway/src/internal/handlers/prueba/file.pdf")
-	byteFile, err := hdl.Issues.DownloadIssues()
+	building := c.Query("building")
+	byteFile, err := hdl.Issues.DownloadIssues(building)
 	if err == nil {
 		c.Header("Content-Disposition", "attachment; filename=incidencias.pdf")
 		c.Data(http.StatusOK, "application/octet-stream", byteFile)

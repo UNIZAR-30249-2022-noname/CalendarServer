@@ -291,7 +291,7 @@ func TestDownloadIssues(t *testing.T) {
 		}
 	}()
 
-	messageRecieved, err := issueRepo.DownloadIssues()
+	messageRecieved, err := issueRepo.DownloadIssues("Ada Byron")
 	assert.Equal(err, nil, "Shouldn't be an error")
 	assert.Equal(messageRecieved, messageSent, "Should be true")
 	chReserve.QueueDelete(constants.REQUEST, true, false, true)

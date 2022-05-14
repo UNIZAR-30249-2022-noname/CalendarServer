@@ -40,5 +40,5 @@ type IssueService interface {
 	Delete(key string) error
 	Create(issue domain.Issue) error
 	ChangeState(key string, state int) error
-	DownloadIssues() ([]byte ,error)
+	DownloadIssues(building string) ([]byte ,error)
 }

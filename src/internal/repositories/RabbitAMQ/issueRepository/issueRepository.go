@@ -76,9 +76,9 @@ func (repo *IssueRepository) ChangeState(key string, state int) error {
 	return nil
 }
 
-func (repo *IssueRepository) DownloadIssues() ([]byte ,error) {
+func (repo *IssueRepository) DownloadIssues(building string) ([]byte ,error) {
 	var issuePdf []byte
-	allIssuesJSON, err := repo.RCPcallJSON("", constants.DOWNLOADISSUE)
+	allIssuesJSON, err := repo.RCPcallJSON(building, constants.DOWNLOADISSUE)
 	if err != nil {
 		return nil, err
 	}
