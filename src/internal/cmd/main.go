@@ -4,6 +4,7 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/docs"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/issue"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/monitoring"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/scheduler"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/space"
 	uploaddata "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/uploadData"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/users"
@@ -12,6 +13,7 @@ import (
 	uploadDatarepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/UploadDataRepository"
 	issuerepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/issueRepository"
 	monitoringrepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/monitoringRepository"
+	schedulerrepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/schedulerRepository"
 	spacerepositoryrabbitamq "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ/spaceRepository"
 
 	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
@@ -35,34 +37,26 @@ func config() (handlers.HTTPHandler, error) {
 	if err != nil {
 		panic(err)
 	}
-	chMonitoring, err := rabbitConn.NewChannel()
+	monitoringRepo := monitoringrepositoryrabbitamq.New(rabbitConn)
+
+	spaceRepo, err := spacerepositoryrabbitamq.New(rabbitConn)
 	if err != nil {
 		panic(err)
 	}
-	monitoringRepo := monitoringrepositoryrabbitamq.New(chMonitoring)
-	//TODO canal
-	chSpace, err := rabbitConn.NewChannel()
+	usersRepo := usersrepositorymemory.New()
+
+	issuesRepo, err := issuerepositoryrabbitamq.New(rabbitConn)
 	if err != nil {
-		//TODO
+		panic(err)
+	}
+	uploadDataRepo, err := uploadDatarepositoryrabbitamq.New(rabbitConn)
+	if err != nil {
+		panic(err)
 	}
 	//spaceRepoAMQ, _ := spacerepositoryrabbitamq.New(chSpaces)
-	spaceRepo, err := spacerepositoryrabbitamq.New(chSpace)
+	schedulerRepo, err := schedulerrepositoryrabbitamq.New(rabbitConn)
 	if err != nil {
-		//TODO
-	}
-	usersRepo := usersrepositorymemory.New()
-	chIssues, err := rabbitConn.NewChannel()
-	if err != nil {
-		//TODO
-	}
-	issuesRepo, err := issuerepositoryrabbitamq.New(chIssues)
-	if err != nil {
-		//TODO
-	}
-	chUploadData, err := rabbitConn.NewChannel()
-	uploadDataRepo, err := uploadDatarepositoryrabbitamq.New(chUploadData)
-	if err != nil {
-		//TODO
+		panic(err)
 	}
 
 	return handlers.HTTPHandler{
@@ -71,6 +65,7 @@ func config() (handlers.HTTPHandler, error) {
 		Spaces:     space.New(spaceRepo),
 		Issues:     issue.New(issuesRepo),
 		UploadData: uploaddata.New(uploadDataRepo),
+		Scheduler:  scheduler.New(schedulerRepo),
 	}, nil
 
 }

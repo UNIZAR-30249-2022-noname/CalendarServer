@@ -6,17 +6,17 @@ import (
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	rabbitamqRepository "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
+	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
-	"github.com/streadway/amqp"
 )
 
 type SpaceRepository struct {
 	*rabbitamqRepository.Repository
 }
 
-func New(ch *amqp.Channel) (*SpaceRepository, error) {
+func New(rabbitConn connection.Connection) (*SpaceRepository, error) {
 	queues := []string{constants.REQUEST, constants.REPLY}
-	rp, err := rabbitamqRepository.New(ch, queues)
+	rp, err := rabbitamqRepository.New(rabbitConn, queues)
 	if err != nil {
 		return &SpaceRepository{}, err
 	}
@@ -24,13 +24,14 @@ func New(ch *amqp.Channel) (*SpaceRepository, error) {
 }
 
 func (repo *SpaceRepository) RequestInfoSlots(req domain.ReqInfoSlot) (domain.AllInfoSlot, error) {
-	var allInfo domain.AllInfoSlot
-	allInfoJSON, err := repo.RCPcallJSON(req, constants.REQINFOSLOT)
+	var reply rabbitamqRepository.DataMessageQueue[domain.AllInfoSlot]
+	replyJSON, err := repo.RCPcallJSON(req, constants.REQINFOSLOT)
 	if err != nil {
 		return domain.AllInfoSlot{}, err
 	}
-	json.Unmarshal(allInfoJSON, &allInfo)
-	return allInfo, nil
+	json.Unmarshal(replyJSON, &reply)
+
+	return reply.Response.Result, nil
 
 }
 
@@ -53,14 +54,14 @@ func (repo *SpaceRepository) ReserveBatch(spaces []string, init, end domain.Hour
 }
 
 func (repo *SpaceRepository) FilterBy(spaceParams domain.SpaceFilterParams) ([]domain.Space, error) {
-	var spaces []domain.Space
-	spacesJSON, err := repo.RCPcallJSON(spaceParams, constants.SPFILTER)
+	var reply rabbitamqRepository.DataMessageQueue[[]domain.Space]
+	replyJSON, err := repo.RCPcallJSON(spaceParams, constants.SPFILTER)
 	if err != nil {
 		return []domain.Space{}, err
 	}
-	json.Unmarshal(spacesJSON, &spaces)
+	json.Unmarshal(replyJSON, &reply)
 
-	return spaces, nil
+	return reply.Response.Result, nil
 }
 
 func (repo *SpaceRepository) CancelReserve(key string) error {

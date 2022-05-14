@@ -9,7 +9,7 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "env": {"GATEWAY_MODE":"test"},
+            //"env": {"GATEWAY_MODE":"test"},
             "program": "${workspaceFolder}/src/internal/cmd/main.go"
         },
     ]

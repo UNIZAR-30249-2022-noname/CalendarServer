@@ -1,12 +1,12 @@
-package horariosrv_test
+package scheduler_test
 
 import (
 	"testing"
 	"time"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
-	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/horariosrv"
-	schedulerrepositorymysql "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/MySQL/schedulerRepository"
+	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/scheduler"
+	horariosrv "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/services/scheduler"
 	mock_ports "github.com/D-D-EINA-Calendar/CalendarServer/src/mocks/mockups"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
@@ -93,8 +93,7 @@ func TestGetAvailableHours(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			horariorepo := schedulerrepositorymysql.New()
-			service := horariosrv.New(horariorepo)
+			service := scheduler.New(m.horarioRepository)
 
 			//Execute
 			result, err := service.GetAvailableHours(tt.args.terna)
@@ -139,6 +138,7 @@ func simpleAvailableHours() []domain.AvailableHours {
 ///////////////////////////////////
 
 func TestUpdateEntries(t *testing.T) {
+	//TODO hacerlo bien
 	t.Skip()
 	// · Mocks · //
 
@@ -156,26 +156,7 @@ func TestUpdateEntries(t *testing.T) {
 		args  args
 		want  want
 		mocks func(m mocks)
-	}{{
-		name: "Create entry succed",
-		args: args{entries: simpleEntries(), terna: simpleTerna()},
-		want: want{result: currentDate(), err: nil},
-		mocks: func(m mocks) {
-			m.horarioRepository.EXPECT().CreateNewEntry(simpleEntries()[0]).Return(nil)
-			m.horarioRepository.EXPECT().CreateNewEntry(simpleEntries()[1]).Return(nil)
-			m.horarioRepository.EXPECT().DeleteAllEntries(simpleTerna()).Return(nil)
-		},
-	},
-		{
-			name: "Should return error if repository fails",
-			args: args{entries: simpleEntries(), terna: simpleTerna()},
-			want: want{result: "", err: apperrors.ErrSql},
-			mocks: func(m mocks) {
-				m.horarioRepository.EXPECT().CreateNewEntry(simpleEntries()[0]).Return(apperrors.ErrInternal)
-				m.horarioRepository.EXPECT().DeleteAllEntries(simpleTerna()).Return(nil)
-			},
-		},
-	}
+	}{}
 	// · Runner · //
 	for _, tt := range tests {
 
@@ -186,8 +167,8 @@ func TestUpdateEntries(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			horariorepo := schedulerrepositorymysql.New()
-			service := horariosrv.New(horariorepo)
+
+			service := horariosrv.New(m.horarioRepository)
 
 			//Execute
 			result, err := service.UpdateScheduler(tt.args.entries, tt.args.terna)
@@ -293,8 +274,7 @@ func TestListSubject(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			horariorepo := schedulerrepositorymysql.New()
-			service := horariosrv.New(horariorepo)
+			service := horariosrv.New(m.horarioRepository)
 
 			//Execute
 			result, err := service.ListAllDegrees()
@@ -405,8 +385,7 @@ func TestGetEntries(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			horariorepo := schedulerrepositorymysql.New()
-			service := horariosrv.New(horariorepo)
+			service := horariosrv.New(m.horarioRepository)
 
 			//Execute
 			result, err := service.GetEntries(tt.args.terna)
@@ -494,8 +473,7 @@ func TestGetICS(t *testing.T) {
 			}
 
 			tt.mocks(m)
-			horariorepo := schedulerrepositorymysql.New()
-			service := horariosrv.New(horariorepo)
+			service := horariosrv.New(m.horarioRepository)
 
 			//Execute
 			result, err := service.GetICS(tt.args.terna)
