@@ -19,6 +19,7 @@ const (
 	GETISSUES         = "obtener-incidencias"
 	DELETEISSUE       = "eliminar-incidencia"
 	UPDATEISSUE       = "modificar-estado-incidencia"
+	DOWNLOADISSUE     = "descargar-incidencias"
 	REQINFOSLOT       = "obtener-informacion-espacio"
 	GETAVAILABLEHOURS = "obtener-horas-disponibles"
 	UPDATESCHEDULER   = "actualizar-calendario"

@@ -95,3 +95,23 @@ func (hdl *HTTPHandler) ChangeStateIssue(c *gin.Context) {
 	}
 
 }
+
+//DownloadIssues is the handler for downloading the issues
+//@Sumary Change state  issue
+//@Description Create the state of a issue
+//@Tag Issues
+//@Produce text/plain
+//@Success 200 {object} []byte
+//@Failure 400,404 {object} ErrorHttp
+//@Router /downloadIssues [get]
+func (hdl *HTTPHandler) DownloadIssues(c *gin.Context) {
+	//byteFile, err := ioutil.ReadFile("C:/Users/Equipo/Desktop/LIS/Gateway/src/internal/handlers/prueba/file.pdf")
+	building := c.Query("building")
+	byteFile, err := hdl.Issues.DownloadIssues(building)
+	if err == nil {
+		c.Header("Content-Disposition", "attachment; filename=incidencias.pdf")
+		c.Data(http.StatusOK, "application/octet-stream", byteFile)
+	} else {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: err.Error()})
+	}
+}

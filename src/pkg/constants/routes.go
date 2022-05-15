@@ -19,4 +19,5 @@ const (
 	GET_ALL_ISSUES             = "/getAllIssue"
 	GET_RESERVES_USER          = "/getReservesPerOwner"
 	DELETE_ISSUE               = "/deleteIssue"
+	DOWNLOAD_ISSUES            = "/downloadIssues"
 )

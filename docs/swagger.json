@@ -167,6 +167,37 @@
                 }
             }
         },
+        "/downloadIssues": {
+            "get": {
+                "description": "Create the state of a issue",
+                "produces": [
+                    "text/plain"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorHttp"
+                        }
+                    }
+                }
+            }
+        },
         "/filterSlots": {
             "get": {
                 "description": "Get spaces filtered by params",
