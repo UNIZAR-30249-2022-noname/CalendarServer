@@ -11,6 +11,7 @@ const (
 	REPLY             = "reply"
 	RESERVE           = "realizar-reserva"
 	IMPORT            = "importar-espacios"
+	IMPORT_DEGREES    = "importar-carreras"
 	SPFILTER          = "filtrar-espacios"
 	RESERVE_EDIT      = "editar-reserva"
 	RESERVE_CANCEL    = "cancelar-reserva"

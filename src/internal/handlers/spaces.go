@@ -48,13 +48,13 @@ func (hdl *HTTPHandler) Reserve(c *gin.Context) {
 //@Failure 400,404 {object} ErrorHttp
 //@Router /requestInfoSlots/ [get]
 func (hdl *HTTPHandler) RequestInfoSlots(c *gin.Context) {
-	name := c.Query("id")
+	id := c.Query("id")
 	date := c.Query("date")
 
-	fmt.Println("id: " + name + " date: " + date)
-	allInfo, err := hdl.Spaces.RequestInfoSlots(domain.ReqInfoSlot{Name: name, Date: date})
+	fmt.Println("id: " + id + " date: " + date)
+	allInfo, err := hdl.Spaces.RequestInfoSlots(domain.ReqInfoSlot{Id: id, Date: date})
 	if err == nil {
-		fmt.Println(name + " " + date)
+		fmt.Println(id + " " + date)
 		c.JSON(http.StatusOK, allInfo)
 	} else {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})

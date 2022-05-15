@@ -15,7 +15,7 @@ type SchedulerService interface {
 }
 
 type UploadDataService interface {
-	UpdateByCSV(csv string) (bool, error)
+	UpdateByCSV(csv, privileges string) (bool, error)
 }
 
 type MonitoringService interface {
