@@ -5,7 +5,6 @@ import (
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	rabbitamqRepository "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ"
-	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 )
@@ -34,15 +33,11 @@ func (repo *IssueRepository) GetAll() ([]domain.Issue, error) {
 }
 
 func (repo *IssueRepository) Delete(key string) error {
-	responseJSON, err := repo.RCPcallJSON(key, constants.DELETEISSUE)
+	_, err := repo.RCPcallJSON(key, constants.DELETEISSUE)
 	if err != nil {
 		return err
 	}
-	var reply rabbitamqRepository.DataMessageQueue[string]
-	json.Unmarshal(responseJSON, &reply)
-	if reply.Response.Result != "ok" {
-		return apperrors.ErrNotFound
-	}
+
 	return nil
 }
 
@@ -61,19 +56,15 @@ func (repo *IssueRepository) ChangeState(key string, state int) error {
 		State int    `json:"state"`
 	}
 	updateIssue := issueUpdateType{Key: key, State: state}
-	responseJSON, err := repo.RCPcallJSON(updateIssue, constants.UPDATEISSUE)
+	_, err := repo.RCPcallJSON(updateIssue, constants.UPDATEISSUE)
 	if err != nil {
 		return err
 	}
-	var reply rabbitamqRepository.DataMessageQueue[string]
-	json.Unmarshal(responseJSON, &reply)
-	if reply.Response.Result != "ok" {
-		return apperrors.ErrNotFound
-	}
+
 	return nil
 }
 
-func (repo *IssueRepository) DownloadIssues(building string) ([]byte ,error) {
+func (repo *IssueRepository) DownloadIssues(building string) ([]byte, error) {
 	var issuePdf []byte
 	allIssuesJSON, err := repo.RCPcallJSON(building, constants.DOWNLOADISSUE)
 	if err != nil {
