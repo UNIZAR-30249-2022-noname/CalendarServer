@@ -73,7 +73,7 @@ func config() (handlers.HTTPHandler, error) {
 func CorsConfig() gin.HandlerFunc {
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
-	config.AllowHeaders = append(config.AllowHeaders, "X-Requested-With") 
+	config.AllowHeaders = append(config.AllowHeaders, "X-Requested-With")
 	return cors.New(config)
 }
 
@@ -89,20 +89,28 @@ func SetupRouter() *gin.Engine {
 	if err != nil {
 		//TODO
 	}
+	//Scheduler
+	r.GET(constants.GET_AVAILABLE_HOURS_URL, handler.GetAvailableHours)
+	r.POST(constants.UPDATE_SCHEDULER_URL, handler.PostUpdateScheduler)
+	r.GET(constants.LIST_DEGREES_URL, handler.ListDegrees)
+	r.GET(constants.LIST_SCHEDULER_ENTRIES_URL, handler.GetEntries)
+
 	r.GET(constants.PING_URL, handler.Ping)
 	r.GET(constants.LOGIN, handler.Login)
+	//spaces
 	r.GET(constants.FILTER_SPACES, handler.FilterBy)
 	r.GET(constants.REQUEST_INFO_SLOTS, handler.RequestInfoSlots)
 	r.POST(constants.RESERVE_SPACE, handler.Reserve)
 	r.POST(constants.UPLOAD_DATA_DEGREES_URL, handler.UpdateByCSV)
 	r.GET(constants.RESERVE_BATCH, handler.ReserveBatch)
-
 	r.GET(constants.CANCEL_RESERVE, handler.CancelReserve)
+	//Issues
 	r.GET(constants.DELETE_ISSUE, handler.DeleteIssue)
 	r.POST(constants.CREATE_ISSUE, handler.CreateIssue)
 	r.GET(constants.MODIFY_ISSUE, handler.ChangeStateIssue)
 	r.GET(constants.GET_ALL_ISSUES, handler.GetAllIssues)
-	r.GET(constants.DOWNLOAD_ISSUES, handler.DownloadIssues)
+
+	//reserves
 	r.GET(constants.GET_RESERVES_USER, handler.GetReservesOwner)
 
 	return r
