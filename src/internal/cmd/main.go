@@ -94,6 +94,7 @@ func SetupRouter() *gin.Engine {
 	r.POST(constants.UPDATE_SCHEDULER_URL, handler.PostUpdateScheduler)
 	r.GET(constants.LIST_DEGREES_URL, handler.ListDegrees)
 	r.GET(constants.LIST_SCHEDULER_ENTRIES_URL, handler.GetEntries)
+	r.GET(constants.GENERATE_ICAL_URL, handler.GetICS)
 
 	r.GET(constants.PING_URL, handler.Ping)
 	r.GET(constants.LOGIN, handler.Login)

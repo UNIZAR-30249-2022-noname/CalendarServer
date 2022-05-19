@@ -11,6 +11,7 @@ type SchedulerRepository interface {
 	ListAllDegrees() ([]domain.DegreeDescription, error)
 	DeleteAllEntries(terna domain.DegreeSet) error
 	GetEntries(req domain.DegreeSet) ([]domain.Entry, error)
+	GetICS(terna domain.DegreeSet) (string, error)
 }
 
 type UploadDataRepository interface {

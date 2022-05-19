@@ -180,6 +180,7 @@ func (hdl *HTTPHandler) GetICS(c *gin.Context) {
 		fmt.Println(list)
 		c.JSON(http.StatusOK, list)
 	} else {
+		fmt.Println(err.Error())
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
 	}
 }
