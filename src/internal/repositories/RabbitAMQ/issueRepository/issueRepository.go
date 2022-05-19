@@ -53,9 +53,6 @@ func (repo *IssueRepository) Create(issue domain.Issue) error {
 	}
 	var reply rabbitamqRepository.DataMessageQueue[string]
 	json.Unmarshal(responseJSON, &reply)
-	if reply.Response.Result != "ok" {
-		return apperrors.ErrNotFound
-	}
 	return nil
 }
 func (repo *IssueRepository) ChangeState(key string, state int) error {
