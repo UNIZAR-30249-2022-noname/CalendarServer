@@ -33,7 +33,11 @@ func (repo *IssueRepository) GetAll() ([]domain.Issue, error) {
 }
 
 func (repo *IssueRepository) Delete(key string) error {
-	_, err := repo.RCPcallJSON(key, constants.DELETEISSUE)
+	type issueDeleteType struct {
+		Key string `json:"key"`
+	}
+	issue := issueDeleteType{Key: key}
+	_, err := repo.RCPcallJSON(issue, constants.DELETEISSUE)
 	if err != nil {
 		return err
 	}
