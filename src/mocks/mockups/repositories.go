@@ -501,3 +501,17 @@ func (mr *MockIssueRepositoryMockRecorder) GetAll() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockIssueRepository)(nil).GetAll))
 }
+
+func (m *MockSchedulerRepository) GetICS(terna domain.DegreeSet) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetICS", terna)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteAllEntries indicates an expected call of DeleteAllEntries.
+func (mr *MockSchedulerRepositoryMockRecorder) GetICS(terna interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetICS", reflect.TypeOf((*MockSchedulerRepository)(nil).GetICS), terna)
+}
