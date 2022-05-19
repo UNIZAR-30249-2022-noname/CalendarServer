@@ -41,5 +41,5 @@ func (srv *SchedulerServiceImp) GetEntries(terna domain.DegreeSet) ([]domain.Ent
 }
 
 func (srv *SchedulerServiceImp) GetICS(terna domain.DegreeSet) (string, error) {
-	return "", apperrors.ErrToDo
+	return srv.schedluerRepository.GetICS(terna)
 }

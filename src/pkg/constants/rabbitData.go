@@ -27,6 +27,7 @@ const (
 	LISTALLDEGREES    = "listar-titulaciones"
 	DELETEALLENTRIES  = "eliminar-todas-las-eentradas"
 	GETENTRIES        = "obtener-entradas"
+	GETICS            = "obtener-ical"
 )
 
 /*TODO

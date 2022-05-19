@@ -80,3 +80,10 @@ func (repo *SchedulerRepository) GetEntries(req domain.DegreeSet) ([]domain.Entr
 	return reply.Response.Result, nil
 
 }
+
+func (repo *SchedulerRepository) GetICS(terna domain.DegreeSet) (string, error) {
+	var serializedIcal string
+	res, err := repo.RCPcallJSON(terna, constants.GETICS)
+	json.Unmarshal(res, &serializedIcal)
+	return serializedIcal, err;
+}
