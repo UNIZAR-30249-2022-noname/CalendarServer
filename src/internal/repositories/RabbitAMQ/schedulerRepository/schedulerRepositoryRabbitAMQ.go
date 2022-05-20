@@ -38,13 +38,12 @@ func (repo *SchedulerRepository) GetAvailableHours(req domain.DegreeSet) ([]doma
 }
 func (repo *SchedulerRepository) UpdateScheduler(entries []domain.Entry, terna domain.DegreeSet) (string, error) {
 	req := struct {
-		terna   domain.DegreeSet
-		entries []domain.Entry
+		DegreeSet   domain.DegreeSet
+		Entry []domain.Entry
 	}{
-		entries: entries,
-		terna:   terna,
+		Entry: entries,
+		DegreeSet:  terna,
 	}
-
 	var reply rabbitamqRepository.DataMessageQueue[string]
 	availableHoursJSON, err := repo.RCPcallJSON(req, constants.UPDATESCHEDULER)
 	if err != nil {
