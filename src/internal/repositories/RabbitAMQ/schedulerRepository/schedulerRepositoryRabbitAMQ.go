@@ -22,9 +22,13 @@ func New(rabbitConn connection.Connection) (*SchedulerRepository, error) {
 	return &SchedulerRepository{rp}, nil
 }
 
+type DegreeSetAux struct {
+	DegreeSet domain.DegreeSet
+}
+
 func (repo *SchedulerRepository) GetAvailableHours(req domain.DegreeSet) ([]domain.AvailableHours, error) {
 	var reply rabbitamqRepository.DataMessageQueue[[]domain.AvailableHours]
-	availableHoursJSON, err := repo.RCPcallJSON(req, constants.GETAVAILABLEHOURS)
+	availableHoursJSON, err := repo.RCPcallJSON(DegreeSetAux{req}, constants.GETAVAILABLEHOURS)
 	if err != nil {
 		return []domain.AvailableHours{}, err
 	}
@@ -72,7 +76,7 @@ func (repo *SchedulerRepository) DeleteAllEntries(terna domain.DegreeSet) error 
 func (repo *SchedulerRepository) GetEntries(req domain.DegreeSet) ([]domain.Entry, error) {
 
 	var reply rabbitamqRepository.DataMessageQueue[[]domain.Entry]
-	availableHoursJSON, err := repo.RCPcallJSON(req, constants.GETENTRIES)
+	availableHoursJSON, err := repo.RCPcallJSON(DegreeSetAux{req}, constants.GETENTRIES)
 	if err != nil {
 		return []domain.Entry{}, err
 	}

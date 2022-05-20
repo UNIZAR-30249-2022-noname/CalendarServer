@@ -1,6 +1,8 @@
 package scheduler
 
 import (
+	"fmt"
+
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/ports"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
@@ -19,7 +21,9 @@ func New(schedluerRepository ports.SchedulerRepository) *SchedulerServiceImp {
 //GetAvaiabledHours is a function which returns a set of [AvailableHours]
 //given a completed [Terna] (not null fields)
 func (srv *SchedulerServiceImp) GetAvailableHours(terna domain.DegreeSet) ([]domain.AvailableHours, error) {
-	return srv.GetAvailableHours(terna)
+	fmt.Println("BBBBBBBBBBBBBBBBBBBB")
+	fmt.Println(terna)
+	return srv.schedluerRepository.GetAvailableHours(terna)
 }
 
 func (srv *SchedulerServiceImp) CreateNewEntry(entry domain.Entry) (string, error) {
