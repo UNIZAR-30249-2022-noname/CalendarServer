@@ -34,6 +34,15 @@ type DataMessageQueue[T any] struct {
 	} `json:"response"`
 }
 
+type DataMessageQueueDownload struct {
+	Response struct {
+		Result struct {
+			Type string `json:"type"`
+			Data []byte `json:"data"`
+		} `json:"resultado"`
+	} `json:"response"`
+}
+
 /*------------------------------------------------------------------------------------------------------*/
 type Repository struct {
 	rabbitConn connection.Connection

@@ -2,6 +2,7 @@ package issuerepositoryrabbitamq
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	rabbitamqRepository "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ"
@@ -69,11 +70,12 @@ func (repo *IssueRepository) ChangeState(key string, state int) error {
 }
 
 func (repo *IssueRepository) DownloadIssues(building string) ([]byte, error) {
-	var issuePdf []byte
+	var reply rabbitamqRepository.DataMessageQueueDownload
 	allIssuesJSON, err := repo.RCPcallJSON(building, constants.DOWNLOADISSUE)
 	if err != nil {
 		return nil, err
 	}
-	json.Unmarshal(allIssuesJSON, &issuePdf)
-	return issuePdf, nil
+	fmt.Printf("Tipo: %T\n", allIssuesJSON)
+	json.Unmarshal(allIssuesJSON, &reply)
+	return reply.Response.Result.Data, nil
 }

@@ -110,6 +110,7 @@ func SetupRouter() *gin.Engine {
 	r.POST(constants.CREATE_ISSUE, handler.CreateIssue)
 	r.GET(constants.MODIFY_ISSUE, handler.ChangeStateIssue)
 	r.GET(constants.GET_ALL_ISSUES, handler.GetAllIssues)
+	r.GET(constants.DOWNLOAD_ISSUES, handler.DownloadIssues)
 
 	//reserves
 	r.GET(constants.GET_RESERVES_USER, handler.GetReservesOwner)
