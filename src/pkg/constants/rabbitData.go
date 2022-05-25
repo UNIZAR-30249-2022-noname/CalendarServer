@@ -10,6 +10,7 @@ const (
 	REQUEST           = "request"
 	REPLY             = "reply"
 	RESERVE           = "realizar-reserva"
+	GETOWNERRESERVE   = "obtener-reserva-usuario"
 	IMPORT            = "importar-espacios"
 	IMPORT_DEGREES    = "importar-cursos"
 	SPFILTER          = "filtrar-espacios"
