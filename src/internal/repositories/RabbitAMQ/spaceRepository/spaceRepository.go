@@ -71,7 +71,7 @@ func (repo *SpaceRepository) CancelReserve(key string) error {
 func (repo *SpaceRepository) GetReservesOwner(owner string) ([]domain.Reserve, error) {
 
 	var reply rabbitamqRepository.DataMessageQueue[[]domain.Reserve]
-	replyJSON, err := repo.RCPcallJSON(owner, constants.GET_RESERVES_USER)
+	replyJSON, err := repo.RCPcallJSON(owner, constants.GETOWNERRESERVE)
 	if err != nil {
 		return []domain.Reserve{}, err
 	}
