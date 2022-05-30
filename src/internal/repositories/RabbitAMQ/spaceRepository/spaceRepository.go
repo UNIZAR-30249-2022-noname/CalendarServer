@@ -5,7 +5,6 @@ import (
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/internal/core/domain"
 	rabbitamqRepository "github.com/D-D-EINA-Calendar/CalendarServer/src/internal/repositories/RabbitAMQ"
-	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	connection "github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/connect"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/constants"
 )
@@ -65,7 +64,18 @@ func (repo *SpaceRepository) FilterBy(spaceParams domain.SpaceFilterParams) ([]d
 }
 
 func (repo *SpaceRepository) CancelReserve(key string) error {
-	return apperrors.ErrToDo
+
+	type reserveCancelType struct {
+		Key string `json:"key"`
+	}
+	issue := reserveCancelType{Key: key}
+	_, err := repo.RCPcallJSON(issue, constants.RESERVE_CANCEL)
+	if err != nil {
+		return err
+	}
+
+	return nil
+
 }
 
 func (repo *SpaceRepository) GetReservesOwner(owner string) ([]domain.Reserve, error) {
