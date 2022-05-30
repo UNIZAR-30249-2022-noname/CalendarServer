@@ -45,7 +45,6 @@ func (hdl *HTTPHandler) GetAvailableHours(c *gin.Context) {
 
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
 	} else {
-		fmt.Println(availableHours)
 		c.JSON(http.StatusOK, availableHours)
 
 	}
@@ -106,7 +105,6 @@ func (hdl *HTTPHandler) PostUpdateScheduler(c *gin.Context) {
 func (hdl *HTTPHandler) ListDegrees(c *gin.Context) {
 	list, err := hdl.Scheduler.ListAllDegrees()
 	if err == nil {
-		fmt.Println(list)
 		c.JSON(http.StatusOK, list)
 	} else {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
@@ -148,7 +146,6 @@ func (hdl *HTTPHandler) GetEntries(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrorHttp{Message: "unkown"})
 	} else {
 		entriesDto := EntriesDomaintoDTO(entries)
-		fmt.Println(entriesDto)
 		c.JSON(http.StatusOK, entriesDto)
 
 	}
@@ -177,7 +174,6 @@ func (hdl *HTTPHandler) GetICS(c *gin.Context) {
 	}
 	list, err := hdl.Scheduler.GetICS(terna)
 	if err == nil {
-		fmt.Println(list)
 		c.JSON(http.StatusOK, list)
 	} else {
 		fmt.Println(err.Error())

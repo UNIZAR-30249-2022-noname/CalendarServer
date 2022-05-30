@@ -2,7 +2,9 @@ package rabbitamqRepository
 
 import (
 	"encoding/json"
+	"log"
 	"os"
+	"time"
 
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/apperrors"
 	"github.com/D-D-EINA-Calendar/CalendarServer/src/pkg/auxFuncs"
@@ -74,6 +76,7 @@ func checkMode(queues []string) {
 
 func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, error) {
 	//TODO garantizar exclusion mutua
+	log.Println("Pattern: " + pattern)
 	ch, _ := rp.rabbitConn.NewChannel()
 	defer ch.Close()
 	corrId := auxFuncs.RandomString(10)
@@ -96,6 +99,7 @@ func (rp *Repository) RCPcallJSON(msg interface{}, pattern string) ([]byte, erro
 			ReplyTo:       constants.REPLY,
 		})
 	var data []byte
+	time.Sleep(time.Second)
 	//canal por el que se recibe la respuesta
 	msgs, err := ch.Consume(
 		constants.REPLY, // queue
