@@ -149,7 +149,7 @@ func (hdl *HTTPHandler) FilterBy(c *gin.Context) {
 //@Failure 400,404 {object} ErrorHttp
 //@Router /cancelReserve [get]
 func (hdl *HTTPHandler) CancelReserve(c *gin.Context) {
-	reserve := c.Query("reserve")
+	reserve := c.Query("key")
 	err := hdl.Spaces.CancelReserve(reserve)
 	if err == nil {
 
